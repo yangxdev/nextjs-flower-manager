@@ -6,14 +6,14 @@
     "dev": "next dev",
     "build": "prisma generate && next build && prisma db push",
     "start": "next start",
-    "lint": "next lint",
-    "postinstall": "prisma generate"
+    "lint": "next lint"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.18",
     "@paralleldrive/cuid2": "^2.2.2",
     "@prisma/client": "^5.12.1",
     "@vercel/postgres": "^0.7.2",
+    "antd": "^5.16.5",
     "chart.js": "^4.4.2",
     "class-variance-authority": "^0.7.0",
     "classnames": "^2.5.1",

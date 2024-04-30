@@ -13,39 +13,21 @@ datasource db {
     directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
 
-model Income {
+model Order {
     id        String   @id @default(cuid())
-    type      String
-    date      DateTime
-    source    String
-    amount    Float
-    currency  String
-    category  String
-    notes     String?
+    deliveryDate DateTime
+    customerName String
+    customerWechatId String
+    amount Float
+    productionCost Float
     createdAt DateTime @default(now()) @map(name: "created_at")
     updatedAt DateTime @updatedAt @map(name: "updated_at")
     userId    String   @map(name: "user_id")
     user      User     @relation(fields: [userId], references: [id])
 
-    @@map(name: "incomes")
+    @@map(name: "orders")
 }
 
-model Expense {
-    id        String   @id @default(cuid())
-    type      String
-    date      DateTime
-    source    String
-    amount    Float
-    currency  String
-    category  String
-    notes     String?
-    createdAt DateTime @default(now()) @map(name: "created_at")
-    updatedAt DateTime @updatedAt @map(name: "updated_at")
-    userId    String   @map(name: "user_id")
-    user      User     @relation(fields: [userId], references: [id])
-
-    @@map(name: "expenses")
-}
 
 model User {
     id        String    @id @default(cuid())
@@ -53,8 +35,7 @@ model User {
     name      String?
     createdAt DateTime  @default(now()) @map(name: "created_at")
     updatedAt DateTime  @updatedAt @map(name: "updated_at")
-    incomes   Income[]
-    expenses  Expense[]
+    orders  Order[]
 
     @@map(name: "users")
 }

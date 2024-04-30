@@ -128,7 +128,7 @@ module.exports = {
         translations: {
             en: {
                 navMenu: {
-                    dashboard: "Dashboard",
+                    dashboard: "Calendar",
                     expenses: "Expenses",
                     income: "Income",
                     debt: "Debt",
@@ -140,7 +140,7 @@ module.exports = {
                 },
 
                 dashboard: {
-                    title: "Dashboard",
+                    title: "Calendar",
                     subtitle: "Summary of your data in the last month",
                 },
 
@@ -326,7 +326,7 @@ module.exports = {
             it: {
                 navMenu: {
                     dashboard: "Dashboard",
-                    expense: "Spese",
+                    expenses: "Spese",
                     income: "Entrate",
                     debt: "Debiti",
                     savings: "Risparmi",

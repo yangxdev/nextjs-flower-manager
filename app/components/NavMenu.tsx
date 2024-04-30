@@ -22,8 +22,8 @@ function AuthButton() {
                     <BudgetBuddyLogo className="w-12 h-12 mr-[0.125rem]" />
                     {/* Budget Buddy <br /> */}
                     <div className="flex flex-col leading-none h-12 justify-between tracking-wider">
-                        <div className="text-[1.39rem]">BUDGET</div>
-                        <div className="text-[1.72rem] -mb-[0.15rem]">BUDDY</div>
+                        <div className="text-[1.39rem]">Flower</div>
+                        <div className="text-[1.72rem] -mb-[0.15rem]">Manager</div>
                     </div>
                 </div>
                 {/* <div className="text-lg greeting mt-2 opacity-80">
@@ -49,10 +49,10 @@ function BottomButtons() {
     if (session) {
         return (
             <div className="my-6 w-full text-lg">
-                <NavLink to="/p/settings" icon={IoSettingsOutline}>
+                {/* <NavLink to="/p/settings" icon={IoSettingsOutline}>
                     {gc?.settings}
-                </NavLink>
-                <button className="transition rounded-lg duration-100 mx-6 w-fit text-black text-2xl hover:bg-newBlue-200 dark:bg-lightGrayCustom2 dark:opacity-60 dark:hover:opacity-100 text-left" onClick={() => signOut()}>
+                </NavLink> */}
+                <button className="transition rounded-lg duration-100 mx-6 w-fit text-black text-xl hover:bg-newBlue-200 dark:bg-lightGrayCustom2 dark:opacity-60 dark:hover:opacity-100 text-left" onClick={() => signOut()}>
                     <div className="flex flex-row items-center gap-2 px-[1rem] py-2">
                         <RiLogoutBoxLine />
                         <div>{gc?.signOut}</div>
@@ -70,6 +70,7 @@ import { GiReceiveMoney } from "react-icons/gi";
 import { MdMoneyOff } from "react-icons/md";
 import { MdOutlineSavings } from "react-icons/md";
 import { GoHomeFill } from "react-icons/go";
+import { FaCalendarDays } from "react-icons/fa6";
 
 export default function NavMenu() {
     return (
@@ -79,10 +80,10 @@ export default function NavMenu() {
                     <AuthButton />
                 </div>
                 <ul>
-                    <NavLink to="/" icon={GoHomeFill}>
+                    <NavLink to="/" icon={FaCalendarDays}>
                         {gc?.dashboard}
                     </NavLink>
-                    <NavLink to="/p/expenses" icon={MdOutlinePayments}>
+                    {/* <NavLink to="/p/expenses" icon={MdOutlinePayments}>
                         {gc?.expenses}
                     </NavLink>
                     <NavLink to="/p/income" icon={GiReceiveMoney}>
@@ -93,7 +94,7 @@ export default function NavMenu() {
                     </NavLink>
                     <NavLink to="/p/savings" icon={MdOutlineSavings}>
                         {gc?.savings}
-                    </NavLink>
+                    </NavLink> */}
                     {/* <NavLink to="/p/crypto" icon={MdOutlineSavings}>
             {gc?.crypto}
           </NavLink> */}

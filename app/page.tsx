@@ -11,6 +11,7 @@ import Greetings from "./components/Greetings";
 import TotalExpenses from "./components/dashboard/TotalExpenses";
 import MoneyFlow from "./components/dashboard/MoneyFlow";
 import Transactions from "./components/dashboard/Transactions";
+import CalendarSection from "./components/CalendarSection";
 
 const defaultLanguage = GlobalConfig.i18n.defaultLanguage || "en";
 const gc = GlobalConfig.i18n.translations[defaultLanguage as keyof typeof GlobalConfig.i18n.translations]?.dashboard;
@@ -23,21 +24,21 @@ export default async function Home() {
 
     return (
         <>
-            <div className="font-bold text-4xl mb-2 select-none">{gc?.title}</div>
+            <div className="font-bold text-2xl mb-2 select-none">{gc?.title}</div>
             <div className="text-lg greeting my-2 opacity-80" suppressHydrationWarning>
-                    <Greetings />
+                    {/* <Greetings /> */}
                 </div>
             <div className="flex flex-row gap-8 justify-between h-auto mt-6">
                 <div className="flex flex-col gap-8 justify-between mb-[190px] h-full">
                     <div className="flex flex-row gap-8 h-auto">
-                        <Balance />
-                        <TotalIncome />
-                        <TotalExpenses />
-                        {/* <InfoChartVerticalBarServer /> */}
+                        <CalendarSection />
+                        {/* <Balance /> */}
+                        {/* <TotalIncome /> */}
+                        {/* <TotalExpenses /> */}
                     </div>
                     <div className="flex flex-row gap-8 h-auto">
-                        <MoneyFlow />
-                        <Transactions />
+                        {/* <MoneyFlow /> */}
+                        {/* <Transactions /> */}
                     </div>
                 </div>
                 <div className="flex flex-row gap-8 h-full">

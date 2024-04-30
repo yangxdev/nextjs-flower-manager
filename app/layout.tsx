@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { DM_Sans } from "next/font/google";
 import "./globals.css";
 import { getServerSession } from "next-auth";
 
@@ -12,7 +12,7 @@ import localFont from "next/font/local";
 
 const myFont = localFont({ src: "./fonts/Avenir Book.ttf" });
 
-const inter = Inter({
+const dmSans = DM_Sans({
     subsets: ["latin"],
 });
 
@@ -30,7 +30,7 @@ export default async function RootLayout({
 
     return (
         <html lang="en">
-            <body className={`${inter.className} text-black`}>
+            <body className={`${dmSans.className} text-black`}>
                 <SessionProvider session={session}>
                     <main className="flex flex-row">
                         <NavMenu />
