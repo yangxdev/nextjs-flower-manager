@@ -1,2 +1,2 @@
-# 💸 Flower Manager
+# 🌸 Flower Manager
 ### 👨🏻‍💻 By Yang (@yangxdev)
