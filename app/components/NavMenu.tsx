@@ -74,7 +74,7 @@ import { FaCalendarDays } from "react-icons/fa6";
 
 export default function NavMenu() {
     return (
-        <div className="bg-white dark:bg-darkGrayCustom flex flex-col justify-between h-screen min-w-sidebar w-sidebar select-none border-r-[1px] border-lightBorder">
+        <div className="bg-white dark:bg-darkGrayCustom flex flex-col justify-between h-screen min-w-sidebar w-sidebar select-none border-r-[1px] border-lightBorder hidden">
             <div>
                 <div className="mt-6 mb-12 px-padding">
                     <AuthButton />

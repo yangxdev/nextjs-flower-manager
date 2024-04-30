@@ -20,22 +20,23 @@ model Order {
     customerWechatId String
     amount Float
     productionCost Float
+    photo Bytes? @map(name: "photo")
     createdAt DateTime @default(now()) @map(name: "created_at")
     updatedAt DateTime @updatedAt @map(name: "updated_at")
-    userId    String   @map(name: "user_id")
-    user      User     @relation(fields: [userId], references: [id])
+    // userId    String   @map(name: "user_id")
+    // user      User     @relation(fields: [userId], references: [id])
 
     @@map(name: "orders")
 }
 
 
-model User {
-    id        String    @id @default(cuid())
-    email     String    @unique
-    name      String?
-    createdAt DateTime  @default(now()) @map(name: "created_at")
-    updatedAt DateTime  @updatedAt @map(name: "updated_at")
-    orders  Order[]
+// model User {
+//     id        String    @id @default(cuid())
+//     email     String    @unique
+//     name      String?
+//     createdAt DateTime  @default(now()) @map(name: "created_at")
+//     updatedAt DateTime  @updatedAt @map(name: "updated_at")
+//     orders  Order[]
 
-    @@map(name: "users")
-}
+//     @@map(name: "users")
+// }

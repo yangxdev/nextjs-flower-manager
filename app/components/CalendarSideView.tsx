@@ -5,13 +5,13 @@ export default function CalendarSideView() {
     // when a date is selected, it will show the orders for that date on the right side
     const { selectedDate } = React.useContext(SelectedDateContext);
     // context to array
-    console.log(selectedDate);
-    // const { $D } = selectedDate;
-    // console.log($D);
+    // console.log(selectedDate);
+    if (!selectedDate) {
+        return null; // or handle the null case accordingly
+    }
     const { $D, $H, $L, $M, $W, $d, $isDayjsObject, $m, $ms, $s, $u, $x, $y } = selectedDate;
     const month = Intl.DateTimeFormat("en-US", { month: "long" }).format(new Date($y, $M, $D));
     const fullDate = `${month} ${$D}, ${$y}`;
-    // TODO: setup prisma and postgresql
 
     return (
         <div className="flex flex-col gap-4 min-w-[22rem]">
