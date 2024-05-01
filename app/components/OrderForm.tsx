@@ -137,7 +137,7 @@ export default function OrderForm() {
                         <Button icon={<UploadOutlined />}>Premi per caricare</Button>
                     </Upload>
                 </Form.Item> */}
-                <Form.Item name="photo" label="Foto" extra="Seleziona una foto">
+                {/* <Form.Item name="photo" label="Foto" extra="Seleziona una foto">
                     <input
                         id="file"
                         type="file"
@@ -148,6 +148,21 @@ export default function OrderForm() {
                             }
                         }}
                         accept="image/png, image/jpeg"
+                    />
+                </Form.Item> */}
+                <Form.Item name="photo" label="Foto" extra="Seleziona una foto">
+                    <input
+                        id="file"
+                        type="file"
+                        className="cursor-pointer min-w-0 flex-auto rounded-md border-0 bg-white/5 px-3.5 py-2 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-white sm:text-sm sm:leading-6"
+                        onChange={(e) => {
+                            const files = e.target.files;
+                            if (files) {
+                                setFile(files[0]);
+                                alert("File selected");
+                            }
+                        }}
+                        accept="image/png, image/jpeg, image/jpg"
                     />
                 </Form.Item>
                 <Form.Item wrapperCol={{ span: 12, offset: 6 }}>
