@@ -1,6 +1,6 @@
 import { InboxOutlined, UploadOutlined } from "@ant-design/icons";
 import { Input, Button, Checkbox, Col, ColorPicker, Form, InputNumber, Radio, Rate, Row, Select, Slider, Space, Switch, Upload } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 export default function OrderForm() {
@@ -8,19 +8,18 @@ export default function OrderForm() {
     const [uploading, setUploading] = React.useState<boolean>(false);
     const [message, setMessage] = React.useState<string>("");
     const [show, setShow] = React.useState<string>("hidden");
+    const [loadedFileMessage, setLoadedFileMessage] = React.useState<string>("");
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-
-        if (!file) {
-            setMessage("Please select a file to upload.");
-            return;
+    useEffect(() => {
+        if (file) {
+            setLoadedFileMessage(`File loaded: ${file.name}`);
         }
+    }, [file]);
 
+    const handlePhotoUpload = async (file: File) => {
         setUploading(true);
 
         const response = await fetch(`/api/postPhoto?filename=${file.name}&contentType=${file.type}`);
-        
 
         if (response.ok) {
             const { url, fields } = await response.json();
@@ -38,6 +37,9 @@ export default function OrderForm() {
 
             if (uploadResponse.ok) {
                 setMessage("Upload successful!");
+                const fileUrl = new URL(fields.key, url).toString();
+                setUploading(false);
+                return fileUrl;
             } else {
                 console.error("S3 Upload Error:", uploadResponse);
                 setMessage("Upload failed.");
@@ -47,30 +49,103 @@ export default function OrderForm() {
         }
 
         setUploading(false);
+        return "";
     };
+
+    const handleSubmit = async (values: any) => {
+        console.log("Received values of form: ", values);
+
+        // AWS S3 photo upload process
+        if (!file) {
+            setMessage("Please select a file to upload.");
+            return;
+        }
+        const photoUrl = await handlePhotoUpload(file);
+
+        // Add order process
+        const { deliveryDate, customerName, customerWechatId, amount, productionCost } = values;
+        const responsePromise = fetch("/api/database/add_order", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                deliveryDate,
+                customerName,
+                customerWechatId,
+                amount,
+                productionCost,
+                photo: photoUrl || "",
+            }),
+        }).then((response) => {
+            if (!response.ok) {
+                throw new Error("HTTP error " + response.status);
+            }
+            return response;
+        });
+
+        toast.promise(
+            responsePromise,
+            {
+                loading: "Saving...",
+                success: "Order added successfully",
+                error: "Error when adding order",
+            },
+            {}
+        );
+    };
+
+    React.useEffect((): void => {
+        if (message.length > 0) {
+            setShow("block");
+        }
+    }, [show, message]);
 
     return (
         <>
-            <form onSubmit={handleSubmit} className="mx-auto mt-10 flex max-w-md gap-x-4">
-                <input
-                    id="file"
-                    type="file"
-                    className="cursor-pointer min-w-0 flex-auto rounded-md border-0 bg-white/5 px-3.5 py-2 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-white sm:text-sm sm:leading-6"
-                    onChange={(e) => {
-                        const files = e.target.files;
-                        if (files) {
-                            setFile(files[0]);
-                        }
-                    }}
-                    accept="image/png, image/jpeg, image/jpg"
-                />
-                <button className="flex-none rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white" type="submit" disabled={uploading}>
-                    Upload
-                </button>
-                <div className={`pt-2 relative ${show}`}>
-                    <div className="absolute left-[40%] mx-auto rounded-md bg-white/5 px-3.5 py-4 text-white">{message}</div>
-                </div>
-            </form>
+            <Form name="addOrder" style={{ maxWidth: "500px" }} onFinish={handleSubmit}>
+                <Form.Item name="deliveryDate" label="Data di consegna" rules={[{ required: true, message: "Please input the delivery date" }]}>
+                    <Input placeholder="Data di consegna" type="date" />
+                </Form.Item>
+                <Form.Item name="customerName" label="Nome cliente" rules={[{ required: true, message: "Please input client's name" }]}>
+                    <Input placeholder="Nome cliente" type="text" />
+                </Form.Item>
+                <Form.Item name="customerWechatId" label="Wechat ID" rules={[{ required: true, message: "Please input client's Wechat ID" }]}>
+                    <Input placeholder="Wechat ID" type="text" />
+                </Form.Item>
+                <Form.Item name="amount" label="Da pagare" rules={[{ required: true, message: "Please input the amount to be paid by the client" }]}>
+                    <Input placeholder="Da pagare" type="number" />
+                </Form.Item>
+                <Form.Item name="productionCost" label="Costo di produzione" rules={[{ required: true, message: "Please input the production cost" }]}>
+                    <Input placeholder="Costo di produzione" type="number" />
+                </Form.Item>
+                <Form.Item label="Foto" extra={loadedFileMessage}>
+                    <input
+                        id="file"
+                        type="file"
+                        className=""
+                        onChange={(e) => {
+                            const files = e.target.files;
+                            if (files) {
+                                setFile(files[0]);
+                            }
+                        }}
+                        accept="image/png, image/jpeg, image/jpg"
+                        style={{ display: "none" }} 
+                    />
+                    <label htmlFor="file" className="border-2 p-2 cursor-pointer hover:bg-newBlue-200 transition duration-200 rounded-lg">
+                        Choose File
+                    </label>
+                </Form.Item>
+                <Form.Item wrapperCol={{ span: 12, offset: 6 }}>
+                    <Space>
+                        <Button type="primary" htmlType="submit">
+                            <div className="text-black">Submit</div>
+                        </Button>
+                        <Button htmlType="reset">reset</Button>
+                    </Space>
+                </Form.Item>
+            </Form>
         </>
     );
 }

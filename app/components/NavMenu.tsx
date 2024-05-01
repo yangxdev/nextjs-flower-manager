@@ -20,7 +20,6 @@ function AuthButton() {
             <div className="flex flex-col gap ml-2">
                 <div className="text-2xl text-black flex flex-row items-center mt-4 -ml-[0.25rem]">
                     <BudgetBuddyLogo className="w-12 h-12 mr-[0.125rem]" />
-                    {/* Budget Buddy <br /> */}
                     <div className="flex flex-col leading-none h-12 justify-between tracking-wider">
                         <div className="text-[1.39rem]">Flower</div>
                         <div className="text-[1.72rem] -mb-[0.15rem]">Manager</div>

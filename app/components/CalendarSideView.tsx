@@ -18,6 +18,7 @@ export default function CalendarSideView() {
             customerName: order.customerName,
             customerWechatId: order.customerWechatId,
             amount: order.amount,
+            photo: order.photo,
         }))
         : [];
 
@@ -30,12 +31,20 @@ export default function CalendarSideView() {
                         <div key={index} className="flex flex-col justify-between border-2 border-lightBorder rounded-md p-4">
                             <div className="flex flex-row">
                                 <div className="font-semibold mr-2">Cliente:</div>
-                                {order.customerName}{" @"}{order.customerWechatId}
+                                {order.customerName}
+                            </div>
+                            <div className="flex flex-row">
+                                <div className="font-semibold mr-2">Wechat ID:</div>
+                                {order.customerWechatId}
                             </div>
                             <div className="flex flex-row">
                                 <div className="font-semibold mr-2">Quantità:</div>
                                 {"€ "}
                                 {order.amount}
+                            </div>
+                            <div className="flex flex-row">
+                                <div className="font-semibold mr-2">Foto:</div>
+                                {order.photo ? <img src={order.photo} alt="order" className="w-20 h-20" /> : "Nessuna foto"}
                             </div>
                         </div>
                     ))}

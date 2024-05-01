@@ -20,7 +20,7 @@ model Order {
     customerWechatId String @map(name: "customer_wechat_id")
     amount Float
     productionCost Float    @map(name: "production_cost")
-    photo Bytes? @map(name: "photo")
+    photo String
     createdAt DateTime @default(now()) @map(name: "created_at")
     updatedAt DateTime @updatedAt @map(name: "updated_at")
     // userId    String   @map(name: "user_id")

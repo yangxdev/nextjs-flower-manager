@@ -5,6 +5,7 @@ import CalendarSection from "./CalendarSection";
 
 export default async function CalendarSectionServer() {
     const orders = await getAllOrders();
+    console.log(orders);
 
     return (
         <>
