@@ -15,11 +15,11 @@ datasource db {
 
 model Order {
     id        String   @id @default(cuid())
-    deliveryDate DateTime
-    customerName String
-    customerWechatId String
+    deliveryDate DateTime @map(name: "delivery_date")
+    customerName String @map(name: "customer_name")
+    customerWechatId String @map(name: "customer_wechat_id")
     amount Float
-    productionCost Float
+    productionCost Float    @map(name: "production_cost")
     photo Bytes? @map(name: "photo")
     createdAt DateTime @default(now()) @map(name: "created_at")
     updatedAt DateTime @updatedAt @map(name: "updated_at")
