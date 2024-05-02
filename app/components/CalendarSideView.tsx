@@ -4,6 +4,7 @@ import { SelectedDateContext } from "../utils/SelectedDateContext";
 import { SelectedDateInfoContext } from "../utils/SelectedDateInfoContext";
 import { Form, Modal, Radio, RadioChangeEvent } from "antd";
 import toast from "react-hot-toast";
+import Image from "next/image";
 
 export default function CalendarSideView() {
     const router = useRouter();
@@ -11,7 +12,7 @@ export default function CalendarSideView() {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [modalImage, setModalImage] = useState("");
 
-    const [orderStatuses, setOrderStatuses] = useState({});
+    const [orderStatuses, setOrderStatuses] = useState<Record<string, string>>({});
 
     // when a date is selected, it will show the orders for that date on the right side
     const { selectedDate } = React.useContext(SelectedDateContext);
@@ -117,10 +118,25 @@ export default function CalendarSideView() {
                             </div>
                             <div className="flex flex-row">
                                 <div className="font-semibold mr-2">Foto:</div>
-                                {order.photo ? <img src={order.photo} alt="order" className="w-40 h-fit rounded-xl cursor-pointer hover:brightness-90 transition duration-100" onClick={() => showModal(order.photo)} /> : "Nessuna foto"}
+                                {order.photo ?
+                                    <Image 
+                                        src={order.photo} 
+                                        alt="order" 
+                                        width={200}
+                                        height={200}
+                                        className="w-40 h-fit rounded-xl cursor-pointer hover:brightness-90 transition duration-100" 
+                                        onClick={() => showModal(order.photo)} />
+                                    : "Nessuna foto"}
 
                                 <Modal open={isModalVisible} onOk={handleOk} onCancel={handleOk} footer={null}>
-                                    <img src={modalImage} className="p-6 -mb-3" alt="order" style={{ width: "100%" }} />
+                                    <Image 
+                                        src={modalImage} 
+                                        className="p-6 -mb-3" 
+                                        height={200}
+                                        width={200}
+                                        alt="order" 
+                                        style={{ width: "100%" }} 
+                                        />
                                     <div className="additional-info text-center">
                                         <div className="flex justify-center">
                                             <div className="font-semibold mr-1">{order.customerName}</div> (@{order.customerWechatId})<br />

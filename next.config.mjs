@@ -7,6 +7,9 @@ const nextConfig = {
                 destination: '/protected/:path*'
             }
         ]
+    },
+    images: {
+        domains: ['localhost', 'nextjs-flower-manager-bucket.s3.us-east-1.amazonaws.com']
     }
 };
 
