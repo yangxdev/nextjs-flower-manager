@@ -79,3 +79,4 @@ export default function CalendarSideView() {
 }
 
 // TODO: mobile view
+// BUG: photo zoom view shows wrong info
