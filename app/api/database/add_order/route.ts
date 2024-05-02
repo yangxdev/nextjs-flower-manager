@@ -1,6 +1,10 @@
 import { sql } from "@vercel/postgres";
 import { NextResponse } from "next/server";
-import { createId } from "@paralleldrive/cuid2";
+import { init } from "@paralleldrive/cuid2";
+
+const createId = init({
+    length: 10,
+})
 
 export async function POST(request: Request) {
     const { deliveryDate, customerName, customerWechatId, amount, productionCost, photo, soldStatus } = await request.json();

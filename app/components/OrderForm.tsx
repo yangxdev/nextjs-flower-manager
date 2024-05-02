@@ -56,7 +56,7 @@ export default function OrderForm() {
     };
 
     const handleSubmit = async (values: any) => {
-        console.log("Received values of form: ", values);
+        //console.log("Received values of form: ", values);
 
         // AWS S3 photo upload process
         if (!file) {
@@ -142,7 +142,7 @@ export default function OrderForm() {
                         Scegli foto
                     </label>
                 </Form.Item>
-                <Form.Item name="soldStatus" label="Status" rules={[{ required: true, message: "Please select the status" }]} initialValue="toSell">
+                <Form.Item name="soldStatus" label="Status" rules={[{ required: true, message: "Please select the status" }]} initialValue="toMake">
                     <Radio.Group>
                         <Radio value="toMake">Da fare</Radio>
                         <Radio value="toSell">Da vendere</Radio>
