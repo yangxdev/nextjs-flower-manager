@@ -4,6 +4,9 @@ import { SelectedDateInfoContext } from "../utils/SelectedDateInfoContext";
 import { Modal } from "antd";
 
 export default function CalendarSideView() {
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [modalImage, setModalImage] = useState("");
+
     // when a date is selected, it will show the orders for that date on the right side
     const { selectedDate } = React.useContext(SelectedDateContext);
     const { selectedDateInfo } = React.useContext(SelectedDateInfoContext);
@@ -16,15 +19,17 @@ export default function CalendarSideView() {
 
     const selectedDateInfoArray = selectedDateInfo
         ? Object.values(selectedDateInfo).map((order: any) => ({
-              customerName: order.customerName,
-              customerWechatId: order.customerWechatId,
-              amount: order.amount,
-              photo: order.photo,
-          }))
+            customerName: order.customerName,
+            customerWechatId: order.customerWechatId,
+            amount: order.amount,
+            photo: order.photo,
+            soldStatus: order.soldStatus,
+        }))
         : [];
 
-    const [isModalVisible, setIsModalVisible] = useState(false);
-    const [modalImage, setModalImage] = useState("");
+    if (!selectedDate) {
+        return null;
+    }
 
     const showModal = (image: string) => {
         setModalImage(image);
@@ -41,7 +46,7 @@ export default function CalendarSideView() {
             <div className="flex flex-row gap-4 w-full">
                 <div className="flex flex-col gap-4 w-full">
                     {selectedDateInfoArray.map((order: any, index: number) => (
-                        <div key={index} className="flex flex-col justify-between border-2 border-lightBorder rounded-md p-4">
+                        <div key={index} className={`info-card flex flex-col justify-between border-2 border-lightBorder rounded-md p-4 ${order.soldStatus}`}>
                             <div className="flex flex-row">
                                 <div className="font-semibold mr-2">Cliente:</div>
                                 {order.customerName}
@@ -56,6 +61,10 @@ export default function CalendarSideView() {
                                 {order.amount}
                             </div>
                             <div className="flex flex-row">
+                                <div className="font-semibold mr-2">Stato:</div>
+                                {order.soldStatus === "sold" ? "Venduto" : "Non venduto"}
+                            </div>
+                            <div className="flex flex-row">
                                 <div className="font-semibold mr-2">Foto:</div>
                                 {order.photo ? <img src={order.photo} alt="order" className="w-40 h-fit rounded-xl cursor-pointer hover:brightness-90 transition duration-100" onClick={() => showModal(order.photo)} /> : "Nessuna foto"}
 
@@ -63,10 +72,15 @@ export default function CalendarSideView() {
                                     <img src={modalImage} className="p-6 -mb-3" alt="order" style={{ width: "100%" }} />
                                     <div className="additional-info text-center">
                                         <div className="flex justify-center">
-                                            <div className="font-semibold mr-1">{order.customerName}</div> (@{order.customerWechatId})<br/>
+                                            <div className="font-semibold mr-1">{order.customerName}</div> (@{order.customerWechatId})<br />
                                         </div>
                                         <div>{"€ "}{order.amount}<br /></div>
                                         <div>{fullDate}</div>
+                                        <div>
+                                            {order.soldStatus === "toMake" ? "Da fare" : ""}
+                                            {order.soldStatus === "toSell" ? "Da vendere" : ""}
+                                            {order.soldStatus === "sold" ? "Venduto" : ""}
+                                        </div>
                                     </div>
                                 </Modal>
                             </div>

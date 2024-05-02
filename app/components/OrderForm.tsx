@@ -2,8 +2,11 @@ import { InboxOutlined, UploadOutlined } from "@ant-design/icons";
 import { Input, Button, Checkbox, Col, ColorPicker, Form, InputNumber, Radio, Rate, Row, Select, Slider, Space, Switch, Upload } from "antd";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 export default function OrderForm() {
+    const router = useRouter();
+
     const [file, setFile] = React.useState<File | null>(null);
     const [uploading, setUploading] = React.useState<boolean>(false);
     const [message, setMessage] = React.useState<string>("");
@@ -57,13 +60,13 @@ export default function OrderForm() {
 
         // AWS S3 photo upload process
         if (!file) {
-            setMessage("Please select a file to upload.");
+            toast.error("Please upload a photo");
             return;
         }
         const photoUrl = await handlePhotoUpload(file);
 
         // Add order process
-        const { deliveryDate, customerName, customerWechatId, amount, productionCost } = values;
+        const { deliveryDate, customerName, customerWechatId, amount, productionCost, soldStatus} = values;
         const responsePromise = fetch("/api/database/add_order", {
             method: "POST",
             headers: {
@@ -75,12 +78,14 @@ export default function OrderForm() {
                 customerWechatId,
                 amount,
                 productionCost,
+                soldStatus,
                 photo: photoUrl || "",
             }),
         }).then((response) => {
             if (!response.ok) {
                 throw new Error("HTTP error " + response.status);
             }
+            router.refresh();
             return response;
         });
 
@@ -102,24 +107,24 @@ export default function OrderForm() {
     }, [show, message]);
 
     return (
-        <div className="border-2 border-lightBorder p-4 w-fit rounded-md bg-whiteDarker text-right">
+        <div className="border-2 border-lightBorder p-4 w-[28rem] rounded-md bg-whiteDarker text-right">
             <Form name="addOrder" style={{ maxWidth: "500px" }} onFinish={handleSubmit}>
-                <Form.Item name="deliveryDate" label="Data di consegna" rules={[{ required: true, message: "Please input the delivery date" }]}>
+                <Form.Item name="deliveryDate" label="Data di consegna" rules={[{ required: true, message: "Please input the date" }]}>
                     <Input placeholder="Data di consegna" type="date" />
                 </Form.Item>
-                <Form.Item name="customerName" label="Nome cliente" rules={[{ required: true, message: "Please input client's name" }]}>
+                <Form.Item name="customerName" label="Nome cliente" rules={[{ required: true, message: "Please input the name" }]}>
                     <Input placeholder="Nome cliente" type="text" />
                 </Form.Item>
-                <Form.Item name="customerWechatId" label="Wechat ID" rules={[{ required: true, message: "Please input client's Wechat ID" }]}>
+                <Form.Item name="customerWechatId" label="Wechat ID" rules={[{ required: true, message: "Please input the Wechat ID" }]}>
                     <Input placeholder="Wechat ID" type="text" />
                 </Form.Item>
-                <Form.Item name="amount" label="Da pagare" rules={[{ required: true, message: "Please input the amount to be paid by the client" }]}>
+                <Form.Item name="amount" label="Da pagare" rules={[{ required: true, message: "Please input the amount" }]}>
                     <Input placeholder="Da pagare" type="number" />
                 </Form.Item>
-                <Form.Item name="productionCost" label="Costo di produzione" rules={[{ required: true, message: "Please input the production cost" }]}>
+                <Form.Item name="productionCost" label="Costo di produzione" rules={[{ required: true, message: "Please input the cost" }]}>
                     <Input placeholder="Costo di produzione" type="number" />
                 </Form.Item>
-                <Form.Item label="Foto" extra={loadedFileMessage}>
+                <Form.Item label="Foto" extra={loadedFileMessage} rules={[{ required: true, message: "Please input a photo" }]}>
                     <input
                         id="file"
                         type="file"
@@ -134,8 +139,15 @@ export default function OrderForm() {
                         style={{ display: "none" }}
                     />
                     <label htmlFor="file" className="border-2 p-2 cursor-pointer hover:bg-newBlue-200 transition duration-200 rounded-lg">
-                        Choose File
+                        Scegli foto
                     </label>
+                </Form.Item>
+                <Form.Item name="soldStatus" label="Status" rules={[{ required: true, message: "Please select the status" }]} initialValue="toSell">
+                    <Radio.Group>
+                        <Radio value="toMake">Da fare</Radio>
+                        <Radio value="toSell">Da vendere</Radio>
+                        <Radio value="sold">Venduto</Radio>
+                    </Radio.Group>
                 </Form.Item>
                 <Form.Item>
                     <Space>

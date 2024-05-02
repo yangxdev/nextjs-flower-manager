@@ -19,6 +19,7 @@ export default function Calendar(props: { orders: any[] }) {
             type: "order",
             // content: order.customerName
             content: order.photo,
+            status: order.soldStatus,
         }));
     };
 
@@ -28,12 +29,14 @@ export default function Calendar(props: { orders: any[] }) {
             <ul className="events gap-2 flex flex-row">
                 {listData.map((item, index) => (
                     <li key={index}>
-                        <img src={item.content} alt="Order" />
+                        <img src={item.content} alt="Order" className={`${item.status}`} />
                     </li>
                 ))}
             </ul>
         );
     };
+
+    // TODO: use next/image for image optimization
 
     const cellRender: CalendarProps<Dayjs>["cellRender"] = (current, info) => {
         if (info.type === "date") return dateCellRender(current);

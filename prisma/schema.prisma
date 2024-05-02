@@ -21,6 +21,7 @@ model Order {
     amount Float
     productionCost Float    @map(name: "production_cost")
     photo String
+    soldStatus String @map(name: "sold_status")
     createdAt DateTime @default(now()) @map(name: "created_at")
     updatedAt DateTime @updatedAt @map(name: "updated_at")
     // userId    String   @map(name: "user_id")
