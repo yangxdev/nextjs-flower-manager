@@ -38,3 +38,7 @@ img.sold, .info-card.sold {
 .ant-picker-calendar-date-content {
     height: 100% !important;
 }
+
+.ant-picker-calendar-mode-switch {
+    display: none;
+}

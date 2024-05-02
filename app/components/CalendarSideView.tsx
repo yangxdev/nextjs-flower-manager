@@ -2,19 +2,22 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { SelectedDateContext } from "../utils/SelectedDateContext";
 import { SelectedDateInfoContext } from "../utils/SelectedDateInfoContext";
-import { Form, Modal, Radio, RadioChangeEvent } from "antd";
+import { Button, Form, Modal, Radio, RadioChangeEvent } from "antd";
 import toast from "react-hot-toast";
+import { FaPlus } from "react-icons/fa6";
 import Image from "next/image";
+import OrderForm from "./OrderForm";
 
 export default function CalendarSideView() {
     const router = useRouter();
 
-    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [isZoomModalVisible, setIsZoomModalVisible] = useState(false);
     const [modalImage, setModalImage] = useState("");
+
+    const [isAddModalVisible, setIsAddModalVisible] = useState(false);
 
     const [orderStatuses, setOrderStatuses] = useState<Record<string, string>>({});
 
-    // when a date is selected, it will show the orders for that date on the right side
     const { selectedDate } = React.useContext(SelectedDateContext);
     const { selectedDateInfo } = React.useContext(SelectedDateInfoContext);
 
@@ -44,12 +47,15 @@ export default function CalendarSideView() {
 
     const showModal = (image: string) => {
         setModalImage(image);
-        setIsModalVisible(true);
+        setIsZoomModalVisible(true);
     };
 
-    const handleOk = () => {
-        setIsModalVisible(false);
+    const handleZoomModalClose = () => {
+        setIsZoomModalVisible(false);
     };
+    const handleAddModalClose = () => {
+        setIsAddModalVisible(false);
+    }
 
     const onStatusChange = (e: RadioChangeEvent) => {
         const orderId = e.target.id?.split("-")[0];
@@ -84,7 +90,14 @@ export default function CalendarSideView() {
 
     return (
         <div className="flex flex-col gap-4 min-w-[20rem]">
-            <div className="text-2xl font-bold mt-2">{fullDate}</div>
+            <div className="text-2xl font-bold mt-2 gap-2 flex flex-row items-center justify-between">
+                <div className="">{fullDate}</div>
+                <div className="">
+                    <div className="flex flex-row items-center text-black font-normal text-base border-lightBorder p-2 bg-whiteDarker border-2 w-[10rem] rounded-lg gap-1 cursor-pointer hover:bg-newBlue-500 hover:text-white transition duration-200" onClick={() => setIsAddModalVisible(true)}>
+                    <FaPlus /> Aggiungi ordine 
+                    </div>
+                </div>
+            </div>
             <div className="flex flex-row gap-4 w-full">
                 <div className="flex flex-col gap-4 w-full">
                     {selectedDateInfoArray.map((order: any, index: number) => (
@@ -119,24 +132,24 @@ export default function CalendarSideView() {
                             <div className="flex flex-row">
                                 <div className="font-semibold mr-2">Foto:</div>
                                 {order.photo ?
-                                    <Image 
-                                        src={order.photo} 
-                                        alt="order" 
+                                    <Image
+                                        src={order.photo}
+                                        alt="order"
                                         width={200}
                                         height={200}
-                                        className="w-40 h-fit rounded-xl cursor-pointer hover:brightness-90 transition duration-100" 
+                                        className="w-40 h-fit rounded-xl cursor-pointer hover:brightness-90 transition duration-100"
                                         onClick={() => showModal(order.photo)} />
                                     : "Nessuna foto"}
 
-                                <Modal open={isModalVisible} onOk={handleOk} onCancel={handleOk} footer={null}>
-                                    <Image 
-                                        src={modalImage} 
-                                        className="p-6 -mb-3" 
+                                <Modal open={isZoomModalVisible} onOk={handleZoomModalClose} onCancel={handleZoomModalClose} footer={null}>
+                                    <Image
+                                        src={modalImage}
+                                        className="p-6 -mb-3"
                                         height={200}
                                         width={200}
-                                        alt="order" 
-                                        style={{ width: "100%" }} 
-                                        />
+                                        alt="order"
+                                        style={{ width: "100%" }}
+                                    />
                                     <div className="additional-info text-center">
                                         <div className="flex justify-center">
                                             <div className="font-semibold mr-1">{order.customerName}</div> (@{order.customerWechatId})<br />
@@ -150,6 +163,10 @@ export default function CalendarSideView() {
                                         </div>
                                         <div className="">{orderStatuses[order.id]}</div> */}
                                     </div>
+                                </Modal>
+
+                                <Modal open={isAddModalVisible} onOk={handleZoomModalClose} onCancel={handleAddModalClose} footer={null}>
+                                    <OrderForm />
                                 </Modal>
                             </div>
                         </div>

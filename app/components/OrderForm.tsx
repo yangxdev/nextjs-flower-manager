@@ -66,7 +66,7 @@ export default function OrderForm() {
         const photoUrl = await handlePhotoUpload(file);
 
         // Add order process
-        const { deliveryDate, customerName, customerWechatId, amount, productionCost, soldStatus} = values;
+        const { deliveryDate, customerName, customerWechatId, amount, productionCost, soldStatus } = values;
         const responsePromise = fetch("/api/database/add_order", {
             method: "POST",
             headers: {
@@ -107,7 +107,8 @@ export default function OrderForm() {
     }, [show, message]);
 
     return (
-        <div className="border-2 border-lightBorder p-4 w-[28rem] rounded-md bg-whiteDarker text-right">
+        <div className="p-4 w-[28rem] rounded-md bg-white text-right">
+            <div className="font-semibold mb-4 text-left text-lg">Aggiungi ordine</div>
             <Form name="addOrder" style={{ maxWidth: "500px" }} onFinish={handleSubmit}>
                 <Form.Item name="deliveryDate" label="Data di consegna" rules={[{ required: true, message: "Please input the date" }]}>
                     <Input placeholder="Data di consegna" type="date" />
@@ -151,7 +152,7 @@ export default function OrderForm() {
                 </Form.Item>
                 <Form.Item>
                     <Space>
-                        <button type="submit" className="p-2 bg-white hover:bg-newBlue-500 hover:text-white transition duration-200 border-2 rounded-md">
+                        <button type="submit" className="p-2 mr-2 bg-white hover:bg-newBlue-500 hover:text-white transition duration-200 border-2 rounded-md">
                             Submit
                         </button>
                         <button type="reset" className="p-2 bg-white hover:bg-newRed-500 hover:text-white transition duration-200 border-2 rounded-md">
