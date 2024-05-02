@@ -11,6 +11,8 @@ export default function CalendarSideView() {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [modalImage, setModalImage] = useState("");
 
+    const [orderStatuses, setOrderStatuses] = useState({});
+
     // when a date is selected, it will show the orders for that date on the right side
     const { selectedDate } = React.useContext(SelectedDateContext);
     const { selectedDateInfo } = React.useContext(SelectedDateInfoContext);
@@ -49,6 +51,9 @@ export default function CalendarSideView() {
     };
 
     const onStatusChange = (e: RadioChangeEvent) => {
+        const orderId = e.target.id?.split("-")[0];
+        const newStatus = e.target.value;
+
         const responsePromise = fetch("/api/database/update_order_status", {
             method: "POST",
             headers: {
@@ -63,6 +68,7 @@ export default function CalendarSideView() {
                 throw new Error("HTTP error " + response.status);
             }
             router.refresh();
+            setOrderStatuses(prevStatuses => ({ ...prevStatuses, [String(orderId)]: newStatus }));
         });
 
         toast.promise(
@@ -81,8 +87,8 @@ export default function CalendarSideView() {
             <div className="flex flex-row gap-4 w-full">
                 <div className="flex flex-col gap-4 w-full">
                     {selectedDateInfoArray.map((order: any, index: number) => (
-                        <div key={index} className={`info-card gap-1 flex flex-col justify-between border-2 border-lightBorder rounded-md p-4 ${order.soldStatus}`}>
-                            <div className="flex flex-row text-xs opacity-50">
+                        <div key={index} className={`info-card gap-1 flex flex-col justify-between border-2 border-lightBorder rounded-md p-4 ${orderStatuses[order.id] || order.soldStatus}`}>
+                            <div className="flex flex-row text-xs opacity-50 hidden">
                                 {order.id}
                             </div>
                             <div className="flex flex-row">
@@ -102,7 +108,7 @@ export default function CalendarSideView() {
                                 <div className="font-semibold mr-2">Stato:</div>
                                 {/* {order.soldStatus === "sold" ? "Venduto" : "Non venduto"} */}
                                 <Form name="">
-                                    <Radio.Group size="small" value={order.soldStatus} onChange={onStatusChange}>
+                                    <Radio.Group size="small" value={orderStatuses[order.id] || order.soldStatus} onChange={onStatusChange}>
                                         <Radio.Button value="toMake" id={`${order.id}-toMake`}>Da fare</Radio.Button>
                                         <Radio.Button value="toSell" id={`${order.id}-toSell`}>Da vendere</Radio.Button>
                                         <Radio.Button value="sold" id={`${order.id}-sold`}>Venduto</Radio.Button>
@@ -121,11 +127,12 @@ export default function CalendarSideView() {
                                         </div>
                                         <div>{"€ "}{order.amount}<br /></div>
                                         <div>{fullDate}</div>
-                                        <div>
-                                            {order.soldStatus === "toMake" ? "Da fare" : ""}
-                                            {order.soldStatus === "toSell" ? "Da vendere" : ""}
-                                            {order.soldStatus === "sold" ? "Venduto" : ""}
+                                        {/* <div>
+                                            {(orderStatuses[order.id] || order.soldStatus) === "toMake" ? "Da fare" : ""}
+                                            {(orderStatuses[order.id] || order.soldStatus) === "toSell" ? "Da vendere" : ""}
+                                            {(orderStatuses[order.id] || order.soldStatus) === "sold" ? "Venduto" : ""}
                                         </div>
+                                        <div className="">{orderStatuses[order.id]}</div> */}
                                     </div>
                                 </Modal>
                             </div>
