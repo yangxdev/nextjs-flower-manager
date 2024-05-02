@@ -10,12 +10,6 @@ export default function CalendarSection(props: { orders: any[] }) {
     const [selectedDate, setSelectedDate] = React.useState(null);
     const [selectedDateInfo, setSelectedDateInfo] = React.useState(null);
 
-    const [updateViews, setUpdateViews] = React.useState(false);
-    const handleUpdateView = () => {
-        setUpdateViews(!updateViews);
-        console.log("view updated: ", updateViews)
-    }
-
     return (
         <div className="border-lightBorder border-2 rounded-xl p-4 mb-16 bg-white overflow-y-auto">
             <SelectedDateContext.Provider value={{ selectedDate, setSelectedDate }}>
@@ -23,7 +17,7 @@ export default function CalendarSection(props: { orders: any[] }) {
                     <div className="flex flex-row gap-6">
                         <Calendar orders={props.orders} />
                         <div className="border-r border-lightBorder"></div>
-                        <CalendarSideView handleUpdateView={handleUpdateView} />
+                        <CalendarSideView />
                     </div>
                 </SelectedDateInfoContext.Provider>
             </SelectedDateContext.Provider>

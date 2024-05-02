@@ -5,7 +5,7 @@ import { SelectedDateInfoContext } from "../utils/SelectedDateInfoContext";
 import { Form, Modal, Radio, RadioChangeEvent } from "antd";
 import toast from "react-hot-toast";
 
-export default function CalendarSideView({ handleUpdateView }) {
+export default function CalendarSideView() {
     const router = useRouter();
 
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -63,7 +63,6 @@ export default function CalendarSideView({ handleUpdateView }) {
                 throw new Error("HTTP error " + response.status);
             }
             router.refresh();
-            handleUpdateView();
         });
 
         toast.promise(

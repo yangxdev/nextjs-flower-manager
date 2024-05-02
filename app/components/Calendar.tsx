@@ -12,20 +12,6 @@ export default function Calendar(props: { orders: any[] }) {
     const { setSelectedDate } = React.useContext(SelectedDateContext);
     const { setSelectedDateInfo } = React.useContext(SelectedDateInfoContext);
 
-    const handleDateSelection = async (date: any, source: any) => {
-        if (source === "date") {
-            setSelectedDate(date);
-            const filteredOrders = props.orders.filter((order) => dayjs(order.deliveryDate).isSame(date, "day"));
-            setSelectedDateInfo(filteredOrders);
-        }
-    }
-    // useEffect(() => {
-    //     if (updateView && selectedDate) {
-    //         handleDateSelection(selectedDate, "date");
-    //         handleUpdateView(); // reset updateView to false
-    //     }
-    // }, [updateView]);
-
     const getListData = (value: Dayjs) => {
         //console.log(props.orders);
         const ordersOnThisDay = props.orders.filter((order) => value.isSame(order.deliveryDate, "day"));
@@ -65,7 +51,6 @@ export default function Calendar(props: { orders: any[] }) {
                     onSelect={async (date, { source }) => {
                         if (source === "date") {
                             setSelectedDate(date);
-                            // filter orders for the selected date
                             const filteredOrders = props.orders.filter((order) => dayjs(order.deliveryDate).isSame(date, "day"));
                             setSelectedDateInfo(filteredOrders);
                         }
