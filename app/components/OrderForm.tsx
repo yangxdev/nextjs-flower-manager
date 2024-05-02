@@ -102,7 +102,7 @@ export default function OrderForm() {
     }, [show, message]);
 
     return (
-        <>
+        <div className="border-2 border-lightBorder p-4 w-fit rounded-md bg-whiteDarker text-right">
             <Form name="addOrder" style={{ maxWidth: "500px" }} onFinish={handleSubmit}>
                 <Form.Item name="deliveryDate" label="Data di consegna" rules={[{ required: true, message: "Please input the delivery date" }]}>
                     <Input placeholder="Data di consegna" type="date" />
@@ -131,22 +131,24 @@ export default function OrderForm() {
                             }
                         }}
                         accept="image/png, image/jpeg, image/jpg"
-                        style={{ display: "none" }} 
+                        style={{ display: "none" }}
                     />
                     <label htmlFor="file" className="border-2 p-2 cursor-pointer hover:bg-newBlue-200 transition duration-200 rounded-lg">
                         Choose File
                     </label>
                 </Form.Item>
-                <Form.Item wrapperCol={{ span: 12, offset: 6 }}>
+                <Form.Item>
                     <Space>
-                        <Button type="primary" htmlType="submit">
-                            <div className="text-black">Submit</div>
-                        </Button>
-                        <Button htmlType="reset">reset</Button>
+                        <button type="submit" className="p-2 bg-white hover:bg-newBlue-500 hover:text-white transition duration-200 border-2 rounded-md">
+                            Submit
+                        </button>
+                        <button type="reset" className="p-2 bg-white hover:bg-newRed-500 hover:text-white transition duration-200 border-2 rounded-md">
+                            Reset
+                        </button>
                     </Space>
                 </Form.Item>
             </Form>
-        </>
+        </div>
     );
 }
 

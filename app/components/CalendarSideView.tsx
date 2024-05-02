@@ -34,7 +34,7 @@ export default function CalendarSideView() {
                                 {order.customerName}
                             </div>
                             <div className="flex flex-row">
-                                <div className="font-semibold mr-2">Wechat ID:</div>
+                                <div className="font-semibold mr-2">WeChat ID:</div>
                                 {order.customerWechatId}
                             </div>
                             <div className="flex flex-row">
@@ -44,7 +44,7 @@ export default function CalendarSideView() {
                             </div>
                             <div className="flex flex-row">
                                 <div className="font-semibold mr-2">Foto:</div>
-                                {order.photo ? <img src={order.photo} alt="order" className="w-20 h-20" /> : "Nessuna foto"}
+                                {order.photo ? <img src={order.photo} alt="order" className="w-40 h-fit rounded-xl" /> : "Nessuna foto"}
                             </div>
                         </div>
                     ))}

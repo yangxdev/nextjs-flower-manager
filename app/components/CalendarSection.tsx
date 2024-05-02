@@ -7,8 +7,6 @@ import Calendar from "./Calendar";
 import OrderForm from "./OrderForm";
 
 export default function CalendarSection(props: { orders: any[] }) {
-    // a calendar component, it shows a calendar containing future orders (not implemented yet)
-    // only current month is shown
     const [selectedDate, setSelectedDate] = React.useState(null);
     const [selectedDateInfo, setSelectedDateInfo] = React.useState(null);
 
@@ -18,7 +16,7 @@ export default function CalendarSection(props: { orders: any[] }) {
                 <SelectedDateInfoContext.Provider value={{ selectedDateInfo, setSelectedDateInfo }}>
                     <div className="flex flex-row gap-6">
                         <Calendar orders={props.orders} />
-                        <div className="border-r border-lightBorder"></div> {/* Divider */}
+                        <div className="border-r border-lightBorder"></div> 
                         <CalendarSideView />
                     </div>
                 </SelectedDateInfoContext.Provider>
