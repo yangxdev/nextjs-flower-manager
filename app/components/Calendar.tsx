@@ -2,15 +2,23 @@
 import { Calendar as AntdCalendar, ConfigProvider } from "antd";
 import { SelectedDateContext } from "../utils/SelectedDateContext";
 import { SelectedDateInfoContext } from "../utils/SelectedDateInfoContext";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import dayjs, { Dayjs } from "dayjs";
 import { BadgeProps, CalendarProps } from "antd";
 import { Badge } from "antd";
-import '@/app/css/Calendar.css';
+import "@/app/css/Calendar.css";
+import { ScrollContext } from "../utils/ScrollContext";
 
 export default function Calendar(props: { orders: any[] }) {
     const { setSelectedDate } = React.useContext(SelectedDateContext);
     const { setSelectedDateInfo } = React.useContext(SelectedDateInfoContext);
+
+    // const topViewRef = useRef<HTMLDivElement>(null);
+    // const { setTopViewRef } = React.useContext(ScrollContext);
+
+    // useEffect(() => {
+    //     setTopViewRef(topViewRef);
+    // }, []);
 
     const getListData = (value: Dayjs) => {
         //console.log(props.orders);
@@ -44,7 +52,9 @@ export default function Calendar(props: { orders: any[] }) {
     };
 
     return (
-        <>
+        <div
+        //  ref={topViewRef}
+        >
             <ConfigProvider>
                 <AntdCalendar
                     cellRender={cellRender}
@@ -57,6 +67,6 @@ export default function Calendar(props: { orders: any[] }) {
                     }}
                 />
             </ConfigProvider>
-        </>
+        </div>
     );
 }

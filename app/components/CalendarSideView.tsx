@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { SelectedDateContext } from "../utils/SelectedDateContext";
 import { SelectedDateInfoContext } from "../utils/SelectedDateInfoContext";
 import { Button, Form, Modal, Radio, RadioChangeEvent } from "antd";
 import toast from "react-hot-toast";
 import Image from "next/image";
+import { ScrollContext } from "../utils/ScrollContext";
 
 export default function CalendarSideView() {
     const router = useRouter();
@@ -16,6 +17,15 @@ export default function CalendarSideView() {
 
     const { selectedDate } = React.useContext(SelectedDateContext);
     const { selectedDateInfo } = React.useContext(SelectedDateInfoContext);
+
+    // const { topViewRef } = React.useContext(ScrollContext);
+
+    const sideViewRef = useRef<HTMLDivElement>(null);
+    useEffect(() => {
+        if (selectedDateInfo && selectedDateInfo.length > 0 && window.innerWidth < 768) {
+            sideViewRef?.current?.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
+        }
+    }, [selectedDateInfo]);
 
     if (!selectedDate) {
         return null;
@@ -34,8 +44,6 @@ export default function CalendarSideView() {
               soldStatus: order.soldStatus,
           }))
         : [];
-
-    // console.log(selectedDateInfoArray);
 
     if (!selectedDate) {
         return null;
@@ -79,13 +87,13 @@ export default function CalendarSideView() {
                 error: "Errore nell'aggiornamento dello stato",
             },
             {
-                position: "top-center",
+                position: "bottom-center",
             }
         );
     };
 
     return (
-        <div className="flex flex-col gap-4 min-w-[20rem]">
+        <div className="flex flex-col gap-4 min-w-[20rem]" ref={sideViewRef}>
             <div className="text-2xl font-bold mt-2 gap-2 flex flex-row items-center justify-between">
                 <div className="">{fullDate}</div>
             </div>
@@ -153,6 +161,16 @@ export default function CalendarSideView() {
                     ))}
                 </div>
             </div>
+            {/* <div>
+                <Button
+                    type="primary"
+                    onClick={() => {
+                        topViewRef?.current?.scrollIntoView({ behavior: "smooth" });
+                    }}
+                >
+                    Torna su
+                </Button>
+            </div> */}
         </div>
     );
 }

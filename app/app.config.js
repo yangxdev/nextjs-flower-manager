@@ -140,7 +140,7 @@ module.exports = {
                 },
 
                 dashboard: {
-                    title: "Calendar",
+                    title: "🌸Calendar",
                     subtitle: "Summary of your data in the last month",
                 },
 

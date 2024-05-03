@@ -105,7 +105,7 @@ export default function OrderForm() {
                 error: "Error when adding order",
             },
             {
-                position: "top-center",
+                position: "bottom-center",
             }
         );
     };
