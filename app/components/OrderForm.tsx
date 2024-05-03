@@ -1,7 +1,9 @@
+"use client";
 import { InboxOutlined, UploadOutlined } from "@ant-design/icons";
-import { Input, Button, Checkbox, Col, ColorPicker, Form, InputNumber, Radio, Rate, Row, Select, Slider, Space, Switch, Upload } from "antd";
+import { Input, Button, Checkbox, Col, ColorPicker, Form, InputNumber, Radio, Rate, Row, Select, Slider, Space, Switch, Upload, Modal } from "antd";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { FaPlus } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
 
 export default function OrderForm() {
@@ -12,6 +14,12 @@ export default function OrderForm() {
     const [message, setMessage] = React.useState<string>("");
     const [show, setShow] = React.useState<string>("hidden");
     const [loadedFileMessage, setLoadedFileMessage] = React.useState<string>("");
+
+    const [isAddModalVisible, setIsAddModalVisible] = useState(false);
+
+    const handleAddModalClose = () => {
+        setIsAddModalVisible(false);
+    }
 
     useEffect(() => {
         if (file) {
@@ -107,61 +115,65 @@ export default function OrderForm() {
     }, [show, message]);
 
     return (
-        <div className="p-4 w-[28rem] rounded-md bg-white text-right">
-            <div className="font-semibold mb-4 text-left text-lg">Aggiungi ordine</div>
-            <Form name="addOrder" style={{ maxWidth: "500px" }} onFinish={handleSubmit}>
-                <Form.Item name="deliveryDate" label="Data di consegna" rules={[{ required: true, message: "Please input the date" }]}>
-                    <Input placeholder="Data di consegna" type="date" />
-                </Form.Item>
-                <Form.Item name="customerName" label="Nome cliente" rules={[{ required: true, message: "Please input the name" }]}>
-                    <Input placeholder="Nome cliente" type="text" />
-                </Form.Item>
-                <Form.Item name="customerWechatId" label="Wechat ID" rules={[{ required: true, message: "Please input the Wechat ID" }]}>
-                    <Input placeholder="Wechat ID" type="text" />
-                </Form.Item>
-                <Form.Item name="amount" label="Da pagare" rules={[{ required: true, message: "Please input the amount" }]}>
-                    <Input placeholder="Da pagare" type="number" />
-                </Form.Item>
-                <Form.Item name="productionCost" label="Costo di produzione" rules={[{ required: true, message: "Please input the cost" }]}>
-                    <Input placeholder="Costo di produzione" type="number" />
-                </Form.Item>
-                <Form.Item label="Foto" extra={loadedFileMessage} rules={[{ required: true, message: "Please input a photo" }]}>
-                    <input
-                        id="file"
-                        type="file"
-                        className=""
-                        onChange={(e) => {
-                            const files = e.target.files;
-                            if (files) {
-                                setFile(files[0]);
-                            }
-                        }}
-                        accept="image/png, image/jpeg, image/jpg"
-                        style={{ display: "none" }}
-                    />
-                    <label htmlFor="file" className="border-2 p-2 cursor-pointer hover:bg-newBlue-200 transition duration-200 rounded-lg">
-                        Scegli foto
-                    </label>
-                </Form.Item>
-                <Form.Item name="soldStatus" label="Status" rules={[{ required: true, message: "Please select the status" }]} initialValue="toMake">
-                    <Radio.Group>
-                        <Radio value="toMake">Da fare</Radio>
-                        <Radio value="toSell">Da vendere</Radio>
-                        <Radio value="sold">Venduto</Radio>
-                    </Radio.Group>
-                </Form.Item>
-                <Form.Item>
-                    <Space>
-                        <button type="submit" className="p-2 mr-2 bg-white hover:bg-newBlue-500 hover:text-white transition duration-200 border-2 rounded-md">
-                            Submit
-                        </button>
-                        <button type="reset" className="p-2 bg-white hover:bg-newRed-500 hover:text-white transition duration-200 border-2 rounded-md">
-                            Reset
-                        </button>
-                    </Space>
-                </Form.Item>
-            </Form>
-        </div>
+        <>
+            <div className="text-black border-2 border-lightBorder hover:text-white hover:bg-newBlue-500 w-fit items-center flex flex-row gap-1 p-2 rounded-lg bg-whiteDarker cursor-pointer" onClick={() => { setIsAddModalVisible(true); }}>
+                <FaPlus /> Aggiungi ordine
+            </div>
+            <Modal open={isAddModalVisible} onOk={handleAddModalClose} onCancel={handleAddModalClose} footer={null}>
+                <div className="p-4 w-full rounded-md bg-white text-right">
+                    <div className="font-semibold mb-4 text-left text-lg">Aggiungi ordine</div>
+                    <Form name="addOrder" style={{ maxWidth: "500px" }} onFinish={handleSubmit}>
+                        <Form.Item name="deliveryDate" label="Data di consegna" rules={[{ required: true, message: "Please input the date" }]}>
+                            <Input placeholder="Data di consegna" type="date" />
+                        </Form.Item>
+                        <Form.Item name="customerName" label="Nome cliente" rules={[{ required: true, message: "Please input the name" }]}>
+                            <Input placeholder="Nome cliente" type="text" />
+                        </Form.Item>
+                        <Form.Item name="customerWechatId" label="Wechat ID" rules={[{ required: true, message: "Please input the Wechat ID" }]}>
+                            <Input placeholder="Wechat ID" type="text" />
+                        </Form.Item>
+                        <Form.Item name="amount" label="Da pagare" rules={[{ required: true, message: "Please input the amount" }]}>
+                            <Input placeholder="Da pagare" type="number" />
+                        </Form.Item>
+                        <Form.Item name="productionCost" label="Costo di produzione" rules={[{ required: true, message: "Please input the cost" }]}>
+                            <Input placeholder="Costo di produzione" type="number" />
+                        </Form.Item>
+                        <Form.Item label="Foto" extra={loadedFileMessage} rules={[{ required: true, message: "Please input a photo" }]}>
+                            <input
+                                id="file"
+                                type="file"
+                                className=""
+                                onChange={(e) => {
+                                    const files = e.target.files;
+                                    if (files) {
+                                        setFile(files[0]);
+                                    }
+                                }}
+                                accept="image/png, image/jpeg, image/jpg"
+                                style={{ display: "none" }} />
+                            <label htmlFor="file" className="border-2 p-2 cursor-pointer hover:bg-newBlue-200 transition duration-200 rounded-lg">
+                                Scegli foto
+                            </label>
+                        </Form.Item>
+                        <Form.Item name="soldStatus" label="Status" rules={[{ required: true, message: "Please select the status" }]} initialValue="toMake">
+                            <Radio.Group>
+                                <Radio value="toMake">Da fare</Radio>
+                                <Radio value="toSell">Da vendere</Radio>
+                                <Radio value="sold">Venduto</Radio>
+                            </Radio.Group>
+                        </Form.Item>
+                        <Form.Item>
+                            <Space>
+                                <button type="submit" className="p-2 mr-2 bg-white hover:bg-newBlue-500 hover:text-white transition duration-200 border-2 rounded-md">
+                                    Submit
+                                </button>
+                                <button type="reset" className="p-2 bg-white hover:bg-newRed-500 hover:text-white transition duration-200 border-2 rounded-md">
+                                    Reset
+                                </button>
+                            </Space>
+                        </Form.Item>
+                    </Form>
+                </div></Modal></>
     );
 }
 
