@@ -26,13 +26,13 @@ export default function CalendarSideView() {
 
     const selectedDateInfoArray = selectedDateInfo
         ? Object.values(selectedDateInfo).map((order: any) => ({
-            id: order.id,
-            customerName: order.customerName,
-            customerWechatId: order.customerWechatId,
-            amount: order.amount,
-            photo: order.photo,
-            soldStatus: order.soldStatus,
-        }))
+              id: order.id,
+              customerName: order.customerName,
+              customerWechatId: order.customerWechatId,
+              amount: order.amount,
+              photo: order.photo,
+              soldStatus: order.soldStatus,
+          }))
         : [];
 
     // console.log(selectedDateInfoArray);
@@ -68,7 +68,7 @@ export default function CalendarSideView() {
                 throw new Error("HTTP error " + response.status);
             }
             router.refresh();
-            setOrderStatuses(prevStatuses => ({ ...prevStatuses, [String(orderId)]: newStatus }));
+            setOrderStatuses((prevStatuses) => ({ ...prevStatuses, [String(orderId)]: newStatus }));
         });
 
         toast.promise(
@@ -78,8 +78,11 @@ export default function CalendarSideView() {
                 success: "Stato aggiornato!",
                 error: "Errore nell'aggiornamento dello stato",
             },
-        )
-    }
+            {
+                position: "top-center",
+            }
+        );
+    };
 
     return (
         <div className="flex flex-col gap-4 min-w-[20rem]">
@@ -90,9 +93,7 @@ export default function CalendarSideView() {
                 <div className="flex flex-col gap-4 w-full">
                     {selectedDateInfoArray.map((order: any, index: number) => (
                         <div key={index} className={`info-card gap-1 flex flex-col justify-between border-2 border-lightBorder rounded-md p-4 ${orderStatuses[order.id] || order.soldStatus}`}>
-                            <div className="flex flex-row text-xs opacity-50 hidden">
-                                {order.id}
-                            </div>
+                            <div className="flex flex-row text-xs opacity-50 hidden">{order.id}</div>
                             <div className="flex flex-row">
                                 <div className="font-semibold mr-2">Cliente:</div>
                                 {order.customerName}
@@ -111,38 +112,33 @@ export default function CalendarSideView() {
                                 {/* {order.soldStatus === "sold" ? "Venduto" : "Non venduto"} */}
                                 <Form name="">
                                     <Radio.Group size="small" value={orderStatuses[order.id] || order.soldStatus} onChange={onStatusChange}>
-                                        <Radio.Button value="toMake" id={`${order.id}-toMake`}>Da fare</Radio.Button>
-                                        <Radio.Button value="toSell" id={`${order.id}-toSell`}>Da vendere</Radio.Button>
-                                        <Radio.Button value="sold" id={`${order.id}-sold`}>Venduto</Radio.Button>
+                                        <Radio.Button value="toMake" id={`${order.id}-toMake`}>
+                                            Da fare
+                                        </Radio.Button>
+                                        <Radio.Button value="toSell" id={`${order.id}-toSell`}>
+                                            Da vendere
+                                        </Radio.Button>
+                                        <Radio.Button value="sold" id={`${order.id}-sold`}>
+                                            Venduto
+                                        </Radio.Button>
                                     </Radio.Group>
                                 </Form>
                             </div>
                             <div className="flex flex-row">
                                 <div className="font-semibold mr-2">Foto:</div>
-                                {order.photo ?
-                                    <Image
-                                        src={order.photo}
-                                        alt="order"
-                                        width={200}
-                                        height={200}
-                                        className="w-40 h-fit rounded-xl cursor-pointer hover:brightness-90 transition duration-100"
-                                        onClick={() => showZoomModal(order.photo)} />
-                                    : "Nessuna foto"}
+                                {order.photo ? <Image src={order.photo} alt="order" width={200} height={200} className="w-40 h-fit rounded-xl cursor-pointer hover:brightness-90 transition duration-100" onClick={() => showZoomModal(order.photo)} /> : "Nessuna foto"}
 
                                 <Modal open={isZoomModalVisible} onOk={handleZoomModalClose} onCancel={handleZoomModalClose} footer={null}>
-                                    <Image
-                                        src={modalImage}
-                                        className="p-6 -mb-3"
-                                        height={200}
-                                        width={200}
-                                        alt="order"
-                                        style={{ width: "100%" }}
-                                    />
+                                    <Image src={modalImage} className="p-6 -mb-3" height={200} width={200} alt="order" style={{ width: "100%" }} />
                                     <div className="additional-info text-center">
                                         <div className="flex justify-center">
                                             <div className="font-semibold mr-1">{order.customerName}</div> (@{order.customerWechatId})<br />
                                         </div>
-                                        <div>{"€ "}{order.amount}<br /></div>
+                                        <div>
+                                            {"€ "}
+                                            {order.amount}
+                                            <br />
+                                        </div>
                                         <div>{fullDate}</div>
                                         {/* <div>
                                             {(orderStatuses[order.id] || order.soldStatus) === "toMake" ? "Da fare" : ""}

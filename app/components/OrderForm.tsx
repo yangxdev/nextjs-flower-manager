@@ -19,7 +19,7 @@ export default function OrderForm() {
 
     const handleAddModalClose = () => {
         setIsAddModalVisible(false);
-    }
+    };
 
     useEffect(() => {
         if (file) {
@@ -104,7 +104,9 @@ export default function OrderForm() {
                 success: "Order added successfully",
                 error: "Error when adding order",
             },
-            {}
+            {
+                position: "top-center",
+            }
         );
     };
 
@@ -116,7 +118,12 @@ export default function OrderForm() {
 
     return (
         <>
-            <div className="text-black border-2 border-lightBorder hover:text-white hover:bg-newBlue-500 w-fit items-center flex flex-row gap-1 p-2 rounded-lg bg-whiteDarker cursor-pointer" onClick={() => { setIsAddModalVisible(true); }}>
+            <div
+                className="text-black border-2 border-lightBorder hover:text-white hover:bg-newBlue-500 w-fit items-center flex flex-row gap-1 p-2 rounded-lg bg-whiteDarker cursor-pointer"
+                onClick={() => {
+                    setIsAddModalVisible(true);
+                }}
+            >
                 <FaPlus /> Aggiungi ordine
             </div>
             <Modal open={isAddModalVisible} onOk={handleAddModalClose} onCancel={handleAddModalClose} footer={null}>
@@ -150,7 +157,8 @@ export default function OrderForm() {
                                     }
                                 }}
                                 accept="image/png, image/jpeg, image/jpg"
-                                style={{ display: "none" }} />
+                                style={{ display: "none" }}
+                            />
                             <label htmlFor="file" className="border-2 p-2 cursor-pointer hover:bg-newBlue-200 transition duration-200 rounded-lg">
                                 Scegli foto
                             </label>
@@ -173,7 +181,9 @@ export default function OrderForm() {
                             </Space>
                         </Form.Item>
                     </Form>
-                </div></Modal></>
+                </div>
+            </Modal>
+        </>
     );
 }
 
