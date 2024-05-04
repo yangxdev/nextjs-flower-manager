@@ -60,7 +60,7 @@ export default function Calendar(props: { orders: any[] }) {
 
     return (
         <div
-        className="overflow-y-auto h-[90vh] w-full"
+        className="calendar md:overflow-y-auto md:h-[90vh] w-full"
         //  ref={topViewRef}
         >
             <ConfigProvider>

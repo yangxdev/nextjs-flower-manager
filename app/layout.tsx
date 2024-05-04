@@ -27,9 +27,9 @@ export default async function RootLayout({
         <html lang="en">
             <body className={`${dmSans.className} text-black`}>
                 <SessionProvider session={session}>
-                    <main className="flex flex-row">
+                    <main className="main flex flex-row h-full">
                         <NavMenu />
-                        <div className="flex-grow p-4 w-screen h-screen relative bg-whiteDarker">
+                        <div className="layout flex-grow p-8 w-screen md:h-screen h-full relative bg-whiteDarker overflow-y-auto">
                             {children}
                             <Toaster position="top-right" reverseOrder={false} />
                         </div>

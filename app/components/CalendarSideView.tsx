@@ -94,11 +94,11 @@ export default function CalendarSideView() {
     };
 
     return (
-        <div className="flex flex-col gap-4 min-w-[20rem] h-full" ref={sideViewRef}>
+        <div className="calendar-side-view flex flex-col gap-4 min-w-[20rem] h-full" ref={sideViewRef}>
             <div className="text-2xl font-bold mt-2 gap-2 flex flex-row items-center justify-between">
                 <div className="">{fullDate}</div>
             </div>
-            <div className="flex flex-col gap-4 w-full overflow-y-auto h-screen">
+            <div className="flex flex-col gap-4 w-full overflow-y-auto">
                 {selectedDateInfoArray.map((order: any, index: number) => (
                     <div key={index} className={`info-card gap-1 flex flex-col justify-between border-2 border-lightBorder rounded-md p-4 ${orderStatuses[order.id] || order.soldStatus}`}>
                         <div className="flex flex-row text-xs opacity-50 hidden">{order.id}</div>
@@ -148,7 +148,7 @@ export default function CalendarSideView() {
                                         <br />
                                     </div>
                                     <div>{fullDate}</div> */}
-                                    
+
                                     {/* <div>
                                             {(orderStatuses[order.id] || order.soldStatus) === "toMake" ? "To make" : ""}
                                             {(orderStatuses[order.id] || order.soldStatus) === "toSell" ? "To sell" : ""}

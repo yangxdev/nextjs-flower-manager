@@ -14,15 +14,12 @@ export default function CalendarSection(props: { orders: any[] }) {
     // const [topViewRef, setTopViewRef] = useState<RefObject<HTMLDivElement> | null>(null);
 
     return (
-        <div className="border-lightBorder border-2 rounded-xl p-4 mb-16 bg-white
-        mt-2 h-[90vh] mb-2
-        flex flex-col md:flex-row gap-6
-        ">
+        <div className="calendar-section border-lightBorder border-2 rounded-xl p-4 mb-16 bg-white mt-2 md:h-[90vh] mb-2 flex flex-col md:flex-row gap-2">
             {/* <ScrollContext.Provider value={{ topViewRef: topViewRef, setTopViewRef: setTopViewRef }}> */}
             <SelectedDateContext.Provider value={{ selectedDate, setSelectedDate }}>
                 <SelectedDateInfoContext.Provider value={{ selectedDateInfo, setSelectedDateInfo }}>
                     <Calendar orders={props.orders} />
-                    <div className="border-r border-lightBorder"></div>
+                    <div className="border-b border-[1.5px] md:border-r border-lightBorder"></div>
                     <CalendarSideView />
                 </SelectedDateInfoContext.Provider>
             </SelectedDateContext.Provider>

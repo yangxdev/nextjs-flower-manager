@@ -15,9 +15,9 @@ export default async function Home() {
 
     return (
         <>
-            <div className="flex flex-row justify-between">
-                <div className="font-bold text-2xl select-none">{gc?.title}</div>
-                <div>
+            <div className="header flex flex-row justify-between">
+                <div className="title font-bold text-2xl select-none">{gc?.title}</div>
+                <div className="order-form">
                     <OrderForm />
                 </div>
             </div>
