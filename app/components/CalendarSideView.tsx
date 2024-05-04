@@ -136,7 +136,7 @@ export default function CalendarSideView() {
                             <div className="font-semibold mr-2">Photo:</div>
                             {order.photo ? <Image src={order.photo} alt="order" width={200} height={200} className="w-40 h-fit rounded-xl cursor-pointer hover:brightness-90 transition duration-100" onClick={() => showZoomModal(order.photo)} /> : "Nessuna Photo"}
 
-                            <Modal open={isZoomModalVisible} onOk={handleZoomModalClose} onCancel={handleZoomModalClose} footer={null}>
+                            <Modal open={isZoomModalVisible} transitionName="" onOk={handleZoomModalClose} onCancel={handleZoomModalClose} footer={null}>
                                 <Image src={modalImage} className="p-6 -mb-3" height={200} width={200} alt="order" style={{ width: "100%" }} />
                                 <div className="additional-info text-center">
                                     {/* <div className="flex justify-center">

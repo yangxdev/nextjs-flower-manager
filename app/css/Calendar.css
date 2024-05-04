@@ -43,19 +43,18 @@ img.sold, .info-card.sold {
     display: none;
 }
 
-.ant-modal-wrap {
-    display: flex;
-    align-items: center;
-    overflow: hidden!important;
-    /* margin-bottom: auto; */
-    /* top: 0; */
-}
+@media only screen and (max-width: 768px) {
+    .ant-modal {
+        height: 100%;
+        width: 100%!important;
+        max-width: 100%!important;
+        transform-origin: 0%!important;
+        margin: 0!important;
+    }
 
-.ant-modal {
-    height: 100%;
-    width: 100%!important;
-    max-width: 100%!important;
-    transform-origin: 0%!important;
-    top: 0;
-    margin: 0!important;
+    .ant-modal-wrap {
+        display: flex;
+        align-items: center;
+        overflow: hidden!important;
+    }
 }
