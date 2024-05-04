@@ -126,7 +126,7 @@ export default function OrderForm() {
             >
                 <FaPlus /> Add Order
             </div>
-            <Modal open={isAddModalVisible} onOk={handleAddModalClose} onCancel={handleAddModalClose} footer={null}>
+            <Modal open={isAddModalVisible} transitionName="" onOk={handleAddModalClose} onCancel={handleAddModalClose} footer={null}>
                 <div className="p-4 w-full rounded-md bg-white text-right">
                     <div className="font-semibold mb-4 text-left text-lg">Add Order</div>
                     <Form name="addOrder" style={{ maxWidth: "500px" }} onFinish={handleSubmit}>
