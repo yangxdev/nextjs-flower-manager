@@ -94,7 +94,7 @@ export default function CalendarSideView() {
     };
 
     return (
-        <div className="calendar-side-view flex flex-col gap-4 min-w-[20rem] h-full" ref={sideViewRef}>
+        <div className="calendar-side-view flex flex-col gap-4 min-w-[20rem] h-full md:overflow-y-auto md:h-[calc(100vh-13rem)]" ref={sideViewRef}>
             <div className="text-2xl font-bold mt-2 gap-2 flex flex-row items-center justify-between">
                 <div className="">{fullDate}</div>
             </div>
