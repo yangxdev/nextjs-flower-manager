@@ -8,6 +8,7 @@ import { BadgeProps, CalendarProps } from "antd";
 import { Badge } from "antd";
 import "@/app/css/Calendar.css";
 import { ScrollContext } from "../utils/ScrollContext";
+import Image from "next/image";
 
 export default function Calendar(props: { orders: any[] }) {
     const { setSelectedDate } = React.useContext(SelectedDateContext);
@@ -37,7 +38,13 @@ export default function Calendar(props: { orders: any[] }) {
             <ul className="events gap-2 flex flex-row">
                 {listData.map((item, index) => (
                     <li key={index}>
-                        <img src={item.content} alt="Order" className={`${item.status}`} />
+                        <Image
+                            src={item.content}
+                            alt="Order"
+                            width={50}
+                            height={50}
+                            className={`${item.status}`}
+                        />
                     </li>
                 ))}
             </ul>
