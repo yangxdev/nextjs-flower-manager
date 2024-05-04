@@ -10,7 +10,7 @@ import { ScrollContext } from "../utils/ScrollContext";
 
 export default function CalendarSection(props: { orders: any[] }) {
     const [selectedDate, setSelectedDate] = useState(null);
-    const [selectedDateInfo, setSelectedDateInfo] = useState(null);
+    const [selectedDateInfo, setSelectedDateInfo] = useState({});
     // const [topViewRef, setTopViewRef] = useState<RefObject<HTMLDivElement> | null>(null);
 
     return (

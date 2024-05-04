@@ -17,15 +17,16 @@ export default function CalendarSideView() {
 
     const { selectedDate } = React.useContext(SelectedDateContext);
     const { selectedDateInfo } = React.useContext(SelectedDateInfoContext);
+    const infoIsEmpty = selectedDateInfo && Object.keys(selectedDateInfo).length === 0;
 
     // const { topViewRef } = React.useContext(ScrollContext);
 
     const sideViewRef = useRef<HTMLDivElement>(null);
     useEffect(() => {
-        if (selectedDateInfo && selectedDateInfo.length > 0 && window.innerWidth < 768) {
+        if (selectedDateInfo && !infoIsEmpty && window.innerWidth < 768) {
             sideViewRef?.current?.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
         }
-    }, [selectedDateInfo]);
+    }, [infoIsEmpty, selectedDateInfo]);
 
     if (!selectedDate) {
         return null;

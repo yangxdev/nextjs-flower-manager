@@ -1,6 +1,6 @@
 import { getServerSession } from "next-auth";
 
-import WhoAmIButton from "./WhoAmIButton";
+// import WhoAmIButton from "./WhoAmIButton";
 
 export default async function ServerActionPage() {
     const whoAmI = async () => {
@@ -10,7 +10,7 @@ export default async function ServerActionPage() {
     };
     return (
         <div>
-            <WhoAmIButton whoAmIAction={whoAmI} />
+            {/* <WhoAmIButton whoAmIAction={whoAmI} /> */}
         </div>
     )
 }
