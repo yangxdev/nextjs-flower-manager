@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { FaPlus } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
+import { MdAddPhotoAlternate } from "react-icons/md";
 
 export default function OrderForm() {
     const router = useRouter();
@@ -16,6 +17,16 @@ export default function OrderForm() {
     const [loadedFileMessage, setLoadedFileMessage] = React.useState<string>("");
 
     const [isAddModalVisible, setIsAddModalVisible] = useState(false);
+
+    const formRef = React.useRef<any>();
+    useEffect(() => {
+        if (isAddModalVisible) {
+            formRef.current.resetFields();
+            setFile(null);
+            setMessage("");
+            setLoadedFileMessage("");
+        }
+    }, [isAddModalVisible]);
 
     const handleAddModalClose = () => {
         setIsAddModalVisible(false);
@@ -94,6 +105,7 @@ export default function OrderForm() {
                 throw new Error("HTTP error " + response.status);
             }
             router.refresh();
+            handleAddModalClose();
             return response;
         });
 
@@ -127,50 +139,110 @@ export default function OrderForm() {
                 <FaPlus /> Add Order
             </div>
             <Modal open={isAddModalVisible} transitionName="" onOk={handleAddModalClose} onCancel={handleAddModalClose} footer={null}>
-                <div className="p-4 w-full rounded-md bg-white text-right">
+                <div className="p-4 w-full rounded-md bg-white">
                     <div className="font-semibold mb-4 text-left text-lg">Add Order</div>
-                    <Form name="addOrder" style={{ maxWidth: "500px" }} onFinish={handleSubmit}>
-                        <Form.Item name="deliveryDate" label="Delivery date" rules={[{ required: true, message: "Please input the date" }]}>
-                            <Input placeholder="Delivery date" type="date" />
+                    <Form name="addOrder" style={{ maxWidth: "500px" }} onFinish={handleSubmit} ref={formRef}>
+                        <Form.Item name="deliveryDate" rules={[{ required: true, message: "Please input the date" }]}>
+                            <Row gutter={8}>
+                                <Col span={8}>
+                                    <label>Delivery date</label>
+                                </Col>
+                                <Col span={16}>
+                                    <Input placeholder="Delivery date" type="date" />
+                                </Col>
+                            </Row>
                         </Form.Item>
-                        <Form.Item name="customerName" label="Client name" rules={[{ required: true, message: "Please input the name" }]}>
-                            <Input placeholder="Client name" type="text" />
+
+                        <Form.Item name="customerName" rules={[{ required: true, message: "Please input the name" }]}>
+                            <Row gutter={8}>
+                                <Col span={8}>
+                                    <label>Client name</label>
+                                </Col>
+                                <Col span={16}>
+                                    <Input placeholder="Client name" type="text" />
+                                </Col>
+                            </Row>
                         </Form.Item>
-                        <Form.Item name="customerWechatId" label="Wechat ID" rules={[{ required: true, message: "Please input the Wechat ID" }]}>
-                            <Input placeholder="Wechat ID" type="text" />
+
+                        <Form.Item name="customerWechatId" rules={[{ required: true, message: "Please input the ID" }]}>
+                            <Row gutter={8}>
+                                <Col span={8}>
+                                    <label>WeChat ID</label>
+                                </Col>
+                                <Col span={16}>
+                                    <Input placeholder="Wechat ID" type="text" />
+                                </Col>
+                            </Row>
                         </Form.Item>
-                        <Form.Item name="amount" label="Amount" rules={[{ required: true, message: "Please input the amount" }]}>
-                            <Input placeholder="Amount" type="number" />
+
+                        <Form.Item name="amount" rules={[{ required: true, message: "Please input the amount" }]}>
+                            <Row gutter={8}>
+                                <Col span={8}>
+                                    <label>Amount</label>
+                                </Col>
+                                <Col span={16}>
+                                    <Input placeholder="Amount" type="number" />
+                                </Col>
+                            </Row>
                         </Form.Item>
-                        <Form.Item name="productionCost" label="Production cost" rules={[{ required: true, message: "Please input the cost" }]}>
-                            <Input placeholder="Production cost" type="number" />
+
+                        <Form.Item name="productionCost" rules={[{ required: true, message: "Please input the cost" }]}>
+                            <Row gutter={8}>
+                                <Col span={8}>
+                                    <label>Production cost</label>
+                                </Col>
+                                <Col span={16}>
+                                    <Input placeholder="Production cost" type="number" />
+                                </Col>
+                            </Row>
                         </Form.Item>
-                        <Form.Item label="Photo" extra={loadedFileMessage} rules={[{ required: true, message: "Please input a photo" }]}>
-                            <input
-                                id="file"
-                                type="file"
-                                className=""
-                                onChange={(e) => {
-                                    const files = e.target.files;
-                                    if (files) {
-                                        setFile(files[0]);
-                                    }
-                                }}
-                                accept="image/png, image/jpeg, image/jpg"
-                                style={{ display: "none" }}
-                            />
-                            <label htmlFor="file" className="border-2 p-2 cursor-pointer hover:bg-newBlue-200 transition duration-200 rounded-lg">
-                                Choose photo
-                            </label>
+
+                        <Form.Item name="photo" extra={loadedFileMessage} rules={[{ required: true, message: "Please input the photo" }]}>
+                            <Row gutter={8}>
+                                <Col span={8}>
+                                    <label>Photo</label>
+                                </Col>
+                                <Col span={16}>
+                                    <div className="flex justify-end">
+                                        <input
+                                            id="file"
+                                            type="file"
+                                            className=""
+                                            onChange={(e) => {
+                                                const files = e.target.files;
+                                                if (files) {
+                                                    setFile(files[0]);
+
+                                                }
+                                            }}
+                                            accept="image/png, image/jpeg, image/jpg"
+                                            style={{ display: "none" }}
+                                        />
+                                        <label htmlFor="file" className="flex flex-row gap-1 items-center w-fit border-2 p-2 cursor-pointer hover:bg-newBlue-200 transition duration-200 rounded-lg">
+                                            <MdAddPhotoAlternate />
+                                            {file ? "Change photo" : "Upload photo"}
+                                        </label>
+                                    </div>
+                                </Col>
+                            </Row>
                         </Form.Item>
-                        <Form.Item name="soldStatus" label="Status" rules={[{ required: true, message: "Please select the status" }]} initialValue="toMake">
-                            <Radio.Group>
-                                <Radio value="toMake">To make</Radio>
-                                <Radio value="toSell">To sell</Radio>
-                                <Radio value="sold">Sold</Radio>
-                            </Radio.Group>
+
+                        <Form.Item name="soldStatus" rules={[{ required: true, message: "Please select the status" }]} initialValue="toMake">
+                            <Row gutter={8}>
+                                <Col span={6}>
+                                    <label>Status</label>
+                                </Col>
+                                <Col span={18} style={{ textAlign: 'right' }}>
+                                    <Radio.Group defaultValue={"toMake"}>
+                                        <Radio.Button value="toMake">To make</Radio.Button>
+                                        <Radio.Button value="toSell">To sell</Radio.Button>
+                                        <Radio.Button value="sold">Sold</Radio.Button>
+                                    </Radio.Group>
+                                </Col>
+                            </Row>
                         </Form.Item>
-                        <Form.Item>
+
+                        <Form.Item className="text-right">
                             <Space>
                                 <button type="submit" className="p-2 mr-2 bg-white hover:bg-newBlue-500 hover:text-white transition duration-200 border-2 rounded-md">
                                     Submit
