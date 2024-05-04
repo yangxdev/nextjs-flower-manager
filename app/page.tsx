@@ -24,9 +24,7 @@ export default async function Home() {
             {/* <div className="text-lg greeting my-2 opacity-80" suppressHydrationWarning>
                     <Greetings />
                 </div> */}
-            <div className="flex flex-row gap-8 justify-between mt-2 h-full w-full">
-                <CalendarSectionServer />
-            </div>
+            <CalendarSectionServer />
         </>
     );
 }
