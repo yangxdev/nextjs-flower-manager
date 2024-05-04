@@ -57,6 +57,10 @@ img.sold, .info-card.sold {
         align-items: center;
         overflow: hidden!important;
     }
+
+    .ant-input {
+        font-size: 16px!important;
+    }
 }
 
 .ant-form-item-extra {

@@ -148,7 +148,7 @@ export default function OrderForm() {
                                     <label>Delivery date</label>
                                 </Col>
                                 <Col span={16}>
-                                    <Input placeholder="Delivery date" type="date" />
+                                    <Input placeholder="Delivery date" type="date" className="text-black"/>
                                 </Col>
                             </Row>
                         </Form.Item>
