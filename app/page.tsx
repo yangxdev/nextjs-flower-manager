@@ -1,17 +1,6 @@
-import Image from "next/image";
 import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
-import Balance from "../app/components/dashboard/Balance";
-import InfoChartVerticalBarServer from "../app/InfoChartVerticalBarServer";
-import ExpenseInfoHistory from "../app/protected/expenses/ExpenseInfoHistory";
 import GlobalConfig from "@/app/app.config";
-import IncomeInfoHistory from "../app/protected/income/IncomeInfoHistory";
-import TotalIncome from "../app/components/dashboard/TotalIncome";
-import Greetings from "../app/components/Greetings";
-import TotalExpenses from "../app/components/dashboard/TotalExpenses";
-import MoneyFlow from "../app/components/dashboard/MoneyFlow";
-import Transactions from "../app/components/dashboard/Transactions";
-import CalendarSection from "../app/components/CalendarSection";
 import CalendarSectionServer from "../app/components/CalendarSectionServer";
 import OrderForm from "./components/OrderForm";
 

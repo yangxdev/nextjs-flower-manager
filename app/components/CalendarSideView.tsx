@@ -36,13 +36,13 @@ export default function CalendarSideView() {
 
     const selectedDateInfoArray = selectedDateInfo
         ? Object.values(selectedDateInfo).map((order: any) => ({
-              id: order.id,
-              customerName: order.customerName,
-              customerWechatId: order.customerWechatId,
-              amount: order.amount,
-              photo: order.photo,
-              soldStatus: order.soldStatus,
-          }))
+            id: order.id,
+            customerName: order.customerName,
+            customerWechatId: order.customerWechatId,
+            amount: order.amount,
+            photo: order.photo,
+            soldStatus: order.soldStatus,
+        }))
         : [];
 
     if (!selectedDate) {
@@ -83,8 +83,8 @@ export default function CalendarSideView() {
             responsePromise,
             {
                 loading: "Loading...",
-                success: "Stato aggiornato!",
-                error: "Errore nell'aggiornamento dello stato",
+                success: "Status updated!",
+                error: "Error when updating status",
             },
             {
                 position: "bottom-center",
@@ -103,7 +103,7 @@ export default function CalendarSideView() {
                         <div key={index} className={`info-card gap-1 flex flex-col justify-between border-2 border-lightBorder rounded-md p-4 ${orderStatuses[order.id] || order.soldStatus}`}>
                             <div className="flex flex-row text-xs opacity-50 hidden">{order.id}</div>
                             <div className="flex flex-row">
-                                <div className="font-semibold mr-2">Cliente:</div>
+                                <div className="font-semibold mr-2">Client:</div>
                                 {order.customerName}
                             </div>
                             <div className="flex flex-row">
@@ -111,30 +111,30 @@ export default function CalendarSideView() {
                                 {order.customerWechatId}
                             </div>
                             <div className="flex flex-row">
-                                <div className="font-semibold mr-2">Quantità:</div>
+                                <div className="font-semibold mr-2">Amount:</div>
                                 {"€ "}
                                 {order.amount}
                             </div>
                             <div className="flex flex-row">
-                                <div className="font-semibold mr-2">Stato:</div>
-                                {/* {order.soldStatus === "sold" ? "Venduto" : "Non venduto"} */}
+                                <div className="font-semibold mr-2">Status:</div>
+                                {/* {order.soldStatus === "sold" ? "Sold" : "Non Sold"} */}
                                 <Form name="">
                                     <Radio.Group size="small" value={orderStatuses[order.id] || order.soldStatus} onChange={onStatusChange}>
                                         <Radio.Button value="toMake" id={`${order.id}-toMake`}>
-                                            Da fare
+                                            To make
                                         </Radio.Button>
                                         <Radio.Button value="toSell" id={`${order.id}-toSell`}>
-                                            Da vendere
+                                            To sell
                                         </Radio.Button>
                                         <Radio.Button value="sold" id={`${order.id}-sold`}>
-                                            Venduto
+                                            Sold
                                         </Radio.Button>
                                     </Radio.Group>
                                 </Form>
                             </div>
                             <div className="flex flex-row">
-                                <div className="font-semibold mr-2">Foto:</div>
-                                {order.photo ? <Image src={order.photo} alt="order" width={200} height={200} className="w-40 h-fit rounded-xl cursor-pointer hover:brightness-90 transition duration-100" onClick={() => showZoomModal(order.photo)} /> : "Nessuna foto"}
+                                <div className="font-semibold mr-2">Photo:</div>
+                                {order.photo ? <Image src={order.photo} alt="order" width={200} height={200} className="w-40 h-fit rounded-xl cursor-pointer hover:brightness-90 transition duration-100" onClick={() => showZoomModal(order.photo)} /> : "Nessuna Photo"}
 
                                 <Modal open={isZoomModalVisible} onOk={handleZoomModalClose} onCancel={handleZoomModalClose} footer={null}>
                                     <Image src={modalImage} className="p-6 -mb-3" height={200} width={200} alt="order" style={{ width: "100%" }} />
@@ -149,9 +149,9 @@ export default function CalendarSideView() {
                                         </div>
                                         <div>{fullDate}</div>
                                         {/* <div>
-                                            {(orderStatuses[order.id] || order.soldStatus) === "toMake" ? "Da fare" : ""}
-                                            {(orderStatuses[order.id] || order.soldStatus) === "toSell" ? "Da vendere" : ""}
-                                            {(orderStatuses[order.id] || order.soldStatus) === "sold" ? "Venduto" : ""}
+                                            {(orderStatuses[order.id] || order.soldStatus) === "toMake" ? "To make" : ""}
+                                            {(orderStatuses[order.id] || order.soldStatus) === "toSell" ? "To sell" : ""}
+                                            {(orderStatuses[order.id] || order.soldStatus) === "sold" ? "Sold" : ""}
                                         </div>
                                         <div className="">{orderStatuses[order.id]}</div> */}
                                     </div>

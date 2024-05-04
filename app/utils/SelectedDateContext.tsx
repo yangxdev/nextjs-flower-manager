@@ -3,5 +3,5 @@ import React from 'react';
 
 export const SelectedDateContext = React.createContext({
     selectedDate: null,
-    setSelectedDate: (date) => {},
+    setSelectedDate: (date: any) => {},
 });

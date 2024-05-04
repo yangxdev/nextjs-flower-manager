@@ -124,28 +124,28 @@ export default function OrderForm() {
                     setIsAddModalVisible(true);
                 }}
             >
-                <FaPlus /> Aggiungi ordine
+                <FaPlus /> Add Order
             </div>
             <Modal open={isAddModalVisible} onOk={handleAddModalClose} onCancel={handleAddModalClose} footer={null}>
                 <div className="p-4 w-full rounded-md bg-white text-right">
-                    <div className="font-semibold mb-4 text-left text-lg">Aggiungi ordine</div>
+                    <div className="font-semibold mb-4 text-left text-lg">Add Order</div>
                     <Form name="addOrder" style={{ maxWidth: "500px" }} onFinish={handleSubmit}>
-                        <Form.Item name="deliveryDate" label="Data di consegna" rules={[{ required: true, message: "Please input the date" }]}>
-                            <Input placeholder="Data di consegna" type="date" />
+                        <Form.Item name="deliveryDate" label="Delivery date" rules={[{ required: true, message: "Please input the date" }]}>
+                            <Input placeholder="Delivery date" type="date" />
                         </Form.Item>
-                        <Form.Item name="customerName" label="Nome cliente" rules={[{ required: true, message: "Please input the name" }]}>
-                            <Input placeholder="Nome cliente" type="text" />
+                        <Form.Item name="customerName" label="Client name" rules={[{ required: true, message: "Please input the name" }]}>
+                            <Input placeholder="Client name" type="text" />
                         </Form.Item>
                         <Form.Item name="customerWechatId" label="Wechat ID" rules={[{ required: true, message: "Please input the Wechat ID" }]}>
                             <Input placeholder="Wechat ID" type="text" />
                         </Form.Item>
-                        <Form.Item name="amount" label="Da pagare" rules={[{ required: true, message: "Please input the amount" }]}>
-                            <Input placeholder="Da pagare" type="number" />
+                        <Form.Item name="amount" label="Amount" rules={[{ required: true, message: "Please input the amount" }]}>
+                            <Input placeholder="Amount" type="number" />
                         </Form.Item>
-                        <Form.Item name="productionCost" label="Costo di produzione" rules={[{ required: true, message: "Please input the cost" }]}>
-                            <Input placeholder="Costo di produzione" type="number" />
+                        <Form.Item name="productionCost" label="Production cost" rules={[{ required: true, message: "Please input the cost" }]}>
+                            <Input placeholder="Production cost" type="number" />
                         </Form.Item>
-                        <Form.Item label="Foto" extra={loadedFileMessage} rules={[{ required: true, message: "Please input a photo" }]}>
+                        <Form.Item label="Photo" extra={loadedFileMessage} rules={[{ required: true, message: "Please input a photo" }]}>
                             <input
                                 id="file"
                                 type="file"
@@ -160,14 +160,14 @@ export default function OrderForm() {
                                 style={{ display: "none" }}
                             />
                             <label htmlFor="file" className="border-2 p-2 cursor-pointer hover:bg-newBlue-200 transition duration-200 rounded-lg">
-                                Scegli foto
+                                Choose photo
                             </label>
                         </Form.Item>
                         <Form.Item name="soldStatus" label="Status" rules={[{ required: true, message: "Please select the status" }]} initialValue="toMake">
                             <Radio.Group>
-                                <Radio value="toMake">Da fare</Radio>
-                                <Radio value="toSell">Da vendere</Radio>
-                                <Radio value="sold">Venduto</Radio>
+                                <Radio value="toMake">To make</Radio>
+                                <Radio value="toSell">To sell</Radio>
+                                <Radio value="sold">Sold</Radio>
                             </Radio.Group>
                         </Form.Item>
                         <Form.Item>
