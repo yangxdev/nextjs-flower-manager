@@ -1,8 +1,11 @@
 import { Button, Col, Form, Input, Modal, Radio, Row, Space } from "antd";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { MdAddPhotoAlternate, MdEdit } from "react-icons/md";
+import { SelectedDateInfoContext } from "../utils/SelectedDateInfoContext";
+import dayjs, { Dayjs } from "dayjs";
+import { getRandomValues } from "crypto";
 
 export default function EditForm(props: { orderId: string; orders: any[] }) {
     const router = useRouter();
@@ -12,6 +15,8 @@ export default function EditForm(props: { orderId: string; orders: any[] }) {
 
     const inputDefaultDeliveryDate = deliveryDate ? deliveryDate.toISOString().split("T")[0] : new Date().toISOString().split("T")[0];
     // console.log("inputDefaultDeliveryDate", inputDefaultDeliveryDate);
+
+    const { selectedDateInfo, setSelectedDateInfo } = useContext(SelectedDateInfoContext);
 
     const handleSubmit = async (values: any) => {
         const responsePromise = fetch("/api/database/edit_order", {
@@ -36,6 +41,8 @@ export default function EditForm(props: { orderId: string; orders: any[] }) {
                 throw new Error("HTTP error " + response.status);
             }
             router.refresh();
+            handleEditModalClose();
+            handleContextUpdate(values);
             return response;
         });
 
@@ -43,8 +50,8 @@ export default function EditForm(props: { orderId: string; orders: any[] }) {
             responsePromise,
             {
                 loading: "Saving...",
-                success: "Order added successfully",
-                error: "Error when adding order",
+                success: "Order edited successfully",
+                error: "Error when editing order",
             },
             {
                 position: "bottom-center",
@@ -54,9 +61,35 @@ export default function EditForm(props: { orderId: string; orders: any[] }) {
 
     const formRef = useRef<any>(null);
     const handleEditModalClose = () => {
-        // reset all the form fields
         formRef.current.resetFields();
         setIsEditModalVisible(false);
+    };
+    const handleContextUpdate = (values: any) => {
+        // get all orders of the selected date
+        const date = deliveryDate;
+        const updatedDeliveryDate = values.deliveryDate;
+        if (!dayjs(updatedDeliveryDate).isSame(date, "day")) {
+            const updatedFilteredOrders = (selectedDateInfo as any[]).filter((order) => order.id !== props.orderId);
+            setSelectedDateInfo(updatedFilteredOrders);
+            return;
+        }
+        const filteredOrders = props.orders.filter((order) => dayjs(order.deliveryDate).isSame(date, "day"));
+        const updatedFilteredOrders = filteredOrders.map((order) => {
+            if (order.id === props.orderId) {
+                return {
+                    ...order,
+                    deliveryDate: values.deliveryDate,
+                    customerName: values.customerName,
+                    customerWechatId: values.customerWechatId,
+                    advance: values.advance,
+                    amount: values.amount,
+                    productionCost: values.productionCost,
+                    soldStatus: values.soldStatus,
+                };
+            }
+            return order;
+        });
+        setSelectedDateInfo(updatedFilteredOrders);
     };
 
     return (
