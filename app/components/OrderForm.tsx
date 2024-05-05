@@ -1,7 +1,7 @@
 "use client";
 import { InboxOutlined, UploadOutlined } from "@ant-design/icons";
 import { Input, Button, Checkbox, Col, ColorPicker, Form, InputNumber, Radio, Rate, Row, Select, Slider, Space, Switch, Upload, Modal } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { FaPlus } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
@@ -9,15 +9,16 @@ import { MdAddPhotoAlternate } from "react-icons/md";
 
 export default function OrderForm({ preselectedDate, label }: { preselectedDate?: Date | null; label: string | null }) {
     const router = useRouter();
-    const [file, setFile] = React.useState<File | null>(null);
-    const [uploading, setUploading] = React.useState<boolean>(false);
-    const [message, setMessage] = React.useState<string>("");
-    const [show, setShow] = React.useState<string>("hidden");
-    const [loadedFileMessage, setLoadedFileMessage] = React.useState<string>("");
+    const [file, setFile] = useState<File | null>(null);
+    const [uploading, setUploading] = useState<boolean>(false);
+    const [message, setMessage] = useState<string>("");
+    const [show, setShow] = useState<string>("hidden");
+    const [loadedFileMessage, setLoadedFileMessage] = useState<string>("");
+    const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
     const [isAddModalVisible, setIsAddModalVisible] = useState(false);
 
-    const formRef = React.useRef<any>();
+    const formRef = useRef<any>();
     useEffect(() => {
         if (isAddModalVisible) {
             formRef.current.resetFields();
@@ -75,6 +76,7 @@ export default function OrderForm({ preselectedDate, label }: { preselectedDate?
 
     const handleSubmit = async (values: any) => {
         //console.log("Received values of form: ", values);
+        setIsSubmitting(true);
 
         // AWS S3 photo upload process
         if (!file) {
@@ -105,6 +107,7 @@ export default function OrderForm({ preselectedDate, label }: { preselectedDate?
             }
             router.refresh();
             handleAddModalClose();
+            setIsSubmitting(false);
             return response;
         });
 
@@ -121,7 +124,7 @@ export default function OrderForm({ preselectedDate, label }: { preselectedDate?
         );
     };
 
-    React.useEffect((): void => {
+    useEffect((): void => {
         if (message.length > 0) {
             setShow("block");
         }
@@ -270,7 +273,7 @@ export default function OrderForm({ preselectedDate, label }: { preselectedDate?
 
                         <Form.Item className="text-right">
                             <Space>
-                                <Button type="primary" htmlType="submit">
+                                <Button type="primary" htmlType="submit" loading={isSubmitting}>
                                     Submit
                                 </Button>
                                 <Button type="default" onClick={onReset}>

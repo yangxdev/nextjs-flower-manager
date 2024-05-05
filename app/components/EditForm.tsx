@@ -10,6 +10,7 @@ import { getRandomValues } from "crypto";
 export default function EditForm(props: { orderId: string; orders: any[] }) {
     const router = useRouter();
     const [isEditModalVisible, setIsEditModalVisible] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const orderData = props.orders.find((order) => order.id === props.orderId);
     const { deliveryDate, customerName, customerWechatId, advance, amount, productionCost, photo, soldStatus } = orderData;
 
@@ -18,6 +19,7 @@ export default function EditForm(props: { orderId: string; orders: any[] }) {
     const { selectedDateInfo, setSelectedDateInfo } = useContext(SelectedDateInfoContext);
 
     const handleSubmit = async (values: any) => {
+        setIsSubmitting(true);
         const responsePromise = fetch("/api/database/edit_order", {
             method: "POST",
             headers: {
@@ -42,6 +44,7 @@ export default function EditForm(props: { orderId: string; orders: any[] }) {
             router.refresh();
             handleEditModalClose();
             handleContextUpdate(values);
+            setIsSubmitting(false);
             return response;
         });
 
@@ -223,7 +226,7 @@ export default function EditForm(props: { orderId: string; orders: any[] }) {
 
                         <Form.Item className="text-right">
                             <Space>
-                                <Button type="primary" htmlType="submit">
+                                <Button type="primary" htmlType="submit" loading={isSubmitting}>
                                     Submit
                                 </Button>
                                 {/* <button type="reset" className="p-2 bg-white hover:bg-newRed-500 hover:text-white transition duration-200 border-2 rounded-md">
