@@ -20,7 +20,7 @@ export default async function Home() {
             <div className="header flex flex-row justify-between">
                 <div className="title font-bold text-2xl select-none">{gc?.title}</div>
                 <div className="order-form">
-                    <OrderForm />
+                    <OrderForm label={"Add Order"}/>
                 </div>
             </div>
             <div className="text-lg greeting mb-2 opacity-80" suppressHydrationWarning>

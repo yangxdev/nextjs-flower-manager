@@ -51,7 +51,7 @@ export default function Calendar(props: { orders: any[] }) {
         );
     };
 
-    // TODO: use next/image for image optimization
+    // DONE: use next/image for image optimization
 
     const cellRender: CalendarProps<Dayjs>["cellRender"] = (current, info) => {
         if (info.type === "date") return dateCellRender(current);

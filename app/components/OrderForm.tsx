@@ -7,9 +7,8 @@ import { FaPlus } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
 import { MdAddPhotoAlternate } from "react-icons/md";
 
-export default function OrderForm() {
+export default function OrderForm({ preselectedDate, label }: { preselectedDate?: Date | null, label: string | null}) {
     const router = useRouter();
-
     const [file, setFile] = React.useState<File | null>(null);
     const [uploading, setUploading] = React.useState<boolean>(false);
     const [message, setMessage] = React.useState<string>("");
@@ -84,7 +83,6 @@ export default function OrderForm() {
         }
         const photoUrl = await handlePhotoUpload(file);
 
-        // Add order process
         const { deliveryDate, customerName, customerWechatId, advance, amount, productionCost, soldStatus } = values;
         const responsePromise = fetch("/api/database/add_order", {
             method: "POST",
@@ -137,19 +135,19 @@ export default function OrderForm() {
                     setIsAddModalVisible(true);
                 }}
             >
-                <FaPlus /> Add Order
+                <FaPlus /> {label}
             </div>
             <Modal open={isAddModalVisible} transitionName="" onOk={handleAddModalClose} onCancel={handleAddModalClose} footer={null}>
                 <div className="p-4 w-full rounded-md bg-white">
                     <div className="font-semibold mb-4 text-left text-lg">Add Order</div>
                     <Form name="addOrder" style={{ maxWidth: "500px" }} onFinish={handleSubmit} ref={formRef}>
-                        <Form.Item name="deliveryDate" rules={[{ required: true, message: "Please input the date" }]} initialValue={new Date().toISOString().split("T")[0]}>
+                        <Form.Item name="deliveryDate" rules={[{ required: true, message: "Please input the date" }]} initialValue={preselectedDate ? preselectedDate.toISOString().split("T")[0] : new Date().toISOString().split("T")[0]}>
                             <Row gutter={8}>
                                 <Col span={8}>
                                     <label>Delivery date</label>
                                 </Col>
                                 <Col span={16}>
-                                    <Input placeholder="Delivery date" type="date" defaultValue={new Date().toISOString().split("T")[0]} />
+                                    <Input placeholder="Delivery date" type="date" defaultValue={preselectedDate ? preselectedDate.toISOString().split("T")[0] : new Date().toISOString().split("T")[0]} />
                                 </Col>
                             </Row>
                         </Form.Item>
@@ -271,3 +269,5 @@ export default function OrderForm() {
 }
 
 // Thanks @imevanc for the image upload functionality https://github.com/imevanc/nextjs-aws-s3
+
+//TODO: drag and drop file upload
