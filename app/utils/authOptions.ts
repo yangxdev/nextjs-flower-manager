@@ -11,6 +11,18 @@ export const authOptions: NextAuthOptions = {
         GoogleProvider({
             clientId: process.env.GOOGLE_ID ?? "",
             clientSecret: process.env.GOOGLE_SECRET ?? "",
-        })
+        }),
     ],
-}
+    callbacks: {
+        async signIn({ user }) {
+            const allowedEmails = process.env.ALLOWED_EMAILS?.split(",");
+            const isAllowedToSignIn = allowedEmails?.includes(user.email ?? "");
+
+            if (isAllowedToSignIn) {
+                return true;
+            } else {
+                return false;
+            }
+        },
+    },
+};

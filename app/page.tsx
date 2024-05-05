@@ -3,6 +3,8 @@ import { getServerSession } from "next-auth";
 import GlobalConfig from "@/app/app.config";
 import CalendarSectionServer from "../app/components/CalendarSectionServer";
 import OrderForm from "./components/OrderForm";
+import SignOutButton from "./components/SignOutButton";
+import Greetings from "./components/Greetings";
 
 const defaultLanguage = GlobalConfig.i18n.defaultLanguage || "en";
 const gc = GlobalConfig.i18n.translations[defaultLanguage as keyof typeof GlobalConfig.i18n.translations]?.dashboard;
@@ -21,10 +23,11 @@ export default async function Home() {
                     <OrderForm />
                 </div>
             </div>
-            {/* <div className="text-lg greeting my-2 opacity-80" suppressHydrationWarning>
+            <div className="text-lg greeting mb-2 opacity-80" suppressHydrationWarning>
                     <Greetings />
-                </div> */}
+                </div>
             <CalendarSectionServer />
+            <SignOutButton />
         </>
     );
 }
