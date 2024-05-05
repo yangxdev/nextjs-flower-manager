@@ -16,8 +16,6 @@ export default function CalendarSideView(props: { orders: any[] }) {
     const [isZoomModalVisible, setIsZoomModalVisible] = useState(false);
     const [modalImage, setModalImage] = useState("");
 
-    const [orderStatuses, setOrderStatuses] = useState<Record<string, string>>({});
-
     const { selectedDate } = React.useContext(SelectedDateContext);
     const { selectedDateInfo, setSelectedDateInfo } = React.useContext(SelectedDateInfoContext);
     const infoIsEmpty = selectedDateInfo && Object.keys(selectedDateInfo).length === 0;
@@ -45,6 +43,7 @@ export default function CalendarSideView(props: { orders: any[] }) {
               customerWechatId: order.customerWechatId,
               advance: order.advance,
               amount: order.amount,
+              productionCost: order.productionCost,
               photo: order.photo,
               soldStatus: order.soldStatus,
           }))
@@ -63,25 +62,22 @@ export default function CalendarSideView(props: { orders: any[] }) {
         setIsZoomModalVisible(false);
     };
 
-    const onStatusChange = (e: RadioChangeEvent) => {
-        const orderId = e.target.id?.split("-")[0];
-        const newStatus = e.target.value;
-
+    const onStatusChange = (id: string) => (e: RadioChangeEvent) => {
         const responsePromise = fetch("/api/database/update_order_status", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                id: e.target.id?.split("-")[0],
-                soldStatus: e.target.value,
+                id: id,
+                sold_status: e.target.value,
             }),
         }).then((response) => {
             if (!response.ok) {
                 throw new Error("HTTP error " + response.status);
             }
             router.refresh();
-            setOrderStatuses((prevStatuses) => ({ ...prevStatuses, [String(orderId)]: newStatus }));
+            handleUpdateContext(id, e.target.value);
         });
 
         toast.promise(
@@ -95,6 +91,18 @@ export default function CalendarSideView(props: { orders: any[] }) {
                 position: "bottom-center",
             }
         );
+    };
+
+    const handleUpdateContext = (id: string, status: string) => {
+        setSelectedDateInfo((prevState: any) => {
+            const updatedInfo = { ...prevState };
+            for (const key in updatedInfo) {
+                if (updatedInfo[key].id === id) {
+                    updatedInfo[key].soldStatus = status;
+                }
+            }
+            return updatedInfo;
+        });
     };
 
     const deleteOrder = async (id: string) => {
@@ -135,6 +143,19 @@ export default function CalendarSideView(props: { orders: any[] }) {
         );
     };
 
+    const borderColor = (status: string) => {
+        switch (status) {
+            case "toMake":
+                return "border-l-[#f5222d]";
+            case "toSell":
+                return "border-l-[#faad14]";
+            case "sold":
+                return "border-l-[#52c41a]";
+            default:
+                return "";
+        }
+    };
+
     return (
         <>
             <div className="border-b border-[1.5px] md:border-r border-lightBorder"></div>
@@ -147,7 +168,7 @@ export default function CalendarSideView(props: { orders: any[] }) {
                 </div>
                 <div className="flex flex-col gap-4 w-full overflow-y-auto">
                     {selectedDateInfoArray.map((order: any, index: number) => (
-                        <div key={index} className={`info-card gap-1 flex flex-col justify-between border-2 border-lightBorder rounded-md p-4 ${orderStatuses[order.id] || order.soldStatus}`}>
+                        <div key={index} className={`info-card gap-1 flex flex-col justify-between border-2 border-lightBorder rounded-md p-4 ${borderColor(order.soldStatus)} border-l-4`}>
                             <div className="flex flex-row text-xs opacity-50">{order.id}</div>
                             <div className="flex flex-row">
                                 <div className="font-semibold mr-2">Client:</div>
@@ -166,19 +187,17 @@ export default function CalendarSideView(props: { orders: any[] }) {
                                 {"€ " + order.amount}
                             </div>
                             <div className="flex flex-row">
+                                <div className="font-semibold mr-2">Production cost:</div>
+                                {"€ " + order.productionCost}
+                            </div>
+                            <div className="flex flex-row">
                                 <div className="font-semibold mr-2">Status:</div>
                                 {/* {order.soldStatus === "sold" ? "Sold" : "Non Sold"} */}
                                 <Form name="">
-                                    <Radio.Group size="small" value={orderStatuses[order.id] || order.soldStatus} onChange={onStatusChange}>
-                                        <Radio.Button value="toMake" id={`${order.id}-toMake`}>
-                                            To make
-                                        </Radio.Button>
-                                        <Radio.Button value="toSell" id={`${order.id}-toSell`}>
-                                            To sell
-                                        </Radio.Button>
-                                        <Radio.Button value="sold" id={`${order.id}-sold`}>
-                                            Sold
-                                        </Radio.Button>
+                                    <Radio.Group buttonStyle="solid" onChange={onStatusChange(order.id)} value={order.soldStatus}>
+                                        <Radio.Button value="toMake">To make</Radio.Button>
+                                        <Radio.Button value="toSell">To sell</Radio.Button>
+                                        <Radio.Button value="sold">Sold</Radio.Button>
                                     </Radio.Group>
                                 </Form>
                             </div>
@@ -188,25 +207,6 @@ export default function CalendarSideView(props: { orders: any[] }) {
 
                                 <Modal open={isZoomModalVisible} transitionName="" onOk={handleZoomModalClose} onCancel={handleZoomModalClose} footer={null}>
                                     <Image src={modalImage} className="p-6 -mb-3" height={200} width={200} alt="order" style={{ width: "100%" }} onClick={handleZoomModalClose} />
-                                    <div className="additional-info text-center">
-                                        {/* <div className="flex justify-center">
-                                                <div className="font-semibold mr-1">{order.customerName}</div> (@{order.customerWechatId})<br />
-                                            </div>
-                                            <div>
-                                                {"€ "}
-                                                {order.amount}
-                                                <br />
-                                            </div>
-                                            <div>{fullDate}</div> */}
-
-                                        {/* <div>
-                                                    {(orderStatuses[order.id] || order.soldStatus) === "toMake" ? "To make" : ""}
-                                                    {(orderStatuses[order.id] || order.soldStatus) === "toSell" ? "To sell" : ""}
-                                                    {(orderStatuses[order.id] || order.soldStatus) === "sold" ? "Sold" : ""}
-                                                </div>
-                                                <div className="">{orderStatuses[order.id]}</div> 
-                                        */}
-                                    </div>
                                 </Modal>
                             </div>
                             <div className="flex flex-row mt-2 justify-end gap-3">

@@ -14,7 +14,6 @@ export default function EditForm(props: { orderId: string; orders: any[] }) {
     const { deliveryDate, customerName, customerWechatId, advance, amount, productionCost, photo, soldStatus } = orderData;
 
     const inputDefaultDeliveryDate = deliveryDate ? deliveryDate.toISOString().split("T")[0] : new Date().toISOString().split("T")[0];
-    // console.log("inputDefaultDeliveryDate", inputDefaultDeliveryDate);
 
     const { selectedDateInfo, setSelectedDateInfo } = useContext(SelectedDateInfoContext);
 
@@ -91,6 +90,10 @@ export default function EditForm(props: { orderId: string; orders: any[] }) {
         });
         setSelectedDateInfo(updatedFilteredOrders);
     };
+
+    const onReset = () => {
+        formRef.current.resetFields();
+    }
 
     return (
         <>
@@ -220,12 +223,16 @@ export default function EditForm(props: { orderId: string; orders: any[] }) {
 
                         <Form.Item className="text-right">
                             <Space>
-                                <button type="submit" className="p-2 mr-2 bg-white hover:bg-newBlue-500 hover:text-white transition duration-200 border-2 rounded-md">
+                                <Button type="primary" htmlType="submit">
                                     Submit
-                                </button>
-                                <button type="reset" className="p-2 bg-white hover:bg-newRed-500 hover:text-white transition duration-200 border-2 rounded-md">
+                                </Button>
+                                {/* <button type="reset" className="p-2 bg-white hover:bg-newRed-500 hover:text-white transition duration-200 border-2 rounded-md">
                                     Reset
-                                </button>
+                                </button> */}
+                                {/* reset button */}
+                                <Button htmlType="button" onClick={onReset}>
+                                    Reset
+                                </Button>
                             </Space>
                         </Form.Item>
                     </Form>

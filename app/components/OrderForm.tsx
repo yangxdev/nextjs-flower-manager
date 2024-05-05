@@ -7,7 +7,7 @@ import { FaPlus } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
 import { MdAddPhotoAlternate } from "react-icons/md";
 
-export default function OrderForm({ preselectedDate, label }: { preselectedDate?: Date | null, label: string | null}) {
+export default function OrderForm({ preselectedDate, label }: { preselectedDate?: Date | null; label: string | null }) {
     const router = useRouter();
     const [file, setFile] = React.useState<File | null>(null);
     const [uploading, setUploading] = React.useState<boolean>(false);
@@ -127,16 +127,33 @@ export default function OrderForm({ preselectedDate, label }: { preselectedDate?
         }
     }, [show, message]);
 
+    const onReset = () => {
+        formRef.current.resetFields();
+        setFile(null);
+        setMessage("");
+        setLoadedFileMessage("");
+    };
+
     return (
         <>
-            <div
+            {/* <div
                 className="text-black border-2 border-lightBorder hover:text-white hover:bg-newBlue-500 w-fit items-center flex flex-row gap-1 p-2 rounded-lg bg-whiteDarker cursor-pointer"
                 onClick={() => {
                     setIsAddModalVisible(true);
                 }}
             >
                 <FaPlus /> {label}
-            </div>
+            </div> */}
+            <Button
+                type="default"
+                className="flex items-center"
+                icon={<FaPlus />}
+                onClick={() => {
+                    setIsAddModalVisible(true);
+                }}
+            >
+                {label}
+            </Button>
             <Modal open={isAddModalVisible} transitionName="" onOk={handleAddModalClose} onCancel={handleAddModalClose} footer={null}>
                 <div className="p-4 w-full rounded-md bg-white">
                     <div className="font-semibold mb-4 text-left text-lg">Add Order</div>
@@ -213,7 +230,7 @@ export default function OrderForm({ preselectedDate, label }: { preselectedDate?
                                     <label>Photo</label>
                                 </Col>
                                 <Col span={16}>
-                                    <div className="flex justify-end">
+                                    <div className="flex justify-end select-none">
                                         <input
                                             id="file"
                                             type="file"
@@ -242,7 +259,7 @@ export default function OrderForm({ preselectedDate, label }: { preselectedDate?
                                     <label>Status</label>
                                 </Col>
                                 <Col span={18} style={{ textAlign: "right" }}>
-                                    <Radio.Group defaultValue={"toMake"}>
+                                    <Radio.Group className="select-none" defaultValue={"toMake"} buttonStyle="solid">
                                         <Radio.Button value="toMake">To make</Radio.Button>
                                         <Radio.Button value="toSell">To sell</Radio.Button>
                                         <Radio.Button value="sold">Sold</Radio.Button>
@@ -253,12 +270,12 @@ export default function OrderForm({ preselectedDate, label }: { preselectedDate?
 
                         <Form.Item className="text-right">
                             <Space>
-                                <button type="submit" className="p-2 mr-2 bg-white hover:bg-newBlue-500 hover:text-white transition duration-200 border-2 rounded-md">
+                                <Button type="primary" htmlType="submit">
                                     Submit
-                                </button>
-                                <button type="reset" className="p-2 bg-white hover:bg-newRed-500 hover:text-white transition duration-200 border-2 rounded-md">
+                                </Button>
+                                <Button type="default" onClick={onReset}>
                                     Reset
-                                </button>
+                                </Button>
                             </Space>
                         </Form.Item>
                     </Form>
