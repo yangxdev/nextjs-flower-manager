@@ -147,7 +147,7 @@ export default function CalendarSideView() {
                 <div className="flex flex-col gap-4 w-full overflow-y-auto">
                     {selectedDateInfoArray.map((order: any, index: number) => (
                         <div key={index} className={`info-card gap-1 flex flex-col justify-between border-2 border-lightBorder rounded-md p-4 ${orderStatuses[order.id] || order.soldStatus}`}>
-                            <div className="flex flex-row text-xs opacity-50 hidden">{order.id}</div>
+                            <div className="flex flex-row text-xs opacity-50">{order.id}</div>
                             <div className="flex flex-row">
                                 <div className="font-semibold mr-2">Client:</div>
                                 {order.customerName}
