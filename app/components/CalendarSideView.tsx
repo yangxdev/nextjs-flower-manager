@@ -194,7 +194,7 @@ export default function CalendarSideView(props: { orders: any[] }) {
                                 <div className="font-semibold mr-2">Status:</div>
                                 {/* {order.soldStatus === "sold" ? "Sold" : "Non Sold"} */}
                                 <Form name="">
-                                    <Radio.Group buttonStyle="solid" onChange={onStatusChange(order.id)} value={order.soldStatus}>
+                                    <Radio.Group buttonStyle="solid" size="small" className="select-none" onChange={onStatusChange(order.id)} value={order.soldStatus}>
                                         <Radio.Button value="toMake">To make</Radio.Button>
                                         <Radio.Button value="toSell">To sell</Radio.Button>
                                         <Radio.Button value="sold">Sold</Radio.Button>

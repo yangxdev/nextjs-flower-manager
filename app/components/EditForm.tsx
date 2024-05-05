@@ -215,7 +215,7 @@ export default function EditForm(props: { orderId: string; orders: any[] }) {
                                     <label>Status</label>
                                 </Col>
                                 <Col span={18} style={{ textAlign: "right" }}>
-                                    <Radio.Group defaultValue={soldStatus} buttonStyle="solid">
+                                    <Radio.Group defaultValue={soldStatus} className="select-none" buttonStyle="solid">
                                         <Radio.Button value="toMake">To make</Radio.Button>
                                         <Radio.Button value="toSell">To sell</Radio.Button>
                                         <Radio.Button value="sold">Sold</Radio.Button>
