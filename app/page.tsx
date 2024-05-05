@@ -31,3 +31,5 @@ export default async function Home() {
         </>
     );
 }
+
+// TODO: Edit button in side view entries
