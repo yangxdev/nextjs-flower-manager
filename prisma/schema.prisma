@@ -18,6 +18,7 @@ model Order {
     deliveryDate DateTime @map(name: "delivery_date")
     customerName String @map(name: "customer_name")
     customerWechatId String @map(name: "customer_wechat_id")
+    advance Float
     amount Float
     productionCost Float    @map(name: "production_cost")
     photo String

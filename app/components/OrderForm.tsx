@@ -85,7 +85,7 @@ export default function OrderForm() {
         const photoUrl = await handlePhotoUpload(file);
 
         // Add order process
-        const { deliveryDate, customerName, customerWechatId, amount, productionCost, soldStatus } = values;
+        const { deliveryDate, customerName, customerWechatId, advance, amount, productionCost, soldStatus } = values;
         const responsePromise = fetch("/api/database/add_order", {
             method: "POST",
             headers: {
@@ -95,6 +95,7 @@ export default function OrderForm() {
                 deliveryDate,
                 customerName,
                 customerWechatId,
+                advance,
                 amount,
                 productionCost,
                 soldStatus,
@@ -142,15 +143,13 @@ export default function OrderForm() {
                 <div className="p-4 w-full rounded-md bg-white">
                     <div className="font-semibold mb-4 text-left text-lg">Add Order</div>
                     <Form name="addOrder" style={{ maxWidth: "500px" }} onFinish={handleSubmit} ref={formRef}>
-                        <Form.Item name="deliveryDate" rules={[{ required: true, message: "Please input the date" }]}
-                            initialValue={new Date().toISOString().split('T')[0]}
-                        >
+                        <Form.Item name="deliveryDate" rules={[{ required: true, message: "Please input the date" }]} initialValue={new Date().toISOString().split("T")[0]}>
                             <Row gutter={8}>
                                 <Col span={8}>
                                     <label>Delivery date</label>
                                 </Col>
                                 <Col span={16}>
-                                    <Input placeholder="Delivery date" type="date" defaultValue={new Date().toISOString().split('T')[0]} />
+                                    <Input placeholder="Delivery date" type="date" defaultValue={new Date().toISOString().split("T")[0]} />
                                 </Col>
                             </Row>
                         </Form.Item>
@@ -173,6 +172,17 @@ export default function OrderForm() {
                                 </Col>
                                 <Col span={16}>
                                     <Input placeholder="Wechat ID" type="text" />
+                                </Col>
+                            </Row>
+                        </Form.Item>
+
+                        <Form.Item name="advance" rules={[{ required: true, message: "Please input the advance" }]} initialValue={0}>
+                            <Row gutter={8}>
+                                <Col span={8}>
+                                    <label>Advance</label>
+                                </Col>
+                                <Col span={16}>
+                                    <Input placeholder="Advance" type="number" />
                                 </Col>
                             </Row>
                         </Form.Item>
@@ -214,7 +224,6 @@ export default function OrderForm() {
                                                 const files = e.target.files;
                                                 if (files) {
                                                     setFile(files[0]);
-
                                                 }
                                             }}
                                             accept="image/png, image/jpeg, image/jpg"
@@ -234,7 +243,7 @@ export default function OrderForm() {
                                 <Col span={6}>
                                     <label>Status</label>
                                 </Col>
-                                <Col span={18} style={{ textAlign: 'right' }}>
+                                <Col span={18} style={{ textAlign: "right" }}>
                                     <Radio.Group defaultValue={"toMake"}>
                                         <Radio.Button value="toMake">To make</Radio.Button>
                                         <Radio.Button value="toSell">To sell</Radio.Button>

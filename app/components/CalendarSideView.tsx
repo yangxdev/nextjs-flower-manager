@@ -37,13 +37,14 @@ export default function CalendarSideView() {
 
     const selectedDateInfoArray = selectedDateInfo
         ? Object.values(selectedDateInfo).map((order: any) => ({
-            id: order.id,
-            customerName: order.customerName,
-            customerWechatId: order.customerWechatId,
-            amount: order.amount,
-            photo: order.photo,
-            soldStatus: order.soldStatus,
-        }))
+              id: order.id,
+              customerName: order.customerName,
+              customerWechatId: order.customerWechatId,
+              advance: order.advance,
+              amount: order.amount,
+              photo: order.photo,
+              soldStatus: order.soldStatus,
+          }))
         : [];
 
     if (!selectedDate) {
@@ -111,9 +112,12 @@ export default function CalendarSideView() {
                             {order.customerWechatId}
                         </div>
                         <div className="flex flex-row">
+                            <div className="font-semibold mr-2">Advance:</div>
+                            {"€ " + order.advance}
+                        </div>
+                        <div className="flex flex-row">
                             <div className="font-semibold mr-2">Amount:</div>
-                            {"€ "}
-                            {order.amount}
+                            {"€ " + order.amount}
                         </div>
                         <div className="flex flex-row">
                             <div className="font-semibold mr-2">Status:</div>
@@ -137,9 +141,7 @@ export default function CalendarSideView() {
                             {order.photo ? <Image src={order.photo} alt="order" width={200} height={200} className="w-40 h-fit rounded-xl cursor-pointer hover:brightness-90 transition duration-100" onClick={() => showZoomModal(order.photo)} /> : "Nessuna Photo"}
 
                             <Modal open={isZoomModalVisible} transitionName="" onOk={handleZoomModalClose} onCancel={handleZoomModalClose} footer={null}>
-                                <Image src={modalImage} className="p-6 -mb-3" height={200} width={200} alt="order" style={{ width: "100%" }}
-                                    onClick={handleZoomModalClose}
-                                />
+                                <Image src={modalImage} className="p-6 -mb-3" height={200} width={200} alt="order" style={{ width: "100%" }} onClick={handleZoomModalClose} />
                                 <div className="additional-info text-center">
                                     {/* <div className="flex justify-center">
                                         <div className="font-semibold mr-1">{order.customerName}</div> (@{order.customerWechatId})<br />
