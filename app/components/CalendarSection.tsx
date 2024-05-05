@@ -19,7 +19,7 @@ export default function CalendarSection(props: { orders: any[] }) {
             <SelectedDateContext.Provider value={{ selectedDate, setSelectedDate }}>
                 <SelectedDateInfoContext.Provider value={{ selectedDateInfo, setSelectedDateInfo }}>
                     <Calendar orders={props.orders} />
-                    <CalendarSideView />
+                    <CalendarSideView orders={props.orders}/>
                 </SelectedDateInfoContext.Provider>
             </SelectedDateContext.Provider>
             {/* </ScrollContext.Provider> */}

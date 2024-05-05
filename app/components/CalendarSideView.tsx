@@ -8,8 +8,9 @@ import Image from "next/image";
 import { ScrollContext } from "../utils/ScrollContext";
 import { MdDelete } from "react-icons/md";
 import OrderForm from "./OrderForm";
+import EditForm from "./EditForm";
 
-export default function CalendarSideView() {
+export default function CalendarSideView(props: { orders: any[] }) {
     const router = useRouter();
 
     const [isZoomModalVisible, setIsZoomModalVisible] = useState(false);
@@ -140,9 +141,9 @@ export default function CalendarSideView() {
             <div className="calendar-side-view flex flex-col gap-4 min-w-fit h-full md:overflow-y-auto md:h-[calc(100vh-13rem)]" ref={sideViewRef}>
                 <div className="mt-2 gap-2 flex flex-row items-center justify-between">
                     <div className="text-2xl font-bold">{fullDate}</div>
-                    <div>
+                    {/* <div>
                         <OrderForm preselectedDate={selectedDate} label={""} />
-                    </div>
+                    </div> */}
                 </div>
                 <div className="flex flex-col gap-4 w-full overflow-y-auto">
                     {selectedDateInfoArray.map((order: any, index: number) => (
@@ -208,7 +209,8 @@ export default function CalendarSideView() {
                                     </div>
                                 </Modal>
                             </div>
-                            <div className="flex flex-row mt-2 justify-end">
+                            <div className="flex flex-row mt-2 justify-end gap-3">
+                                <EditForm orderId={order.id} orders={props.orders} />
                                 <Popconfirm
                                     title="Delete this order"
                                     description="Are you sure you want to delete this order? This action cannot be undone."

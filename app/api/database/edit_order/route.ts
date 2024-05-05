@@ -4,7 +4,6 @@ import { NextResponse } from "next/server";
 export async function POST(request: Request) {
     const { orderId, deliveryDate, customerName, customerWechatId, advance, amount, productionCost, photo, soldStatus } = await request.json();
     const updatedAt = new Date().toISOString();
-    console.log(orderId, deliveryDate, customerName, customerWechatId, advance, amount, productionCost, photo, soldStatus, updatedAt);
 
     try {
         const result = await sql`
