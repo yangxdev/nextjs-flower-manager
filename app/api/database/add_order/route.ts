@@ -15,7 +15,7 @@ export async function POST(request: Request) {
 
     try {
         const result = await sql`
-            INSERT INTO orders (id, delivery_date, customer_name, customer_wechat_id, advance, amount, production_cost, photo, sold_status, created_at, updated_at) 
+            INSERT INTO public."orders" (id, delivery_date, customer_name, customer_wechat_id, advance, amount, production_cost, photo, sold_status, created_at, updated_at) 
             VALUES (${id}, ${deliveryDate}, ${customerName}, ${customerWechatId}, ${advance}, ${amount}, ${productionCost}, ${photo}, ${soldStatus}, ${createdAt}, ${updatedAt})`;
         
         // console.log(result);

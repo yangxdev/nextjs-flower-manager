@@ -182,7 +182,7 @@ export default function OrderForm() {
                                     <label>Advance</label>
                                 </Col>
                                 <Col span={16}>
-                                    <Input placeholder="Advance" type="number" />
+                                    <Input placeholder="Advance" type="number" defaultValue={0} />
                                 </Col>
                             </Row>
                         </Form.Item>

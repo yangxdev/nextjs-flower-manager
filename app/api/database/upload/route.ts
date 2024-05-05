@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 
 export async function POST(request: Request) {
     const { filename, contentType } = await request.json();
-    console.log(process.env.AWS_BUCKET_NAME);
+    // console.log(process.env.AWS_BUCKET_NAME);
     try {
         const client = new S3Client({ region: 'eu-central-1' });
         const { url, fields } = await createPresignedPost(client, {

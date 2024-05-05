@@ -11,7 +11,7 @@ export async function POST(request: Request) {
 
     try {
         const result = await sql`
-            UPDATE orders 
+            UPDATE public."orders"
             SET sold_status = ${soldStatus}
             WHERE id = ${id}`;
         

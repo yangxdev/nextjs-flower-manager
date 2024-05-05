@@ -66,3 +66,9 @@ img.sold, .info-card.sold {
 .ant-form-item-extra {
     text-align: right;
 }
+
+.ant-btn-primary {
+    color: white;
+    /* height: 32px; */
+    background-color: #1677ff;
+}

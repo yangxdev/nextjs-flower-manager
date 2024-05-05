@@ -19,7 +19,6 @@ export default function CalendarSection(props: { orders: any[] }) {
             <SelectedDateContext.Provider value={{ selectedDate, setSelectedDate }}>
                 <SelectedDateInfoContext.Provider value={{ selectedDateInfo, setSelectedDateInfo }}>
                     <Calendar orders={props.orders} />
-                    <div className="border-b border-[1.5px] md:border-r border-lightBorder"></div>
                     <CalendarSideView />
                 </SelectedDateInfoContext.Provider>
             </SelectedDateContext.Provider>
