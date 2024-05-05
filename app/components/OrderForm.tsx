@@ -142,13 +142,15 @@ export default function OrderForm() {
                 <div className="p-4 w-full rounded-md bg-white">
                     <div className="font-semibold mb-4 text-left text-lg">Add Order</div>
                     <Form name="addOrder" style={{ maxWidth: "500px" }} onFinish={handleSubmit} ref={formRef}>
-                        <Form.Item name="deliveryDate" rules={[{ required: true, message: "Please input the date" }]}>
+                        <Form.Item name="deliveryDate" rules={[{ required: true, message: "Please input the date" }]}
+                            initialValue={new Date().toISOString().split('T')[0]}
+                        >
                             <Row gutter={8}>
                                 <Col span={8}>
                                     <label>Delivery date</label>
                                 </Col>
                                 <Col span={16}>
-                                    <Input placeholder="Delivery date" type="date" className="text-black"/>
+                                    <Input placeholder="Delivery date" type="date" defaultValue={new Date().toISOString().split('T')[0]} />
                                 </Col>
                             </Row>
                         </Form.Item>
