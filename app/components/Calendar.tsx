@@ -60,11 +60,12 @@ export default function Calendar(props: { orders: any[] }) {
 
     return (
         <div
-        className="calendar md:overflow-y-auto w-full"
+            className="calendar md:overflow-y-auto w-full"
         //  ref={topViewRef}
         >
             <ConfigProvider>
                 <AntdCalendar
+                    className="bg-newPinkLighter-300"
                     cellRender={cellRender}
                     onSelect={async (date, { source }) => {
                         if (source === "date") {

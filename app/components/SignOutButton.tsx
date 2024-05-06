@@ -11,7 +11,7 @@ export default function SignOutButton() {
         //         <div>Sign out</div>
         //     </div>
         // </button>
-        <Button className="flex items-center ml-auto" onClick={() => signOut()} icon={<RiLogoutBoxLine />}>
+        <Button className="flex items-center ml-auto bg-white" onClick={() => signOut()} icon={<RiLogoutBoxLine />}>
             Sign out
         </Button>
     );

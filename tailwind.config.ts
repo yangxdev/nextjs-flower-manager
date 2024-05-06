@@ -38,7 +38,7 @@ const config: Config = {
                 platinum: "#EBE9E9",
                 mintCream: "#F3F8F2",
                 azul: "#0C6FC0",
-                newBlue: { 
+                newBlue: {
                     200: "#D6E4F7",
                     500: "#1455fb",
                 },
@@ -52,7 +52,35 @@ const config: Config = {
                 alabaster: "DEE2D6",
                 white: "#FFFFFF",
                 whiteDarker: "#FDFDFD",
-                lightBorder: "#eaecf0", 
+                lightBorder: "#eaecf0",
+
+                // 06/05/2024 re-design flower manager
+                // palette 1
+                // https://colorhunt.co/palette/fff5e4ffe3e1ffd1d1ff9494
+                // FFF5E4, FFE3E1, FFD1D1, FF9494
+                newPink: {
+                    200: "#FFF5E4",
+                    300: "#FFE3E1",
+                    400: "#FFD1D1",
+                    500: "#FF9494",
+                },
+                newPinkLighter: {
+                    200: "#FFF9F2",
+                    // 300: "#FFECE9",
+                    300: "#B5C18E", // "B5C18E",
+                    400: "#FFDFD9",
+                    500: "#FFC9C2",
+                },
+
+                // palette 2 
+                // https://colorhunt.co/palette/b5c18ef7dcb9deac80b99470
+                // B5C18E, F7DCB9, DEAC80, B99470
+                newBrown: {
+                    200: "#B5C18E",
+                    300: "#F7DCB9",
+                    400: "#DEAC80",
+                    500: "#B99470",
+                }
             },
             spacing: {
                 sidebar: SIDEBAR_MIN_WIDTH,

@@ -72,3 +72,8 @@ img.sold, .info-card.sold {
     /* height: 32px; */
     background-color: #1677ff;
 }
+
+.ant-picker-panel {
+    border-radius: 6px!important;
+    padding: 6px;
+}

@@ -158,17 +158,17 @@ export default function CalendarSideView(props: { orders: any[] }) {
 
     return (
         <>
-            <div className="border-b border-[1.5px] md:border-r border-lightBorder"></div>
+            <div className="border-b hidden border-[1.5px] md:border-r border-lightBorder"></div>
             <div className="calendar-side-view flex flex-col gap-4 min-w-fit h-full md:overflow-y-auto md:h-[calc(100vh-13rem)]" ref={sideViewRef}>
                 <div className="mt-2 gap-2 flex flex-row items-center justify-between">
-                    <div className="text-2xl font-bold">{fullDate}</div>
+                    <div className="text-2xl font-bold text-[#8f8167]">{fullDate}</div>
                     {/* <div>
                         <OrderForm preselectedDate={selectedDate} label={""} />
                     </div> */}
                 </div>
                 <div className="flex flex-col gap-4 w-full overflow-y-auto">
                     {selectedDateInfoArray.map((order: any, index: number) => (
-                        <div key={index} className={`info-card gap-1 flex flex-col justify-between border-2 border-lightBorder rounded-md p-4 ${borderColor(order.soldStatus)} border-l-4`}>
+                        <div key={index} className={`info-card gap-1 bg-white flex flex-col justify-between border-2 border-lightBorder rounded-md p-4 ${borderColor(order.soldStatus)} border-l-4`}>
                             <div className="flex flex-row text-xs opacity-50">{order.id}</div>
                             <div className="flex flex-row">
                                 <div className="font-semibold mr-2">Client:</div>

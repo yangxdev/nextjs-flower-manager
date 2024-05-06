@@ -149,7 +149,7 @@ export default function OrderForm({ preselectedDate, label }: { preselectedDate?
             </div> */}
             <Button
                 type="default"
-                className="flex items-center"
+                className="flex items-center w-fit bg-white"
                 icon={<FaPlus />}
                 onClick={() => {
                     setIsAddModalVisible(true);

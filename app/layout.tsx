@@ -29,7 +29,7 @@ export default async function RootLayout({
                 <SessionProvider session={session}>
                     <main className="main flex flex-row h-full">
                         <NavMenu />
-                        <div className="layout flex-grow p-8 w-screen md:h-screen h-full relative bg-whiteDarker overflow-y-auto">
+                        <div className="layout flex-grow p-8 w-screen md:h-screen h-full relative overflow-y-auto bg-newPinkLighter-200">
                             {children}
                             <Toaster position="bottom-center" reverseOrder={false} />
                         </div>

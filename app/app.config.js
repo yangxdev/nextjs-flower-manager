@@ -33,7 +33,7 @@ module.exports = {
                 },
 
                 dashboard: {
-                    title: "🌸 Calendar",
+                    title: "🌷 💌 🐰",
                     // subtitle: "Summary of your data in the last month",
                 },
             },
@@ -46,7 +46,7 @@ module.exports = {
                 },
 
                 dashboard: {
-                    title: "🌸 Calendario",
+                    title: "🌷 💌 🐰 Calendario",
                     // subtitle: "Sommario dei tuoi dati nell'ultimo mese",
                 },
 
