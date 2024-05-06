@@ -32,4 +32,4 @@ export default async function Home() {
     );
 }
 
-// TODO: Edit button in side view entries
+// DONE: Edit button in side view entries
