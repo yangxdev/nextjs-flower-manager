@@ -16,7 +16,7 @@
     "@paralleldrive/cuid2": "^2.2.2",
     "@prisma/client": "^5.12.1",
     "@vercel/postgres": "^0.7.2",
-    "antd": "^5.17.0",
+    "antd": "^5.16.5",
     "aws-sdk": "^2.1610.0",
     "chart.js": "^4.4.2",
     "class-variance-authority": "^0.7.0",
