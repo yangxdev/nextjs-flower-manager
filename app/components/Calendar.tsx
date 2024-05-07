@@ -1,5 +1,5 @@
 "use client";
-import { Calendar as AntdCalendar, ConfigProvider } from "antd";
+import { Calendar as AntdCalendar, ConfigProvider, ConfigProviderProps } from "antd";
 import { SelectedDateContext } from "../utils/SelectedDateContext";
 import { SelectedDateInfoContext } from "../utils/SelectedDateInfoContext";
 import React, { useEffect, useRef, useState } from "react";
@@ -9,10 +9,18 @@ import { Badge } from "antd";
 import "@/app/css/Calendar.css";
 import { ScrollContext } from "../utils/ScrollContext";
 import Image from "next/image";
+import itIT from 'antd/locale/it_IT';
+
+import 'dayjs/locale/it';
+
+type Locale = ConfigProviderProps['locale'];
+
+dayjs.locale('it');
 
 export default function Calendar(props: { orders: any[] }) {
     const { setSelectedDate } = React.useContext(SelectedDateContext);
     const { setSelectedDateInfo } = React.useContext(SelectedDateInfoContext);
+    const [locale, setLocale] = useState<Locale>(itIT);
 
     // const topViewRef = useRef<HTMLDivElement>(null);
     // const { setTopViewRef } = React.useContext(ScrollContext);
@@ -63,10 +71,13 @@ export default function Calendar(props: { orders: any[] }) {
             className="calendar md:overflow-y-auto w-full"
         //  ref={topViewRef}
         >
-            <ConfigProvider>
+            <ConfigProvider
+                locale={locale}
+                >
                 <AntdCalendar
-                    className="bg-newPinkLighter-300"
+                    className="bg-white"
                     cellRender={cellRender}
+                    value={dayjs()}
                     onSelect={async (date, { source }) => {
                         if (source === "date") {
                             setSelectedDate(date);

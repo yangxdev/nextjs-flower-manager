@@ -14,7 +14,7 @@ export default function CalendarSection(props: { orders: any[] }) {
     // const [topViewRef, setTopViewRef] = useState<RefObject<HTMLDivElement> | null>(null);
 
     return (
-        <div className="calendar-section border-lightBorder border-2 rounded-xl p-4 mb-16 mt-2 mb-2 flex flex-col md:flex-row gap-2 md:gap-8 md:h-[calc(100vh-10rem)] bg-newPinkLighter-300">
+        <div className="calendar-section border-lightBorder border-2 rounded-xl p-4 mb-16 mt-2 mb-2 flex flex-col md:flex-row gap-2 md:gap-8 md:h-[calc(100vh-10rem)] bg-white">
             {/* <ScrollContext.Provider value={{ topViewRef: topViewRef, setTopViewRef: setTopViewRef }}> */}
             <SelectedDateContext.Provider value={{ selectedDate, setSelectedDate }}>
                 <SelectedDateInfoContext.Provider value={{ selectedDateInfo, setSelectedDateInfo }}>
