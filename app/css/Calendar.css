@@ -77,3 +77,8 @@ img.sold, .info-card.sold {
     border-radius: 6px!important;
     padding: 6px;
 }
+
+.ant-picker-calendar-date-content img {
+    border-radius: 5px;
+    box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.5);
+}
