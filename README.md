@@ -7,9 +7,9 @@ Welcome to my latest project! This is an order manager I made for my partner's f
 ---
 
 ### 🌼 Screenshots
-![Screenshot 1 - Mobile View](/public/screenshots/1_mobile_no_details.jpg)
-![Screenshot 2 - Desktop View](/public/screenshots/2_desktop_with_details.jpg)
-![Screenshot 3 - Add Order View](/public/screenshots/3_desktop_add_order.jpg)
+<img src="public/screenshots/1_mobile_no_details.jpg" alt="Screenshot 1 - Mobile View" width="300">
+<img src="public/screenshots/2_desktop_with_details.jpg" alt="Screenshot 2 - Desktop View" width="600">
+<img src="public/screenshots/3_desktop_add_order.jpg" alt="Screenshot 3 - Add Order View" width="600">
 
 ---
 
