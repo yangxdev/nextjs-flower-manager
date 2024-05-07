@@ -19,6 +19,7 @@ Welcome to my latest project! This is an order manager I made for my partner's f
 - Login authentication with Google and GitHub 
 - Image upload for each order
 - Responsive design for mobile, tablet, and desktop
+- Database backup and restore functionality
 
 ---
 
