@@ -1,4 +1,4 @@
-# 🌷 Flower Manager
+# 🌷 Flower Manager v1.0.0
 ### 👨🏻‍💻 By Yang (@yangxdev)
 
 ### 🌸 Description
