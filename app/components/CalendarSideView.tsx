@@ -161,7 +161,7 @@ export default function CalendarSideView(props: { orders: any[] }) {
             <div className="border-b hidden border-[1.5px] md:border-r border-lightBorder"></div>
             <div className="calendar-side-view flex flex-col gap-4 min-w-fit h-full md:overflow-y-auto md:h-[calc(100vh-13rem)]" ref={sideViewRef}>
                 <div className="mt-2 gap-2 flex flex-row items-center justify-between">
-                    <div className="text-2xl font-bold text-[#8f8167]">{fullDate}</div>
+                    <div className="text-2xl font-bold text-black">{fullDate}</div>
                     {/* <div>
                         <OrderForm preselectedDate={selectedDate} label={""} />
                     </div> */}
@@ -248,3 +248,4 @@ export default function CalendarSideView(props: { orders: any[] }) {
 // BUG: photo zoom view shows wrong info -> disabled for now
 // TODO: skeleton of image loading
 // TODO: add entry from side view, with already selected date
+// TODO: search functionality
