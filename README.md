@@ -1,4 +1,4 @@
-# 🌷 Flower Manager v1.0.0
+# 🌷 Flower Manager v1.1.0
 ### 👨🏻‍💻 By Yang (@yangxdev)
 
 ### 🌸 Description
@@ -24,7 +24,7 @@ Welcome to my latest project! This is an order manager I made for my partner's f
 ---
 
 ### 🌹 Technologies
-- React (Next.js 14 w/App router)
+- React (Next.js 14)
 - Tailwind CSS
 - AWS S3 (for image storage)
 - PostgreSQL (w/ Prisma ORM)
