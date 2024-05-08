@@ -2,14 +2,15 @@
 ### 👨🏻‍💻 By Yang (@yangxdev)
 
 ### 🌸 Description
-Welcome to my latest project! This is an order manager I made for my partner's flower business where she can keep track of her orders and customers throughout the month. The project has been initially forked from my other recent project Budget Buddy, a budget manager I made for myself.
+Welcome to my latest project! This is an order manager I made for my partner's flower business where she can keep track of her orders and customers throughout the month. This project gives me a chance to make a real world impact, using the latest technologies to make a product that can provide value to a business.
+For the latest updates (also with explanatory GIFs) see my most recent [v1.1.0 release](https://github.com/yangxdev/nextjs-flower-manager/releases/tag/v1.1.0)!
 
 ---
 
-### 🌼 Screenshots
-<img src="public/screenshots/1_mobile_no_details.jpg" alt="Screenshot 1 - Mobile View" width="300">
-<img src="public/screenshots/2_desktop_with_details.jpg" alt="Screenshot 2 - Desktop View" width="600">
-<img src="public/screenshots/3_desktop_add_order.jpg" alt="Screenshot 3 - Add Order View" width="600">
+### 🌼 Screenshots and videos
+<img src="https://github.com/yangxdev/nextjs-flower-manager/assets/102532340/ae7efb82-e39d-4808-9755-8fa61a7e80a7" alt="GIF 1 - selecting a date" width="300">
+<img src="https://github.com/yangxdev/nextjs-flower-manager/assets/102532340/e2fb1f25-51a0-4c62-ad11-5b522e0a7b5f" alt="GIF 2 - changing status from side view" width="300">
+<img src="https://github.com/yangxdev/nextjs-flower-manager/assets/102532340/a31d2dce-cf8d-41dd-9fe2-01feebe52b82" alt="GIF 3 - editing an entry" width="300">
 
 ---
 
