@@ -159,77 +159,79 @@ export default function CalendarSideView(props: { orders: any[] }) {
     return (
         <>
             <div className="border-b hidden border-[1.5px] md:border-r border-lightBorder"></div>
-            <div className="calendar-side-view flex flex-col gap-4 min-w-fit h-full md:overflow-y-auto md:h-[calc(100vh-13rem)]" ref={sideViewRef}>
-                <div className="mt-2 gap-2 flex flex-row items-center justify-between">
-                    <div className="text-2xl font-bold text-black">{fullDate}</div>
-                    {/* <div>
+
+            {!infoIsEmpty && (
+                <div className="calendar-side-view flex flex-col gap-4 min-w-fit h-full md:overflow-y-auto md:h-[calc(100vh-13rem)]" ref={sideViewRef}>
+                    <div className="mt-2 gap-2 flex flex-row items-center justify-between">
+                        <div className="text-2xl font-bold text-black">{fullDate}</div>
+                        {/* <div>
                         <OrderForm preselectedDate={selectedDate} label={""} />
                     </div> */}
-                </div>
-                <div className="flex flex-col gap-4 w-full overflow-y-auto">
-                    {selectedDateInfoArray.map((order: any, index: number) => (
-                        <div key={index} className={`info-card gap-1 bg-white flex flex-col justify-between border-2 border-lightBorder rounded-md p-4 ${borderColor(order.soldStatus)} border-l-4`}>
-                            <div className="flex flex-row text-xs opacity-50">{order.id}</div>
-                            <div className="flex flex-row">
-                                <div className="font-semibold mr-2">Client:</div>
-                                {order.customerName}
-                            </div>
-                            <div className="flex flex-row">
-                                <div className="font-semibold mr-2">WeChat ID:</div>
-                                {order.customerWechatId}
-                            </div>
-                            <div className="flex flex-row">
-                                <div className="font-semibold mr-2">Advance:</div>
-                                {"€ " + order.advance}
-                            </div>
-                            <div className="flex flex-row">
-                                <div className="font-semibold mr-2">Amount:</div>
-                                {"€ " + order.amount}
-                            </div>
-                            <div className="flex flex-row">
-                                <div className="font-semibold mr-2">Production cost:</div>
-                                {"€ " + order.productionCost}
-                            </div>
-                            <div className="flex flex-row">
-                                <div className="font-semibold mr-2">Status:</div>
-                                {/* {order.soldStatus === "sold" ? "Sold" : "Non Sold"} */}
-                                <Form name="">
-                                    <Radio.Group buttonStyle="solid" size="small" className="select-none" onChange={onStatusChange(order.id)} value={order.soldStatus}>
-                                        <Radio.Button value="toMake">To make</Radio.Button>
-                                        <Radio.Button value="toSell">To sell</Radio.Button>
-                                        <Radio.Button value="sold">Sold</Radio.Button>
-                                    </Radio.Group>
-                                </Form>
-                            </div>
-                            <div className="flex flex-row">
-                                <div className="font-semibold mr-2">Photo:</div>
-                                {order.photo ? <Image src={order.photo} alt="order" width={200} height={200} className="w-40 h-fit rounded-xl cursor-pointer hover:brightness-90 transition duration-100" onClick={() => showZoomModal(order.photo)} /> : "Nessuna Photo"}
+                    </div>
+                    <div className="flex flex-col gap-4 w-full overflow-y-auto">
+                        {selectedDateInfoArray.map((order: any, index: number) => (
+                            <div key={index} className={`info-card gap-1 bg-white flex flex-col justify-between border-2 border-lightBorder rounded-md p-4 ${borderColor(order.soldStatus)} border-l-4`}>
+                                <div className="flex flex-row text-xs opacity-50">{order.id}</div>
+                                <div className="flex flex-row">
+                                    <div className="font-semibold mr-2">Client:</div>
+                                    {order.customerName}
+                                </div>
+                                <div className="flex flex-row">
+                                    <div className="font-semibold mr-2">WeChat ID:</div>
+                                    {order.customerWechatId}
+                                </div>
+                                <div className="flex flex-row">
+                                    <div className="font-semibold mr-2">Advance:</div>
+                                    {"€ " + order.advance}
+                                </div>
+                                <div className="flex flex-row">
+                                    <div className="font-semibold mr-2">Amount:</div>
+                                    {"€ " + order.amount}
+                                </div>
+                                <div className="flex flex-row">
+                                    <div className="font-semibold mr-2">Production cost:</div>
+                                    {"€ " + order.productionCost}
+                                </div>
+                                <div className="flex flex-row">
+                                    <div className="font-semibold mr-2">Status:</div>
+                                    {/* {order.soldStatus === "sold" ? "Sold" : "Non Sold"} */}
+                                    <Form name="">
+                                        <Radio.Group buttonStyle="solid" size="small" className="select-none" onChange={onStatusChange(order.id)} value={order.soldStatus}>
+                                            <Radio.Button value="toMake">To make</Radio.Button>
+                                            <Radio.Button value="toSell">To sell</Radio.Button>
+                                            <Radio.Button value="sold">Sold</Radio.Button>
+                                        </Radio.Group>
+                                    </Form>
+                                </div>
+                                <div className="flex flex-row">
+                                    <div className="font-semibold mr-2">Photo:</div>
+                                    {order.photo ? <Image src={order.photo} alt="order" width={200} height={200} className="w-40 h-fit rounded-xl cursor-pointer hover:brightness-90 transition duration-100" onClick={() => showZoomModal(order.photo)} /> : "Nessuna Photo"}
 
-                                <Modal open={isZoomModalVisible} transitionName="" onOk={handleZoomModalClose} onCancel={handleZoomModalClose} footer={null}>
-                                    <Image src={modalImage} className="p-6 -mb-3" height={200} width={200} alt="order" style={{ width: "100%" }} onClick={handleZoomModalClose} />
-                                </Modal>
+                                    <Modal open={isZoomModalVisible} transitionName="" onOk={handleZoomModalClose} onCancel={handleZoomModalClose} footer={null}>
+                                        <Image src={modalImage} className="p-6 -mb-3" height={200} width={200} alt="order" style={{ width: "100%" }} onClick={handleZoomModalClose} />
+                                    </Modal>
+                                </div>
+                                <div className="flex flex-row mt-2 justify-end gap-3">
+                                    <EditForm orderId={order.id} orders={props.orders} />
+                                    <Popconfirm
+                                        title="Delete this order"
+                                        description="Are you sure you want to delete this order? This action cannot be undone."
+                                        onConfirm={() => {
+                                            deleteOrder(order.id);
+                                        }}
+                                        okText="Yes"
+                                        cancelText="No"
+                                    >
+                                        <Button className="flex flex-row gap-1 items-center pr-5" type="primary" danger>
+                                            <MdDelete />
+                                            Delete
+                                        </Button>
+                                    </Popconfirm>
+                                </div>
                             </div>
-                            <div className="flex flex-row mt-2 justify-end gap-3">
-                                <EditForm orderId={order.id} orders={props.orders} />
-                                <Popconfirm
-                                    title="Delete this order"
-                                    description="Are you sure you want to delete this order? This action cannot be undone."
-                                    onConfirm={() => {
-                                        deleteOrder(order.id);
-                                    }}
-                                    okText="Yes"
-                                    cancelText="No"
-                                >
-                                    <Button className="flex flex-row gap-1 items-center pr-5" type="primary" danger>
-                                        <MdDelete />
-                                        Delete
-                                    </Button>
-                                </Popconfirm>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-                {/* <div>
+                        ))}
+                    </div>
+                    {/* <div>
                         <Button
                             type="primary"
                             onClick={() => {
@@ -239,7 +241,8 @@ export default function CalendarSideView(props: { orders: any[] }) {
                             Torna su
                         </Button>
                     </div> */}
-            </div>
+                </div>
+            )}
         </>
     );
 }
