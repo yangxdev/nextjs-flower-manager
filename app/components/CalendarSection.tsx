@@ -50,4 +50,4 @@ export default function CalendarSection(props: { orders: any[] }) {
     );
 }
 
-// TODO: make images in calendar square
+// DONE: make images in calendar square
