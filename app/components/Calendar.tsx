@@ -110,4 +110,4 @@ export default function Calendar(props: { orders: any[] }) {
     );
 }
 
-// TODO: use context to set loading to the antd buttons too
+// DONE: use context to set loading to the antd buttons too

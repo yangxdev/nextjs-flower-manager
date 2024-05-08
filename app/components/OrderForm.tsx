@@ -1,6 +1,6 @@
 "use client";
 import { InboxOutlined, UploadOutlined } from "@ant-design/icons";
-import { Input, Button, Checkbox, Col, ColorPicker, Form, InputNumber, Radio, Rate, Row, Select, Slider, Space, Switch, Upload, Modal } from "antd";
+import { Input, Button, Checkbox, Col, ColorPicker, Form, InputNumber, Radio, Rate, Row, Select, Slider, Space, Switch, Upload, Modal, ConfigProvider } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { FaPlus } from "react-icons/fa6";
@@ -10,6 +10,7 @@ import { LoadingStateContext } from "../utils/LoadingStateContext";
 
 export default function OrderForm({ preselectedDate, label }: { preselectedDate?: Date | null; label: string | null }) {
     const router = useRouter();
+    const isMobile = window.innerWidth < 768;
     const [file, setFile] = useState<File | null>(null);
     const [uploading, setUploading] = useState<boolean>(false);
     const [message, setMessage] = useState<string>("");
@@ -179,7 +180,7 @@ export default function OrderForm({ preselectedDate, label }: { preselectedDate?
                     {label}
                 </Button>
             </div>
-            <Modal open={isAddModalVisible} transitionName="" onOk={handleAddModalClose} onCancel={handleAddModalClose} footer={null}>
+            <Modal open={isAddModalVisible} transitionName={isMobile ? "" : undefined} onOk={handleAddModalClose} onCancel={handleAddModalClose} footer={null}>
                 <div className="p-4 w-full rounded-md bg-white">
                     <div className="font-semibold mb-4 text-left text-lg">Add Order</div>
                     <Form name="addOrder" style={{ maxWidth: "500px" }} onFinish={handleSubmit} ref={formRef}>
@@ -285,9 +286,45 @@ export default function OrderForm({ preselectedDate, label }: { preselectedDate?
                                 </Col>
                                 <Col span={18} style={{ textAlign: "right" }}>
                                     <Radio.Group className="select-none" defaultValue={"toMake"} buttonStyle="solid">
-                                        <Radio.Button value="toMake">To make</Radio.Button>
-                                        <Radio.Button value="toSell">To sell</Radio.Button>
-                                        <Radio.Button value="sold">Sold</Radio.Button>
+                                        <ConfigProvider
+                                            theme={{
+                                                components: {
+                                                    Radio: {
+                                                        buttonSolidCheckedActiveBg: "#F5222D",
+                                                        buttonSolidCheckedBg: "#F5222D",
+                                                        buttonSolidCheckedHoverBg: "#FF4D4F",
+                                                    },
+                                                },
+                                            }}
+                                        >
+                                            <Radio.Button value="toMake">To make</Radio.Button>
+                                        </ConfigProvider>
+                                        <ConfigProvider
+                                            theme={{
+                                                components: {
+                                                    Radio: {
+                                                        buttonSolidCheckedActiveBg: "#FAAD14",
+                                                        buttonSolidCheckedBg: "#FAAD14",
+                                                        buttonSolidCheckedHoverBg: "#FFC940",
+                                                    },
+                                                },
+                                            }}
+                                        >
+                                            <Radio.Button value="toSell">To sell</Radio.Button>
+                                        </ConfigProvider>
+                                        <ConfigProvider
+                                            theme={{
+                                                components: {
+                                                    Radio: {
+                                                        buttonSolidCheckedActiveBg: "#52C41A",
+                                                        buttonSolidCheckedBg: "#52C41A",
+                                                        buttonSolidCheckedHoverBg: "#73D13D",
+                                                    },
+                                                },
+                                            }}
+                                        >
+                                            <Radio.Button value="sold">Sold</Radio.Button>
+                                        </ConfigProvider>
                                     </Radio.Group>
                                 </Col>
                             </Row>

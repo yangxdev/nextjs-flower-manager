@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { SelectedDateContext } from "../utils/SelectedDateContext";
 import { SelectedDateInfoContext } from "../utils/SelectedDateInfoContext";
-import { Button, Form, Modal, Popconfirm, Radio, RadioChangeEvent } from "antd";
+import { Button, ConfigProvider, Form, Modal, Popconfirm, Radio, RadioChangeEvent } from "antd";
 import toast from "react-hot-toast";
 import Image from "next/image";
 import { ScrollContext } from "../utils/ScrollContext";
@@ -12,6 +12,8 @@ import EditForm from "./EditForm";
 
 export default function CalendarSideView(props: { orders: any[] }) {
     const router = useRouter();
+
+    const isMobile = window.innerWidth < 768;
 
     const [isZoomModalVisible, setIsZoomModalVisible] = useState(false);
     const [modalImage, setModalImage] = useState("");
@@ -197,9 +199,45 @@ export default function CalendarSideView(props: { orders: any[] }) {
                                     {/* {order.soldStatus === "sold" ? "Sold" : "Non Sold"} */}
                                     <Form name="">
                                         <Radio.Group buttonStyle="solid" size="small" className="select-none" onChange={onStatusChange(order.id)} value={order.soldStatus}>
-                                            <Radio.Button value="toMake">To make</Radio.Button>
-                                            <Radio.Button value="toSell">To sell</Radio.Button>
-                                            <Radio.Button value="sold">Sold</Radio.Button>
+                                            <ConfigProvider
+                                                theme={{
+                                                    components: {
+                                                        Radio: {
+                                                            buttonSolidCheckedActiveBg: "#F5222D",
+                                                            buttonSolidCheckedBg: "#F5222D",
+                                                            buttonSolidCheckedHoverBg: "#FF4D4F",
+                                                        },
+                                                    },
+                                                }}
+                                            >
+                                                <Radio.Button value="toMake">To make</Radio.Button>
+                                            </ConfigProvider>
+                                            <ConfigProvider
+                                                theme={{
+                                                    components: {
+                                                        Radio: {
+                                                            buttonSolidCheckedActiveBg: "#FAAD14",
+                                                            buttonSolidCheckedBg: "#FAAD14",
+                                                            buttonSolidCheckedHoverBg: "#FFC940",
+                                                        },
+                                                    },
+                                                }}
+                                            >
+                                                <Radio.Button value="toSell">To sell</Radio.Button>
+                                            </ConfigProvider>
+                                            <ConfigProvider
+                                                theme={{
+                                                    components: {
+                                                        Radio: {
+                                                            buttonSolidCheckedActiveBg: "#52C41A",
+                                                            buttonSolidCheckedBg: "#52C41A",
+                                                            buttonSolidCheckedHoverBg: "#73D13D",
+                                                        },
+                                                    },
+                                                }}
+                                            >
+                                                <Radio.Button value="sold">Sold</Radio.Button>
+                                            </ConfigProvider>
                                         </Radio.Group>
                                     </Form>
                                 </div>
@@ -207,7 +245,7 @@ export default function CalendarSideView(props: { orders: any[] }) {
                                     <div className="font-semibold mr-2">Photo:</div>
                                     {order.photo ? <Image src={order.photo} alt="order" width={200} height={200} className="w-40 h-fit rounded-xl cursor-pointer hover:brightness-90 transition duration-100" onClick={() => showZoomModal(order.photo)} /> : "Nessuna Photo"}
 
-                                    <Modal open={isZoomModalVisible} transitionName="" onOk={handleZoomModalClose} onCancel={handleZoomModalClose} footer={null}>
+                                    <Modal open={isZoomModalVisible} transitionName={isMobile ? "" : undefined} onOk={handleZoomModalClose} onCancel={handleZoomModalClose} footer={null}>
                                         <Image src={modalImage} className="p-6 -mb-3" height={200} width={200} alt="order" style={{ width: "100%" }} onClick={handleZoomModalClose} />
                                     </Modal>
                                 </div>

@@ -1,4 +1,4 @@
-import { Button, Col, Form, Input, Modal, Radio, Row, Space } from "antd";
+import { Button, Col, ConfigProvider, Form, Input, Modal, Radio, Row, Space } from "antd";
 import { useRouter } from "next/navigation";
 import { useContext, useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
@@ -9,6 +9,7 @@ import { getRandomValues } from "crypto";
 
 export default function EditForm(props: { orderId: string; orders: any[] }) {
     const router = useRouter();
+    const isMobile = window.innerWidth < 768;
     const [isEditModalVisible, setIsEditModalVisible] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const orderData = props.orders.find((order) => order.id === props.orderId);
@@ -63,7 +64,7 @@ export default function EditForm(props: { orderId: string; orders: any[] }) {
 
     const formRef = useRef<any>(null);
     const handleEditModalClose = () => {
-        formRef.current.resetFields();
+        // formRef.current.resetFields();
         setIsEditModalVisible(false);
     };
     const handleContextUpdate = (values: any) => {
@@ -96,7 +97,7 @@ export default function EditForm(props: { orderId: string; orders: any[] }) {
 
     const onReset = () => {
         formRef.current.resetFields();
-    }
+    };
 
     return (
         <>
@@ -106,10 +107,10 @@ export default function EditForm(props: { orderId: string; orders: any[] }) {
             <Modal
                 key={isEditModalVisible ? "editModal" : null} // the solution!!!
                 open={isEditModalVisible}
-                transitionName=""
+                transitionName={isMobile ? "" : undefined}
                 footer={null}
-                onCancel={() => handleEditModalClose()}
-                onOk={() => setIsEditModalVisible(false)}
+                onCancel={handleEditModalClose}
+                onOk={handleEditModalClose}
             >
                 <div className="p-4 w-full rounded-md bg-white">
                     <div className="font-semibold mb-4 text-left text-lg">Edit Order</div>
@@ -216,9 +217,45 @@ export default function EditForm(props: { orderId: string; orders: any[] }) {
                                 </Col>
                                 <Col span={18} style={{ textAlign: "right" }}>
                                     <Radio.Group defaultValue={soldStatus} className="select-none" buttonStyle="solid">
-                                        <Radio.Button value="toMake">To make</Radio.Button>
-                                        <Radio.Button value="toSell">To sell</Radio.Button>
-                                        <Radio.Button value="sold">Sold</Radio.Button>
+                                        <ConfigProvider
+                                            theme={{
+                                                components: {
+                                                    Radio: {
+                                                        buttonSolidCheckedActiveBg: "#F5222D",
+                                                        buttonSolidCheckedBg: "#F5222D",
+                                                        buttonSolidCheckedHoverBg: "#FF4D4F",
+                                                    },
+                                                },
+                                            }}
+                                        >
+                                            <Radio.Button value="toMake">To make</Radio.Button>
+                                        </ConfigProvider>
+                                        <ConfigProvider
+                                            theme={{
+                                                components: {
+                                                    Radio: {
+                                                        buttonSolidCheckedActiveBg: "#FAAD14",
+                                                        buttonSolidCheckedBg: "#FAAD14",
+                                                        buttonSolidCheckedHoverBg: "#FFC940",
+                                                    },
+                                                },
+                                            }}
+                                        >
+                                            <Radio.Button value="toSell">To sell</Radio.Button>
+                                        </ConfigProvider>
+                                        <ConfigProvider
+                                            theme={{
+                                                components: {
+                                                    Radio: {
+                                                        buttonSolidCheckedActiveBg: "#52C41A",
+                                                        buttonSolidCheckedBg: "#52C41A",
+                                                        buttonSolidCheckedHoverBg: "#73D13D",
+                                                    },
+                                                },
+                                            }}
+                                        >
+                                            <Radio.Button value="sold">Sold</Radio.Button>
+                                        </ConfigProvider>
                                     </Radio.Group>
                                 </Col>
                             </Row>
