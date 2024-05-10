@@ -359,4 +359,3 @@ export default function OrderForm({ label }: { label: string | null }) {
 // Thanks @imevanc for the image upload functionality https://github.com/imevanc/nextjs-aws-s3
 
 //TODO: drag and drop file upload
-// TODO: add form from side view

@@ -132,5 +132,3 @@ export default function Calendar(props: { orders: any[] }) {
 }
 
 // DONE: use context to set loading to the antd buttons too
-
-// BUG: REGRESSION: loading spinner is not working
