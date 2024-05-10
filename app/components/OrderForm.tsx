@@ -7,10 +7,13 @@ import { FaPlus } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
 import { MdAddPhotoAlternate } from "react-icons/md";
 import { LoadingStateContext } from "../utils/LoadingStateContext";
+import { AddModalContext } from "../utils/AddModalContext";
+import { SelectedDateContext } from "../utils/SelectedDateContext";
+import { useMediaQuery } from "react-responsive";
 
-export default function OrderForm({ preselectedDate, label }: { preselectedDate?: Date | null; label: string | null }) {
+export default function OrderForm({ label }: { label: string | null }) {
     const router = useRouter();
-    const isMobile = window.innerWidth < 768;
+    const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
     const [file, setFile] = useState<File | null>(null);
     const [uploading, setUploading] = useState<boolean>(false);
     const [message, setMessage] = useState<string>("");
@@ -18,7 +21,9 @@ export default function OrderForm({ preselectedDate, label }: { preselectedDate?
     const [loadedFileMessage, setLoadedFileMessage] = useState<string>("");
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
-    const [isAddModalVisible, setIsAddModalVisible] = useState(false);
+    const { isAddModalVisible: isAddModalVisible, setIsAddModalVisible: setIsAddModalVisible
+    } = React.useContext(AddModalContext);
+    const { selectedDate } = React.useContext(SelectedDateContext);
 
     const { loading } = React.useContext(LoadingStateContext);
 
@@ -141,6 +146,9 @@ export default function OrderForm({ preselectedDate, label }: { preselectedDate?
         setLoadedFileMessage("");
     };
 
+    const tzoffset = new Date().getTimezoneOffset() * 60000; //offset in milliseconds
+    const localISOTime = (new Date(Date.now() - tzoffset)).toISOString().slice(0, -1);
+
     return (
         <>
             {/* <div
@@ -180,17 +188,25 @@ export default function OrderForm({ preselectedDate, label }: { preselectedDate?
                     {label}
                 </Button>
             </div>
-            <Modal open={isAddModalVisible} transitionName={isMobile ? "" : undefined} onOk={handleAddModalClose} onCancel={handleAddModalClose} footer={null}>
+            <Modal
+                key={isAddModalVisible ? "addModal" : null}
+                open={isAddModalVisible} transitionName={isMobile ? "" : undefined} onOk={handleAddModalClose} onCancel={handleAddModalClose} footer={null}>
                 <div className="p-4 w-full rounded-md bg-white">
                     <div className="font-semibold mb-4 text-left text-lg">Add Order</div>
                     <Form name="addOrder" style={{ maxWidth: "500px" }} onFinish={handleSubmit} ref={formRef}>
-                        <Form.Item name="deliveryDate" rules={[{ required: true, message: "Please input the date" }]} initialValue={preselectedDate ? preselectedDate.toISOString().split("T")[0] : new Date().toISOString().split("T")[0]}>
+                        <Form.Item name="deliveryDate" rules={[{ required: true, message: "Please input the date" }]} initialValue={selectedDate ?
+                            (new Date(selectedDate - tzoffset)).toISOString().split("T")[0] :
+                            (new Date(localISOTime)).toISOString().split("T")[0]
+                        }>
                             <Row gutter={8}>
                                 <Col span={8}>
                                     <label>Delivery date</label>
                                 </Col>
                                 <Col span={16}>
-                                    <Input placeholder="Delivery date" type="date" defaultValue={preselectedDate ? preselectedDate.toISOString().split("T")[0] : new Date().toISOString().split("T")[0]} />
+                                    <Input placeholder="Delivery date" type="date" defaultValue={selectedDate ?
+                                        (new Date(selectedDate - tzoffset)).toISOString().split("T")[0] :
+                                        (new Date(localISOTime)).toISOString().split("T")[0]
+                                    } />
                                 </Col>
                             </Row>
                         </Form.Item>
@@ -350,3 +366,4 @@ export default function OrderForm({ preselectedDate, label }: { preselectedDate?
 // Thanks @imevanc for the image upload functionality https://github.com/imevanc/nextjs-aws-s3
 
 //TODO: drag and drop file upload
+// TODO: add form from side view

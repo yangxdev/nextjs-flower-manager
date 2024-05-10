@@ -10,28 +10,39 @@ import itIT from "antd/locale/it_IT";
 
 import "dayjs/locale/it";
 import { LoadingStateContext } from "../utils/LoadingStateContext";
+import { AddModalContext } from "../utils/AddModalContext";
+import { FaPlus } from "react-icons/fa6";
+import { useMediaQuery } from "react-responsive";
+import { useWindowSize } from 'react-use';
+import { icons } from "antd/es/image/PreviewGroup";
 
 type Locale = ConfigProviderProps["locale"];
 
 dayjs.locale("it");
 
 export default function Calendar(props: { orders: any[] }) {
-    const { setSelectedDate } = React.useContext(SelectedDateContext);
+
+    const { width } = useWindowSize();
+    const baseSize = 10;
+    const increaseStart = 476;
+    const increaseEnd = 556;
+    const divisor = 20;
+    let iconSize = baseSize;
+    if (width > increaseStart && width <= increaseEnd) {
+        iconSize = baseSize + (width - increaseStart) / divisor;
+    } else if (width > increaseEnd) {
+        iconSize = baseSize + (increaseEnd - increaseStart) / divisor;
+    }
+
+    const { selectedDate, setSelectedDate } = React.useContext(SelectedDateContext);
     const { setSelectedDateInfo } = React.useContext(SelectedDateInfoContext);
+    const { isAddModalVisible: isAddModalVisible, setIsAddModalVisible: setIsAddModalVisible } = React.useContext(AddModalContext);
 
     const [locale, setLocale] = useState<Locale>(itIT);
 
-    // const [loading, setLoading] = useState(true);
     const { loading, setLoading } = React.useContext(LoadingStateContext);
 
-    // const topViewRef = useRef<HTMLDivElement>(null);
-    // const { setTopViewRef } = React.useContext(ScrollContext);
-
-    // useEffect(() => {
-    //     setTopViewRef(topViewRef);
-    // }, []);
-
-    const getListData = (value: Dayjs) => {
+    const getListData = (value: Dayjs): { type: string; content: string; status: string }[] => {
         //console.log(props.orders);
         const ordersOnThisDay = props.orders.filter((order) => value.isSame(order.deliveryDate, "day"));
         return ordersOnThisDay.map((order) => ({
@@ -46,6 +57,10 @@ export default function Calendar(props: { orders: any[] }) {
         const listData = getListData(value);
         return (
             <ul className="events gap-2 flex flex-row">
+                {listData.length === 0 && (
+                    <div className="hover-add-button text-center aspect-square w-full" >
+                        <FaPlus size={iconSize} />
+                    </div>)}
                 {listData.map((item, index) => (
                     <li key={index}>
                         <Image src={item.content} alt="Order" width={50} height={50} className={`${item.status}`} />
@@ -64,12 +79,12 @@ export default function Calendar(props: { orders: any[] }) {
 
     useEffect(() => {
         setLoading(false);
-    }, []);
+    }, [setLoading]);
 
     return (
         <div
             className={`calendar md:overflow-y-auto w-full min-h-[60vh] ${loading ? "flex justify-center items-center" : ""}`}
-            //  ref={topViewRef}
+        //  ref={topViewRef}
         >
             <ConfigProvider
                 locale={locale}
@@ -99,9 +114,14 @@ export default function Calendar(props: { orders: any[] }) {
                     cellRender={cellRender}
                     onSelect={async (date, { source }) => {
                         if (source === "date") {
-                            setSelectedDate(date);
-                            const filteredOrders = props.orders.filter((order) => dayjs(order.deliveryDate).isSame(date, "day"));
-                            setSelectedDateInfo(filteredOrders);
+                            if (selectedDate && dayjs(selectedDate).isSame(date, "day")) {
+                                // If the selected date is the same as the clicked date, open the modal
+                                setIsAddModalVisible(true);
+                            } else {
+                                setSelectedDate(date);
+                                const filteredOrders = props.orders.filter((order) => dayjs(order.deliveryDate).isSame(date, "day"));
+                                setSelectedDateInfo(filteredOrders);
+                            }
                         }
                     }}
                 />
@@ -111,3 +131,5 @@ export default function Calendar(props: { orders: any[] }) {
 }
 
 // DONE: use context to set loading to the antd buttons too
+
+// BUG: REGRESSION: loading spinner is not working
