@@ -7,10 +7,6 @@
     margin-bottom: 7px !important;
 }
 
-.events>li img {
-    /* border-radius: 15px; */
-}
-
 .events img.toMake,
 .info-card.toMake {
     border-left: 5px solid #f5222d;
@@ -84,7 +80,6 @@
 
 .ant-picker-calendar-date-content img {
     border-radius: 5px;
-    /* box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.5); */
     aspect-ratio: 1/1;
     object-fit: cover;
 }
@@ -101,15 +96,9 @@
 }
 
 .hover-add-button:hover {
-    /* color: white; */
     color: #1677ff;
-    /* background-color: #1677ff; */
     border-color: #1677ff;
 }
-
-/* .ant-picker-calendar-date:hover .hover-add-button {
-    display: block;
-} */
 
 .ant-picker-cell-selected .hover-add-button {
     display: flex;
@@ -136,4 +125,5 @@
 
 .fade.hide {
     opacity: 0;
+    display: none;
 }

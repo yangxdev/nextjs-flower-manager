@@ -5,7 +5,6 @@ import { SelectedDateContext } from "../utils/SelectedDateContext";
 import { SelectedDateInfoContext } from "../utils/SelectedDateInfoContext";
 import Calendar from "./Calendar";
 import { useState } from "react";
-import { ScrollContext } from "../utils/ScrollContext";
 import OrderForm from "./OrderForm";
 import GlobalConfig from "@/app/app.config";
 import Greetings from "./Greetings";
@@ -40,12 +39,9 @@ export default function CalendarSection(props: { orders: any[] }) {
                             <div className="text-lg greeting mb-2 opacity-80" suppressHydrationWarning>
                                 <Greetings />
                             </div>
-                            <div className="calendar-section border-lightBorder border-2 rounded-xl p-4 mb-16 mt-2 mb-2 flex flex-col md:flex-row gap-2 md:gap-8 md:h-[calc(100vh-10rem)] bg-white">
-                                {/* <ScrollContext.Provider value={{ topViewRef: topViewRef, setTopViewRef: setTopViewRef }}> */}
+                            <div className="calendar-section border-lightBorder border-2 rounded-xl p-4 mt-2 mb-2 flex flex-col md:flex-row gap-2 md:gap-8 md:h-[calc(100vh-10rem)] bg-white">
                                 <Calendar orders={props.orders} />
                                 <CalendarSideView orders={props.orders} />
-                                {/* </ScrollContext.Provider> */}
-                                {/* <OrderForm /> */}
                             </div>
                             <SignOutButton />
                         </AddModalContext.Provider>
@@ -57,6 +53,6 @@ export default function CalendarSection(props: { orders: any[] }) {
 }
 
 // DONE: make images in calendar square
+// DONE: branch to clean code
 
-// TODO: branch to clean code
 // TODO: use redux for state management

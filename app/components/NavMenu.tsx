@@ -82,21 +82,6 @@ export default function NavMenu() {
                     <NavLink to="/" icon={FaCalendarDays}>
                         {gc?.dashboard}
                     </NavLink>
-                    {/* <NavLink to="/p/expenses" icon={MdOutlinePayments}>
-                        {gc?.expenses}
-                    </NavLink>
-                    <NavLink to="/p/income" icon={GiReceiveMoney}>
-                        {gc?.income}
-                    </NavLink>
-                    <NavLink to="/p/debt" icon={MdMoneyOff}>
-                        {gc?.debt}
-                    </NavLink>
-                    <NavLink to="/p/savings" icon={MdOutlineSavings}>
-                        {gc?.savings}
-                    </NavLink> */}
-                    {/* <NavLink to="/p/crypto" icon={MdOutlineSavings}>
-            {gc?.crypto}
-          </NavLink> */}
                 </ul>
             </div>
             <div>

@@ -5,9 +5,7 @@ import { SelectedDateInfoContext } from "../utils/SelectedDateInfoContext";
 import { Button, ConfigProvider, Form, Modal, Popconfirm, Radio, RadioChangeEvent } from "antd";
 import toast from "react-hot-toast";
 import Image from "next/image";
-import { ScrollContext } from "../utils/ScrollContext";
 import { MdDelete } from "react-icons/md";
-import OrderForm from "./OrderForm";
 import EditForm from "./EditForm";
 import { useMediaQuery } from "react-responsive";
 import { FaPlus } from "react-icons/fa6";
@@ -22,7 +20,7 @@ export default function CalendarSideView(props: { orders: any[] }) {
     const [isZoomModalVisible, setIsZoomModalVisible] = useState(false);
     const [modalImage, setModalImage] = useState("");
 
-    const { isAddModalVisible, setIsAddModalVisible } = React.useContext(AddModalContext);
+    const { setIsAddModalVisible } = React.useContext(AddModalContext);
 
     const { selectedDate } = React.useContext(SelectedDateContext);
     const { selectedDateInfo, setSelectedDateInfo } = React.useContext(SelectedDateInfoContext);
@@ -42,8 +40,6 @@ export default function CalendarSideView(props: { orders: any[] }) {
             });
         });
     }, [props.orders]);
-
-    // const { topViewRef } = React.useContext(ScrollContext);
 
     const sideViewRef = useRef<HTMLDivElement>(null);
     useEffect(() => {
@@ -222,7 +218,6 @@ export default function CalendarSideView(props: { orders: any[] }) {
                             </div>
                             <div className="flex flex-row">
                                 <div className="font-semibold mr-2">Status:</div>
-                                {/* {order.soldStatus === "sold" ? "Sold" : "Non Sold"} */}
                                 <Form name="">
                                     <Radio.Group buttonStyle="solid" size="small" className="select-none" onChange={onStatusChange(order.id)} value={order.soldStatus}>
                                         <ConfigProvider
@@ -295,23 +290,12 @@ export default function CalendarSideView(props: { orders: any[] }) {
                         </div>
                     ))}
                 </div>
-                {/* <div>
-                        <Button
-                            type="primary"
-                            onClick={() => {
-                                topViewRef?.current?.scrollIntoView({ behavior: "smooth" });
-                            }}
-                        >
-                            Torna su
-                        </Button>
-                    </div> */}
             </div>
         </>
     );
 }
 
 // DONE: mobile view
-// BUG: photo zoom view shows wrong info -> disabled for now
 // DONE: add entry from side view, with already selected date
-// TODO: skeleton of image loading
+
 // TODO: search functionality

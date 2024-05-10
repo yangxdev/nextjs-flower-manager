@@ -6,7 +6,7 @@ import { RiLogoutBoxLine } from "react-icons/ri";
 import { LoadingStateContext } from "../utils/LoadingStateContext";
 
 export default function SignOutButton() {
-    const { loading, setLoading } = useContext(LoadingStateContext);
+    const { loading } = useContext(LoadingStateContext);
 
     return (
         <>
