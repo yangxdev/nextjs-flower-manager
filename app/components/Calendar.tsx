@@ -1,5 +1,5 @@
 "use client";
-import { Spin, Calendar as AntdCalendar, ConfigProvider, ConfigProviderProps, CalendarProps, Alert, Skeleton } from "antd";
+import { Calendar as AntdCalendar, ConfigProvider, ConfigProviderProps, CalendarProps } from "antd";
 import { SelectedDateContext } from "../utils/SelectedDateContext";
 import { SelectedDateInfoContext } from "../utils/SelectedDateInfoContext";
 import React, { useEffect, useState } from "react";
@@ -7,21 +7,17 @@ import dayjs, { Dayjs } from "dayjs";
 import "@/app/css/Calendar.css";
 import Image from "next/image";
 import itIT from "antd/locale/it_IT";
-
 import "dayjs/locale/it";
 import { LoadingStateContext } from "../utils/LoadingStateContext";
 import { AddModalContext } from "../utils/AddModalContext";
 import { FaPlus } from "react-icons/fa6";
-import { useMediaQuery } from "react-responsive";
-import { useWindowSize } from 'react-use';
-import { icons } from "antd/es/image/PreviewGroup";
+import { useWindowSize } from "react-use";
 
 type Locale = ConfigProviderProps["locale"];
 
 dayjs.locale("it");
 
 export default function Calendar(props: { orders: any[] }) {
-
     const { width } = useWindowSize();
     const baseSize = 10;
     const increaseStart = 476;
@@ -37,18 +33,16 @@ export default function Calendar(props: { orders: any[] }) {
     const { selectedDate, setSelectedDate } = React.useContext(SelectedDateContext);
     const { selectedDateInfo, setSelectedDateInfo } = React.useContext(SelectedDateInfoContext);
     const infoIsEmpty = selectedDateInfo && Object.keys(selectedDateInfo).length === 0;
-    const { isAddModalVisible: isAddModalVisible, setIsAddModalVisible: setIsAddModalVisible } = React.useContext(AddModalContext);
+    const { setIsAddModalVisible } = React.useContext(AddModalContext);
 
-    const [locale, setLocale] = useState<Locale>(itIT);
+    const [locale] = useState<Locale>(itIT);
 
     const { loading, setLoading } = React.useContext(LoadingStateContext);
 
     const getListData = (value: Dayjs): { type: string; content: string; status: string }[] => {
-        //console.log(props.orders);
         const ordersOnThisDay = props.orders.filter((order) => value.isSame(order.deliveryDate, "day"));
         return ordersOnThisDay.map((order) => ({
             type: "order",
-            // content: order.customerName
             content: order.photo,
             status: order.soldStatus,
         }));
@@ -59,9 +53,10 @@ export default function Calendar(props: { orders: any[] }) {
         return (
             <ul className="events gap-2 flex flex-row">
                 {listData.length === 0 && (
-                    <div className="hover-add-button text-center aspect-square w-full p-[2px]" >
+                    <div className="hover-add-button text-center aspect-square w-full p-[2px]">
                         <FaPlus size={iconSize} />
-                    </div>)}
+                    </div>
+                )}
                 {listData.map((item, index) => (
                     <li key={index}>
                         <Image src={item.content} alt="Order" width={50} height={50} className={`${item.status}`} />
@@ -70,8 +65,6 @@ export default function Calendar(props: { orders: any[] }) {
             </ul>
         );
     };
-
-    // DONE: use next/image for image optimization
 
     const cellRender: CalendarProps<Dayjs>["cellRender"] = (current, info) => {
         if (info.type === "date") return dateCellRender(current);
@@ -83,20 +76,8 @@ export default function Calendar(props: { orders: any[] }) {
     }, [setLoading]);
 
     return (
-        <div
-            className={`calendar md:overflow-y-auto w-full min-h-[60vh] ${loading ? "flex justify-center items-center" : ""}`}
-        //  ref={topViewRef}
-        >
-            <ConfigProvider
-                locale={locale}
-                theme={{
-                    components: {
-                        Calendar: {
-                            // itemActiveBg: "#FFF9F2",
-                        },
-                    },
-                }}
-            >
+        <div className={`calendar md:overflow-y-auto w-full min-h-[60vh] ${loading ? "flex justify-center items-center" : ""}`}>
+            <ConfigProvider locale={locale}>
                 <div className={`custom-loading-spinner flex justify-center items-center ${loading ? "" : "hidden"}`}>
                     <svg aria-hidden="true" className="w-8 h-8 text-gray-200 animate-spin fill-newPink-200" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path
@@ -108,7 +89,6 @@ export default function Calendar(props: { orders: any[] }) {
                             fill="currentFill"
                         />
                     </svg>
-                    {/* <span className="loading loading-ring loading-lg"></span> */}
                 </div>
                 <AntdCalendar
                     className={`bg-white ${loading ? "hidden" : ""}`}
@@ -116,7 +96,6 @@ export default function Calendar(props: { orders: any[] }) {
                     onSelect={async (date, { source }) => {
                         if (source === "date") {
                             if (selectedDate && dayjs(selectedDate).isSame(date, "day") && infoIsEmpty) {
-                                // If the selected date is the same as the clicked date, open the modal
                                 setIsAddModalVisible(true);
                             } else {
                                 setSelectedDate(date);
@@ -132,3 +111,4 @@ export default function Calendar(props: { orders: any[] }) {
 }
 
 // DONE: use context to set loading to the antd buttons too
+// DONE: use next/image for image optimization

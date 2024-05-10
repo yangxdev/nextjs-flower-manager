@@ -1,11 +1,10 @@
 import { Button, Col, ConfigProvider, Form, Input, Modal, Radio, Row, Space } from "antd";
 import { useRouter } from "next/navigation";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import toast from "react-hot-toast";
-import { MdAddPhotoAlternate, MdEdit } from "react-icons/md";
+import { MdEdit } from "react-icons/md";
 import { SelectedDateInfoContext } from "../utils/SelectedDateInfoContext";
-import dayjs, { Dayjs } from "dayjs";
-import { getRandomValues } from "crypto";
+import dayjs from "dayjs";
 
 export default function EditForm(props: { orderId: string; orders: any[] }) {
     const router = useRouter();
@@ -64,7 +63,6 @@ export default function EditForm(props: { orderId: string; orders: any[] }) {
 
     const formRef = useRef<any>(null);
     const handleEditModalClose = () => {
-        // formRef.current.resetFields();
         setIsEditModalVisible(false);
     };
     const handleContextUpdate = (values: any) => {
@@ -105,7 +103,7 @@ export default function EditForm(props: { orderId: string; orders: any[] }) {
                 <MdEdit /> {"Edit"}
             </Button>
             <Modal
-                key={isEditModalVisible ? "editModal" : null} // the solution!!!
+                key={isEditModalVisible ? "editModal" : null} // solution to the issue of modals not re-rendering (also breaking the photo input field)
                 open={isEditModalVisible}
                 transitionName={isMobile ? "" : undefined}
                 footer={null}
@@ -266,10 +264,6 @@ export default function EditForm(props: { orderId: string; orders: any[] }) {
                                 <Button type="primary" htmlType="submit" loading={isSubmitting}>
                                     Submit
                                 </Button>
-                                {/* <button type="reset" className="p-2 bg-white hover:bg-newRed-500 hover:text-white transition duration-200 border-2 rounded-md">
-                                    Reset
-                                </button> */}
-                                {/* reset button */}
                                 <Button htmlType="button" onClick={onReset}>
                                     Reset
                                 </Button>

@@ -1,16 +1,11 @@
-// schema.prisma
-
 generator client {
     provider = "prisma-client-js"
-
-    // IMPORTANT: uncomment the following line when deploying to production
-    //     //   output   = "../src/generated/client"
 }
 
 datasource db {
     provider  = "postgresql"
-    url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
-    directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+    url       = env("POSTGRES_PRISMA_URL") 
+    directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
 model Order {

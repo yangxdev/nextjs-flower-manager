@@ -18,7 +18,6 @@ export async function POST(request: Request) {
                 sold_status = ${soldStatus}, 
                 updated_at = ${updatedAt}
             WHERE id = ${orderId}`;
-
         return NextResponse.json({ result }, { status: 200 });
     } catch (error) {
         console.error(error);

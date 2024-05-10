@@ -8,7 +8,6 @@ export async function POST(request: Request) {
         const result = await sql`
             DELETE FROM public."orders"
             WHERE id = ${id}`;
-
         return NextResponse.json({ result }, { status: 200 });
     } catch (error) {
         console.error(error);
