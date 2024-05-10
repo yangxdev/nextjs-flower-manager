@@ -35,7 +35,8 @@ export default function Calendar(props: { orders: any[] }) {
     }
 
     const { selectedDate, setSelectedDate } = React.useContext(SelectedDateContext);
-    const { setSelectedDateInfo } = React.useContext(SelectedDateInfoContext);
+    const { selectedDateInfo, setSelectedDateInfo } = React.useContext(SelectedDateInfoContext);
+    const infoIsEmpty = selectedDateInfo && Object.keys(selectedDateInfo).length === 0;
     const { isAddModalVisible: isAddModalVisible, setIsAddModalVisible: setIsAddModalVisible } = React.useContext(AddModalContext);
 
     const [locale, setLocale] = useState<Locale>(itIT);
@@ -58,7 +59,7 @@ export default function Calendar(props: { orders: any[] }) {
         return (
             <ul className="events gap-2 flex flex-row">
                 {listData.length === 0 && (
-                    <div className="hover-add-button text-center aspect-square w-full" >
+                    <div className="hover-add-button text-center aspect-square w-full p-[2px]" >
                         <FaPlus size={iconSize} />
                     </div>)}
                 {listData.map((item, index) => (
@@ -114,7 +115,7 @@ export default function Calendar(props: { orders: any[] }) {
                     cellRender={cellRender}
                     onSelect={async (date, { source }) => {
                         if (source === "date") {
-                            if (selectedDate && dayjs(selectedDate).isSame(date, "day")) {
+                            if (selectedDate && dayjs(selectedDate).isSame(date, "day") && infoIsEmpty) {
                                 // If the selected date is the same as the clicked date, open the modal
                                 setIsAddModalVisible(true);
                             } else {

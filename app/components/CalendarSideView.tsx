@@ -10,6 +10,9 @@ import { MdDelete } from "react-icons/md";
 import OrderForm from "./OrderForm";
 import EditForm from "./EditForm";
 import { useMediaQuery } from "react-responsive";
+import { FaPlus } from "react-icons/fa6";
+import { AddModalContext } from "../utils/AddModalContext";
+import dayjs from "dayjs";
 
 export default function CalendarSideView(props: { orders: any[] }) {
     const router = useRouter();
@@ -19,14 +22,32 @@ export default function CalendarSideView(props: { orders: any[] }) {
     const [isZoomModalVisible, setIsZoomModalVisible] = useState(false);
     const [modalImage, setModalImage] = useState("");
 
+    const { isAddModalVisible, setIsAddModalVisible } = React.useContext(AddModalContext);
+
     const { selectedDate } = React.useContext(SelectedDateContext);
     const { selectedDateInfo, setSelectedDateInfo } = React.useContext(SelectedDateInfoContext);
     const infoIsEmpty = selectedDateInfo && Object.keys(selectedDateInfo).length === 0;
+
+    const filteredOrders = props.orders.filter((order) => dayjs(order.deliveryDate).isSame(selectedDate, "day"));
+
+    useEffect(() => {
+        // updates the orders list when the received props change
+        setSelectedDateInfo({});
+        filteredOrders.forEach((order) => {
+            setSelectedDateInfo((prevState: any) => {
+                return {
+                    ...prevState,
+                    [order.id]: order,
+                };
+            });
+        });
+    }, [props.orders]);
 
     // const { topViewRef } = React.useContext(ScrollContext);
 
     const sideViewRef = useRef<HTMLDivElement>(null);
     useEffect(() => {
+        // when in mobile, scrolls to the bottom of the side view when a date is selected
         if (selectedDateInfo && !infoIsEmpty && window.innerWidth < 768) {
             sideViewRef?.current?.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
         }
@@ -41,15 +62,15 @@ export default function CalendarSideView(props: { orders: any[] }) {
 
     const selectedDateInfoArray = selectedDateInfo
         ? Object.values(selectedDateInfo).map((order: any) => ({
-            id: order.id,
-            customerName: order.customerName,
-            customerWechatId: order.customerWechatId,
-            advance: order.advance,
-            amount: order.amount,
-            productionCost: order.productionCost,
-            photo: order.photo,
-            soldStatus: order.soldStatus,
-        }))
+              id: order.id,
+              customerName: order.customerName,
+              customerWechatId: order.customerWechatId,
+              advance: order.advance,
+              amount: order.amount,
+              productionCost: order.productionCost,
+              photo: order.photo,
+              soldStatus: order.soldStatus,
+          }))
         : [];
 
     if (!selectedDate) {
@@ -167,6 +188,14 @@ export default function CalendarSideView(props: { orders: any[] }) {
                 <div className="calendar-side-view flex flex-col gap-4 min-w-fit h-full md:overflow-y-auto md:h-[calc(100vh-13rem)]" ref={sideViewRef}>
                     <div className="mt-2 gap-2 flex flex-row items-center justify-between">
                         <div className="text-2xl font-bold text-black">{fullDate}</div>
+                        <Button
+                            type="default"
+                            className={`flex items-center w-fit bg-white`}
+                            icon={<FaPlus />}
+                            onClick={() => {
+                                setIsAddModalVisible(true);
+                            }}
+                        ></Button>
                     </div>
                     <div className="flex flex-col gap-4 w-full overflow-y-auto">
                         {selectedDateInfoArray.map((order: any, index: number) => (
