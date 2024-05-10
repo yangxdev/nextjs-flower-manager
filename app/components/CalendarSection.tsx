@@ -59,3 +59,4 @@ export default function CalendarSection(props: { orders: any[] }) {
 // DONE: make images in calendar square
 
 // TODO: branch to clean code
+// TODO: use redux for state management
