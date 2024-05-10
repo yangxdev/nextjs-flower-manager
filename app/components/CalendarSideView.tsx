@@ -9,11 +9,12 @@ import { ScrollContext } from "../utils/ScrollContext";
 import { MdDelete } from "react-icons/md";
 import OrderForm from "./OrderForm";
 import EditForm from "./EditForm";
+import { useMediaQuery } from "react-responsive";
 
 export default function CalendarSideView(props: { orders: any[] }) {
     const router = useRouter();
 
-    const isMobile = window.innerWidth < 768;
+    const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
 
     const [isZoomModalVisible, setIsZoomModalVisible] = useState(false);
     const [modalImage, setModalImage] = useState("");
@@ -40,15 +41,15 @@ export default function CalendarSideView(props: { orders: any[] }) {
 
     const selectedDateInfoArray = selectedDateInfo
         ? Object.values(selectedDateInfo).map((order: any) => ({
-              id: order.id,
-              customerName: order.customerName,
-              customerWechatId: order.customerWechatId,
-              advance: order.advance,
-              amount: order.amount,
-              productionCost: order.productionCost,
-              photo: order.photo,
-              soldStatus: order.soldStatus,
-          }))
+            id: order.id,
+            customerName: order.customerName,
+            customerWechatId: order.customerWechatId,
+            advance: order.advance,
+            amount: order.amount,
+            productionCost: order.productionCost,
+            photo: order.photo,
+            soldStatus: order.soldStatus,
+        }))
         : [];
 
     if (!selectedDate) {
@@ -166,9 +167,6 @@ export default function CalendarSideView(props: { orders: any[] }) {
                 <div className="calendar-side-view flex flex-col gap-4 min-w-fit h-full md:overflow-y-auto md:h-[calc(100vh-13rem)]" ref={sideViewRef}>
                     <div className="mt-2 gap-2 flex flex-row items-center justify-between">
                         <div className="text-2xl font-bold text-black">{fullDate}</div>
-                        {/* <div>
-                        <OrderForm preselectedDate={selectedDate} label={""} />
-                    </div> */}
                     </div>
                     <div className="flex flex-col gap-4 w-full overflow-y-auto">
                         {selectedDateInfoArray.map((order: any, index: number) => (
