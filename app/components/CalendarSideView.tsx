@@ -312,6 +312,6 @@ export default function CalendarSideView(props: { orders: any[] }) {
 
 // DONE: mobile view
 // BUG: photo zoom view shows wrong info -> disabled for now
+// DONE: add entry from side view, with already selected date
 // TODO: skeleton of image loading
-// TODO: add entry from side view, with already selected date
 // TODO: search functionality
