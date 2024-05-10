@@ -98,7 +98,7 @@
     align-items: center;
     background-color: white;
     border: 1px solid #d9d9d9;
-}   
+}
 
 .hover-add-button:hover {
     /* color: white; */
@@ -113,4 +113,27 @@
 
 .ant-picker-cell-selected .hover-add-button {
     display: flex;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.fade {
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.fade.show {
+    opacity: 1;
+}
+
+.fade.hide {
+    opacity: 0;
 }
