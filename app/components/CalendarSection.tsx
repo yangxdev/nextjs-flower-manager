@@ -12,18 +12,18 @@ import SignOutButton from "./SignOutButton";
 import { AddModalContext } from "../utils/AddModalContext";
 import { Provider } from "react-redux";
 import { store } from "../store/store";
+import dayjs from 'dayjs';
 
 const defaultLanguage = GlobalConfig.i18n.defaultLanguage || "en";
 const gc = GlobalConfig.i18n.translations[defaultLanguage as keyof typeof GlobalConfig.i18n.translations]?.dashboard;
 
 export default function CalendarSection(props: { orders: any[] }) {
-    const [selectedDate, setSelectedDate] = useState(null);
     const [selectedDateInfo, setSelectedDateInfo] = useState({});
     const [isAddModalVisible, setIsAddModalVisible] = useState(false);
 
     return (
-        <><Provider store={store}>
-            <SelectedDateContext.Provider value={{ selectedDate, setSelectedDate }}>
+        <>
+            <Provider store={store}>
                 <SelectedDateInfoContext.Provider value={{ selectedDateInfo, setSelectedDateInfo }}>
                     <AddModalContext.Provider value={{ isAddModalVisible, setIsAddModalVisible }}>
                         <div className="header flex flex-row justify-between">
@@ -42,8 +42,7 @@ export default function CalendarSection(props: { orders: any[] }) {
                         <SignOutButton />
                     </AddModalContext.Provider>
                 </SelectedDateInfoContext.Provider>
-            </SelectedDateContext.Provider>
-        </Provider>
+            </Provider>
         </>
     );
 }

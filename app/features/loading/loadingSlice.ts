@@ -1,13 +1,20 @@
 "use client";
 import { createSlice } from "@reduxjs/toolkit";
+import type { PayloadAction } from "@reduxjs/toolkit";
+
+export interface LoadingState {
+    value: boolean
+}
+
+const initialState: LoadingState = {
+    value: true,
+}
 
 export const loadingSlice = createSlice({
     name: "loading",
-    initialState: {
-        value: true,
-    },
+    initialState,
     reducers: {
-        setLoading: (state, action) => {
+        setLoading: (state, action: PayloadAction<boolean>) => {
             state.value = action.payload;
         },
     },

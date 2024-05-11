@@ -11,18 +11,21 @@ import { useMediaQuery } from "react-responsive";
 import { FaPlus } from "react-icons/fa6";
 import { AddModalContext } from "../utils/AddModalContext";
 import dayjs from "dayjs";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../store/store";
 
 export default function CalendarSideView(props: { orders: any[] }) {
     const router = useRouter();
-
     const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
+
+    const dispatch = useDispatch();
+    const selectedDate = dayjs(useSelector((state: RootState) => state.selectedDate.value));
 
     const [isZoomModalVisible, setIsZoomModalVisible] = useState(false);
     const [modalImage, setModalImage] = useState("");
 
     const { setIsAddModalVisible } = React.useContext(AddModalContext);
 
-    const { selectedDate } = React.useContext(SelectedDateContext);
     const { selectedDateInfo, setSelectedDateInfo } = React.useContext(SelectedDateInfoContext);
     const infoIsEmpty = selectedDateInfo && Object.keys(selectedDateInfo).length === 0;
 
@@ -52,21 +55,23 @@ export default function CalendarSideView(props: { orders: any[] }) {
     if (!selectedDate) {
         return null;
     }
-    const { $D, $H, $L, $M, $W, $d, $isDayjsObject, $m, $ms, $s, $u, $x, $y } = selectedDate;
+    const $D = selectedDate.date();
+    const $M = selectedDate.month();
+    const $y = selectedDate.year()
     const month = Intl.DateTimeFormat("en-US", { month: "long" }).format(new Date($y, $M, $D));
     const fullDate = `${month} ${$D}, ${$y}`;
 
     const selectedDateInfoArray = selectedDateInfo
         ? Object.values(selectedDateInfo).map((order: any) => ({
-              id: order.id,
-              customerName: order.customerName,
-              customerWechatId: order.customerWechatId,
-              advance: order.advance,
-              amount: order.amount,
-              productionCost: order.productionCost,
-              photo: order.photo,
-              soldStatus: order.soldStatus,
-          }))
+            id: order.id,
+            customerName: order.customerName,
+            customerWechatId: order.customerWechatId,
+            advance: order.advance,
+            amount: order.amount,
+            productionCost: order.productionCost,
+            photo: order.photo,
+            soldStatus: order.soldStatus,
+        }))
         : [];
 
     if (!selectedDate) {
@@ -264,7 +269,7 @@ export default function CalendarSideView(props: { orders: any[] }) {
                             </div>
                             <div className="flex flex-row">
                                 <div className="font-semibold mr-2">Photo:</div>
-                                {order.photo ? <Image src={order.photo} alt="order" width={200} height={200} className="w-40 h-fit rounded-xl cursor-pointer hover:brightness-90 transition duration-100" onClick={() => showZoomModal(order.photo)} /> : "Nessuna Photo"}
+                                {order.photo ? <Image src={order.photo} alt="order" priority={true} width={200} height={200} className="w-40 h-fit rounded-xl cursor-pointer hover:brightness-90 transition duration-100" onClick={() => showZoomModal(order.photo)} /> : "Nessuna Photo"}
 
                                 <Modal open={isZoomModalVisible} transitionName={isMobile ? "" : undefined} onOk={handleZoomModalClose} onCancel={handleZoomModalClose} footer={null}>
                                     <Image src={modalImage} className="p-6 -mb-3" height={200} width={200} alt="order" style={{ width: "100%" }} onClick={handleZoomModalClose} />

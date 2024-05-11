@@ -9,8 +9,9 @@ import { AddModalContext } from "../utils/AddModalContext";
 import { SelectedDateContext } from "../utils/SelectedDateContext";
 import { useMediaQuery } from "react-responsive";
 import { SelectedDateInfoContext } from "../utils/SelectedDateInfoContext";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/store";
+import dayjs from 'dayjs';
 
 export default function OrderForm({ label }: { label: string | null }) {
     const router = useRouter();
@@ -23,7 +24,9 @@ export default function OrderForm({ label }: { label: string | null }) {
 
     const { isAddModalVisible, setIsAddModalVisible } = React.useContext(AddModalContext);
     React.useContext(SelectedDateInfoContext);
-    const { selectedDate } = React.useContext(SelectedDateContext);
+
+    const dispatch = useDispatch();
+    const selectedDate = dayjs(useSelector((state: RootState) => state.selectedDate.value));
 
     const loading = useSelector((state: RootState) => state.loading.value);
 
@@ -178,13 +181,13 @@ export default function OrderForm({ label }: { label: string | null }) {
                 <div className="p-4 w-full rounded-md bg-white">
                     <div className="font-semibold mb-4 text-left text-lg">Add Order</div>
                     <Form name="addOrder" style={{ maxWidth: "500px" }} onFinish={handleSubmit} ref={formRef}>
-                        <Form.Item name="deliveryDate" rules={[{ required: true, message: "Please input the date" }]} initialValue={selectedDate ? new Date(selectedDate - tzoffset).toISOString().split("T")[0] : new Date(localISOTime).toISOString().split("T")[0]}>
+                        <Form.Item name="deliveryDate" rules={[{ required: true, message: "Please input the date" }]} initialValue={selectedDate ? new Date(selectedDate.valueOf() - tzoffset).toISOString().split("T")[0] : new Date(localISOTime).toISOString().split("T")[0]}>
                             <Row gutter={8}>
                                 <Col span={8}>
                                     <label>Delivery date</label>
                                 </Col>
                                 <Col span={16}>
-                                    <Input placeholder="Delivery date" type="date" defaultValue={selectedDate ? new Date(selectedDate - tzoffset).toISOString().split("T")[0] : new Date(localISOTime).toISOString().split("T")[0]} />
+                                    <Input placeholder="Delivery date" type="date" defaultValue={selectedDate ? new Date(selectedDate.valueOf() - tzoffset).toISOString().split("T")[0] : new Date(localISOTime).toISOString().split("T")[0]} />
                                 </Col>
                             </Row>
                         </Form.Item>

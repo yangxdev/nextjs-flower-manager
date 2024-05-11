@@ -4,6 +4,7 @@ import { SelectedDateContext } from "../utils/SelectedDateContext";
 import { SelectedDateInfoContext } from "../utils/SelectedDateInfoContext";
 import React, { useEffect, useState } from "react";
 import dayjs, { Dayjs } from "dayjs";
+// import dayjs from 'dayjs';
 import "@/app/css/Calendar.css";
 import Image from "next/image";
 import itIT from "antd/locale/it_IT";
@@ -15,12 +16,26 @@ import { useWindowSize } from "react-use";
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@/app/store/store';
 import { setLoading } from "../features/loading/loadingSlice";
+import { setSelectedDate } from "../features/selectedDate/selectedDateSlice";
 
 type Locale = ConfigProviderProps["locale"];
 
 dayjs.locale("it");
 
 export default function Calendar(props: { orders: any[] }) {
+    const dispatch = useDispatch();
+    const loading = useSelector((state: RootState) => state.loading.value);
+    useEffect(() => {
+        dispatch(setLoading(false));
+    }, [dispatch]);
+    const selectedDate = useSelector((state: RootState) => state.selectedDate.value)
+
+    const { selectedDateInfo, setSelectedDateInfo } = React.useContext(SelectedDateInfoContext);
+    const infoIsEmpty = selectedDateInfo && Object.keys(selectedDateInfo).length === 0;
+    const { setIsAddModalVisible } = React.useContext(AddModalContext);
+
+    const [locale] = useState<Locale>(itIT);
+
     const { width } = useWindowSize();
     const baseSize = 10;
     const increaseStart = 476;
@@ -32,13 +47,6 @@ export default function Calendar(props: { orders: any[] }) {
     } else if (width > increaseEnd) {
         iconSize = baseSize + (increaseEnd - increaseStart) / divisor;
     }
-
-    const { selectedDate, setSelectedDate } = React.useContext(SelectedDateContext);
-    const { selectedDateInfo, setSelectedDateInfo } = React.useContext(SelectedDateInfoContext);
-    const infoIsEmpty = selectedDateInfo && Object.keys(selectedDateInfo).length === 0;
-    const { setIsAddModalVisible } = React.useContext(AddModalContext);
-
-    const [locale] = useState<Locale>(itIT);
 
     const getListData = (value: Dayjs): { type: string; content: string; status: string }[] => {
         const ordersOnThisDay = props.orders.filter((order) => value.isSame(order.deliveryDate, "day"));
@@ -72,12 +80,6 @@ export default function Calendar(props: { orders: any[] }) {
         return info.originNode;
     };
 
-    const loading = useSelector((state: RootState) => state.loading.value);
-    const dispatch = useDispatch();
-    useEffect(() => {
-        dispatch(setLoading(false));
-    }, [dispatch]);
-
     return (
         <div className={`calendar md:overflow-y-auto w-full min-h-[60vh] ${loading ? "flex justify-center items-center" : ""}`}>
             <ConfigProvider locale={locale}>
@@ -101,7 +103,7 @@ export default function Calendar(props: { orders: any[] }) {
                             if (selectedDate && dayjs(selectedDate).isSame(date, "day") && infoIsEmpty) {
                                 setIsAddModalVisible(true);
                             } else {
-                                setSelectedDate(date);
+                                dispatch(setSelectedDate(date.format()));
                                 const filteredOrders = props.orders.filter((order) => dayjs(order.deliveryDate).isSame(date, "day"));
                                 setSelectedDateInfo(filteredOrders);
                             }
