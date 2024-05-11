@@ -5,17 +5,17 @@ import toast from "react-hot-toast";
 import { FaPlus } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
 import { MdAddPhotoAlternate } from "react-icons/md";
-import { LoadingStateContext } from "../utils/LoadingStateContext";
 import { AddModalContext } from "../utils/AddModalContext";
 import { SelectedDateContext } from "../utils/SelectedDateContext";
 import { useMediaQuery } from "react-responsive";
 import { SelectedDateInfoContext } from "../utils/SelectedDateInfoContext";
+import { useSelector } from "react-redux";
+import { RootState } from "../store/store";
 
 export default function OrderForm({ label }: { label: string | null }) {
     const router = useRouter();
     const isMobile = useMediaQuery({ query: "(max-width: 767px)" });
     const [file, setFile] = useState<File | null>(null);
-    const [setUploading] = useState<boolean>(false);
     const [message, setMessage] = useState<string>("");
     const [show, setShow] = useState<string>("hidden");
     const [loadedFileMessage, setLoadedFileMessage] = useState<string>("");
@@ -25,7 +25,7 @@ export default function OrderForm({ label }: { label: string | null }) {
     React.useContext(SelectedDateInfoContext);
     const { selectedDate } = React.useContext(SelectedDateContext);
 
-    const { loading } = React.useContext(LoadingStateContext);
+    const loading = useSelector((state: RootState) => state.loading.value);
 
     const formRef = useRef<any>();
     useEffect(() => {

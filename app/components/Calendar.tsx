@@ -12,6 +12,9 @@ import { LoadingStateContext } from "../utils/LoadingStateContext";
 import { AddModalContext } from "../utils/AddModalContext";
 import { FaPlus } from "react-icons/fa6";
 import { useWindowSize } from "react-use";
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '@/app/store/store';
+import { setLoading } from "../features/loading/loadingSlice";
 
 type Locale = ConfigProviderProps["locale"];
 
@@ -36,8 +39,6 @@ export default function Calendar(props: { orders: any[] }) {
     const { setIsAddModalVisible } = React.useContext(AddModalContext);
 
     const [locale] = useState<Locale>(itIT);
-
-    const { loading, setLoading } = React.useContext(LoadingStateContext);
 
     const getListData = (value: Dayjs): { type: string; content: string; status: string }[] => {
         const ordersOnThisDay = props.orders.filter((order) => value.isSame(order.deliveryDate, "day"));
@@ -71,9 +72,11 @@ export default function Calendar(props: { orders: any[] }) {
         return info.originNode;
     };
 
+    const loading = useSelector((state: RootState) => state.loading.value);
+    const dispatch = useDispatch();
     useEffect(() => {
-        setLoading(false);
-    }, [setLoading]);
+        dispatch(setLoading(false));
+    }, [dispatch]);
 
     return (
         <div className={`calendar md:overflow-y-auto w-full min-h-[60vh] ${loading ? "flex justify-center items-center" : ""}`}>
