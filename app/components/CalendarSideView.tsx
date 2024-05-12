@@ -10,7 +10,7 @@ import { FaPlus } from "react-icons/fa6";
 import dayjs from "dayjs";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/store";
-import { setSelectedDateInfo } from "../features/selectedDateInfo/selectedDateInfoSlice";
+import { setSelectedDateOrders } from "../features/selectedDateOrders/selectedDateOrdersSlice";
 import { setAddModal } from "../features/addModal/addModalSlice";
 
 export default function CalendarSideView(props: { orders: any[] }) {
@@ -23,11 +23,11 @@ export default function CalendarSideView(props: { orders: any[] }) {
     const [isZoomModalVisible, setIsZoomModalVisible] = useState(false);
     const [modalImage, setModalImage] = useState("");
 
-    const selectedDateInfoUnparsed = useSelector((state: RootState) => state.selectedDateInfo.value);
-    const selectedDateInfo = useMemo(() => Object.keys(selectedDateInfoUnparsed).length > 0 ? JSON.parse(selectedDateInfoUnparsed as string) : [], [selectedDateInfoUnparsed]);
-    const infoIsEmpty = selectedDateInfo && Object.keys(selectedDateInfo).length === 0;
+    const selectedDateOrdersUnparsed = useSelector((state: RootState) => state.selectedDateOrders.value);
+    const selectedDateOrders = useMemo(() => Object.keys(selectedDateOrdersUnparsed).length > 0 ? JSON.parse(selectedDateOrdersUnparsed as string) : [], [selectedDateOrdersUnparsed]);
+    const infoIsEmpty = selectedDateOrders && Object.keys(selectedDateOrders).length === 0;
 
-    // update selectedDateInfo when the selected date orders changes
+    // update selectedDateOrders when the selected date orders changes
     useEffect(() => {
         const newOrders = props.orders.filter((order) => dayjs(order.deliveryDate).isSame(selectedDate, "day"));
         const toBeDispatched: { [key: number]: any } = {};
@@ -36,16 +36,16 @@ export default function CalendarSideView(props: { orders: any[] }) {
             toBeDispatched[counter] = order;
             counter++;
         });
-        dispatch(setSelectedDateInfo(JSON.stringify(toBeDispatched)));
+        dispatch(setSelectedDateOrders(JSON.stringify(toBeDispatched)));
     });
 
     const sideViewRef = useRef<HTMLDivElement>(null);
     useEffect(() => {
         // when in mobile, scrolls to the bottom of the side view when a date is selected
-        if (selectedDateInfo && !infoIsEmpty && isMobile) {
+        if (selectedDateOrders && !infoIsEmpty && isMobile) {
             sideViewRef?.current?.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
         }
-    }, [infoIsEmpty, isMobile, selectedDateInfo]);
+    }, [infoIsEmpty, isMobile, selectedDateOrders]);
 
     if (!selectedDate) {
         return null;
@@ -56,8 +56,8 @@ export default function CalendarSideView(props: { orders: any[] }) {
     const month = Intl.DateTimeFormat("en-US", { month: "long" }).format(new Date($y, $M, $D));
     const fullDate = `${month} ${$D}, ${$y}`;
 
-    const selectedDateInfoArray = selectedDateInfo
-        ? Object.values(selectedDateInfo).map((order: any) => ({
+    const selectedDateOrdersArray = selectedDateOrders
+        ? Object.values(selectedDateOrders).map((order: any) => ({
             id: order.id,
             customerName: order.customerName,
             customerWechatId: order.customerWechatId,
@@ -114,13 +114,13 @@ export default function CalendarSideView(props: { orders: any[] }) {
     };
 
     const handleUpdateContext = (id: string, status: string) => {
-        const toBeDispatched = { ...selectedDateInfo };
+        const toBeDispatched = { ...selectedDateOrders };
         for (const key in toBeDispatched) {
             if (toBeDispatched[key].id === id) {
                 toBeDispatched[key].soldStatus = status;
             }
         }
-        dispatch(setSelectedDateInfo(JSON.stringify(toBeDispatched)));
+        dispatch(setSelectedDateOrders(JSON.stringify(toBeDispatched)));
     };
 
     const deleteOrder = async (id: string) => {
@@ -138,13 +138,13 @@ export default function CalendarSideView(props: { orders: any[] }) {
             }
             router.refresh();
 
-            const toBeDispatched = { ...selectedDateInfo };
+            const toBeDispatched = { ...selectedDateOrders };
             for (const key in toBeDispatched) {
                 if (toBeDispatched[key].id === id) {
                     delete toBeDispatched[key];
                 }
             }
-            dispatch(setSelectedDateInfo(JSON.stringify(toBeDispatched)));
+            dispatch(setSelectedDateOrders(JSON.stringify(toBeDispatched)));
         });
 
         toast.promise(
@@ -190,7 +190,7 @@ export default function CalendarSideView(props: { orders: any[] }) {
                     ></Button>
                 </div>
                 <div className="flex flex-col gap-4 w-full overflow-y-auto">
-                    {selectedDateInfoArray.map((order: any, index: number) => (
+                    {selectedDateOrdersArray.map((order: any, index: number) => (
                         <div key={index} className={`info-card gap-1 bg-white flex flex-col justify-between border-2 border-lightBorder rounded-md p-4 ${borderColor(order.soldStatus)} border-l-4`}>
                             <div className="flex flex-row text-xs opacity-50">{order.id}</div>
                             <div className="flex flex-row">

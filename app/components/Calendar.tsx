@@ -12,7 +12,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@/app/store/store';
 import { setLoading } from "../features/loading/loadingSlice";
 import { setSelectedDate } from "../features/selectedDate/selectedDateSlice";
-import { setSelectedDateInfo } from "../features/selectedDateInfo/selectedDateInfoSlice";
+import { setSelectedDateOrders } from "../features/selectedDateOrders/selectedDateOrdersSlice";
 import { setAddModal } from "../features/addModal/addModalSlice";
 
 type Locale = ConfigProviderProps["locale"];
@@ -27,9 +27,9 @@ export default function Calendar(props: { orders: any[] }) {
     }, [dispatch]);
     const selectedDate = useSelector((state: RootState) => state.selectedDate.value)
 
-    const selectedDateInfoUnparsed = useSelector((state: RootState) => state.selectedDateInfo.value);
-    const selectedDateInfo = Object.keys(selectedDateInfoUnparsed).length > 0 ? JSON.parse(selectedDateInfoUnparsed as string) : [];
-    const infoIsEmpty = selectedDateInfo && Object.keys(selectedDateInfo).length === 0;
+    const selectedDateOrdersUnparsed = useSelector((state: RootState) => state.selectedDateOrders.value);
+    const selectedDateOrders = Object.keys(selectedDateOrdersUnparsed).length > 0 ? JSON.parse(selectedDateOrdersUnparsed as string) : [];
+    const infoIsEmpty = selectedDateOrders && Object.keys(selectedDateOrders).length === 0;
 
     const [locale] = useState<Locale>(itIT);
 
@@ -106,7 +106,7 @@ export default function Calendar(props: { orders: any[] }) {
                             } else {
                                 dispatch(setSelectedDate(date.format()));
                                 const filteredOrders = props.orders.filter((order) => dayjs(order.deliveryDate).isSame(date, "day"));
-                                dispatch(setSelectedDateInfo(JSON.stringify(filteredOrders)));
+                                dispatch(setSelectedDateOrders(JSON.stringify(filteredOrders)));
                             }
                         }
                     }}
@@ -118,4 +118,4 @@ export default function Calendar(props: { orders: any[] }) {
 
 // DONE: use context to set loading to the antd buttons too
 // DONE: use next/image for image optimization
-// TODO: rename selectedDateInfo to selectedDateOrders
+// TODO: rename selectedDateOrders to selectedDateOrders
