@@ -17,5 +17,3 @@ export default async function CalendarSectionServer() {
         </>
     );
 }
-
-// TODO: shortcut the calendarsection components

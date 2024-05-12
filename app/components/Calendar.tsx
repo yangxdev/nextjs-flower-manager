@@ -118,4 +118,4 @@ export default function Calendar(props: { orders: any[] }) {
 
 // DONE: use context to set loading to the antd buttons too
 // DONE: use next/image for image optimization
-// TODO: rename selectedDateOrders to selectedDateOrders
+// DONE: rename selectedDateOrders to selectedDateOrders
