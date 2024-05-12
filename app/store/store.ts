@@ -3,6 +3,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import loadingReducer from "../features/loading/loadingSlice";
 import selectedDateReducer from "../features/selectedDate/selectedDateSlice";
 import selectedDateInfoReducer from "../features/selectedDateInfo/selectedDateInfoSlice";
+import ordersReducer from "../features/orders/ordersSlice";
 // import selectedAddModalReducer from "../features/selectedAddModal/selectedAddModalSlice";
 
 export const store = configureStore({
@@ -10,6 +11,7 @@ export const store = configureStore({
         loading: loadingReducer,
         selectedDate: selectedDateReducer,
         selectedDateInfo: selectedDateInfoReducer,
+        orders: ordersReducer,
         // selectedAddModal: selectedAddModalReducer,
     },
 });
