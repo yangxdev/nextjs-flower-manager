@@ -60,7 +60,11 @@ export default function Calendar(props: { orders: any[] }) {
         return (
             <ul className="events gap-2 flex flex-row">
                 {listData.length === 0 && (
-                    <div className="hover-add-button text-center aspect-square w-full p-[2px]">
+                    <div className="hover-add-button text-center aspect-square w-full p-[2px]" onClick={
+                        () => {
+                            setIsAddModalVisible(true);
+                        }
+                    }>
                         <FaPlus size={iconSize} />
                     </div>
                 )}
@@ -99,7 +103,7 @@ export default function Calendar(props: { orders: any[] }) {
                     onSelect={async (date, { source }) => {
                         if (source === "date") {
                             if (selectedDate && dayjs(selectedDate).isSame(date, "day") && infoIsEmpty) {
-                                setIsAddModalVisible(true);
+                                // setIsAddModalVisible(true);
                             } else {
                                 dispatch(setSelectedDate(date.format()));
                                 const filteredOrders = props.orders.filter((order) => dayjs(order.deliveryDate).isSame(date, "day"));
