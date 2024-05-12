@@ -1,7 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { SelectedDateContext } from "../utils/SelectedDateContext";
-import { SelectedDateInfoContext } from "../utils/SelectedDateInfoContext";
 import { Button, ConfigProvider, Form, Modal, Popconfirm, Radio, RadioChangeEvent } from "antd";
 import toast from "react-hot-toast";
 import Image from "next/image";
@@ -14,7 +12,6 @@ import dayjs from "dayjs";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/store";
 import { setSelectedDateInfo } from "../features/selectedDateInfo/selectedDateInfoSlice";
-import { setSelectedDate } from "../features/selectedDate/selectedDateSlice";
 
 export default function CalendarSideView(props: { orders: any[] }) {
     const router = useRouter();
@@ -28,7 +25,6 @@ export default function CalendarSideView(props: { orders: any[] }) {
 
     const { setIsAddModalVisible } = React.useContext(AddModalContext);
 
-    // const { selectedDateInfo, setSelectedDateInfo } = React.useContext(SelectedDateInfoContext);
     const selectedDateInfoUnparsed = useSelector((state: RootState) => state.selectedDateInfo.value);
     const selectedDateInfo = Object.keys(selectedDateInfoUnparsed).length > 0 ? JSON.parse(selectedDateInfoUnparsed as string) : [];
     const infoIsEmpty = selectedDateInfo && Object.keys(selectedDateInfo).length === 0;
@@ -44,21 +40,6 @@ export default function CalendarSideView(props: { orders: any[] }) {
         });
         dispatch(setSelectedDateInfo(JSON.stringify(toBeDispatched)));
     });
-
-    // const filteredOrders = props.orders.filter((order) => dayjs(order.deliveryDate).isSame(selectedDate, "day"));
-
-    // useEffect(() => {
-    //     // updates the orders list when the received props change
-    //     dispatch(setSelectedDateInfo({}));
-    //     filteredOrders.forEach((order) => {
-    //         setSelectedDateInfo((prevState: any) => {
-    //             return {
-    //                 ...prevState,
-    //                 [order.id]: order,
-    //             };
-    //         });
-    //     });
-    // }, [dispatch, filteredOrders, props.orders]);
 
     const sideViewRef = useRef<HTMLDivElement>(null);
     useEffect(() => {
@@ -89,7 +70,6 @@ export default function CalendarSideView(props: { orders: any[] }) {
               soldStatus: order.soldStatus,
           }))
         : [];
-    // console.log(selectedDateInfoArray);
 
     if (!selectedDate) {
         return null;
@@ -99,8 +79,6 @@ export default function CalendarSideView(props: { orders: any[] }) {
         setModalImage(image);
         setIsZoomModalVisible(true);
     };
-
-    //TODO: lift zoom image state to parent component
 
     const handleZoomModalClose = () => {
         setIsZoomModalVisible(false);
@@ -145,18 +123,6 @@ export default function CalendarSideView(props: { orders: any[] }) {
             }
         }
         dispatch(setSelectedDateInfo(JSON.stringify(toBeDispatched)));
-
-        // dispatch(
-        //     setSelectedDateInfo((prevState: any) => {
-        //         const updatedInfo = { ...prevState };
-        //         for (const key in updatedInfo) {
-        //             if (updatedInfo[key].id === id) {
-        //                 updatedInfo[key].soldStatus = status;
-        //             }
-        //         }
-        //         return updatedInfo;
-        //     })
-        // );
     };
 
     const deleteOrder = async (id: string) => {
@@ -181,17 +147,6 @@ export default function CalendarSideView(props: { orders: any[] }) {
                 }
             }
             dispatch(setSelectedDateInfo(JSON.stringify(toBeDispatched)));
-            // dispatch(
-            //     setSelectedDateInfo((prevState: any) => {
-            //         const updatedInfo = { ...prevState };
-            //         for (const key in updatedInfo) {
-            //             if (updatedInfo[key].id === id) {
-            //                 delete updatedInfo[key];
-            //             }
-            //         }
-            //         return updatedInfo;
-            //     })
-            // );
         });
 
         toast.promise(
@@ -343,3 +298,4 @@ export default function CalendarSideView(props: { orders: any[] }) {
 // DONE: add entry from side view, with already selected date
 
 // TODO: search functionality
+// TODO: lift zoom image state to parent component

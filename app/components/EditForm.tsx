@@ -1,9 +1,8 @@
 import { Button, Col, ConfigProvider, Form, Input, Modal, Radio, Row, Space } from "antd";
 import { useRouter } from "next/navigation";
-import { useContext, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { MdEdit } from "react-icons/md";
-import { SelectedDateInfoContext } from "../utils/SelectedDateInfoContext";
 import dayjs from "dayjs";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../store/store";
@@ -87,7 +86,7 @@ export default function EditForm(props: { orderId: string; orders: any[] }) {
             return;
         }
         const filteredOrders = props.orders.filter((order) => dayjs(order.deliveryDate).isSame(date, "day"));
-        const updatedFilteredOrders = filteredOrders.map((order) => {
+        const toBeDispatched = filteredOrders.map((order) => {
             if (order.id === props.orderId) {
                 return {
                     ...order,
@@ -102,7 +101,7 @@ export default function EditForm(props: { orderId: string; orders: any[] }) {
             }
             return order;
         });
-        dispatch(setSelectedDateInfo(updatedFilteredOrders));
+        dispatch(setSelectedDateInfo(JSON.stringify(toBeDispatched)));
     };
 
     const onReset = () => {

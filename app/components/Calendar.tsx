@@ -1,15 +1,11 @@
 "use client";
 import { Calendar as AntdCalendar, ConfigProvider, ConfigProviderProps, CalendarProps } from "antd";
-import { SelectedDateContext } from "../utils/SelectedDateContext";
-import { SelectedDateInfoContext } from "../utils/SelectedDateInfoContext";
 import React, { useEffect, useState } from "react";
 import dayjs, { Dayjs } from "dayjs";
-// import dayjs from 'dayjs';
 import "@/app/css/Calendar.css";
 import Image from "next/image";
 import itIT from "antd/locale/it_IT";
 import "dayjs/locale/it";
-import { LoadingStateContext } from "../utils/LoadingStateContext";
 import { AddModalContext } from "../utils/AddModalContext";
 import { FaPlus } from "react-icons/fa6";
 import { useWindowSize } from "react-use";
@@ -31,7 +27,6 @@ export default function Calendar(props: { orders: any[] }) {
     }, [dispatch]);
     const selectedDate = useSelector((state: RootState) => state.selectedDate.value)
 
-    // const { selectedDateInfo, setSelectedDateInfo } = React.useContext(SelectedDateInfoContext);
     const selectedDateInfoUnparsed = useSelector((state: RootState) => state.selectedDateInfo.value);
     const selectedDateInfo = Object.keys(selectedDateInfoUnparsed).length > 0 ? JSON.parse(selectedDateInfoUnparsed as string) : [];
     const infoIsEmpty = selectedDateInfo && Object.keys(selectedDateInfo).length === 0;

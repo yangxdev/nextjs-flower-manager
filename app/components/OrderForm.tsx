@@ -6,10 +6,8 @@ import { FaPlus } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
 import { MdAddPhotoAlternate } from "react-icons/md";
 import { AddModalContext } from "../utils/AddModalContext";
-import { SelectedDateContext } from "../utils/SelectedDateContext";
 import { useMediaQuery } from "react-responsive";
-import { SelectedDateInfoContext } from "../utils/SelectedDateInfoContext";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
 import dayjs from 'dayjs';
 
@@ -23,9 +21,7 @@ export default function OrderForm({ label }: { label: string | null }) {
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
     const { isAddModalVisible, setIsAddModalVisible } = React.useContext(AddModalContext);
-    React.useContext(SelectedDateInfoContext);
 
-    const dispatch = useDispatch();
     const selectedDate = dayjs(useSelector((state: RootState) => state.selectedDate.value));
 
     const loading = useSelector((state: RootState) => state.loading.value);

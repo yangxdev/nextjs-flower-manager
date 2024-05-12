@@ -1,8 +1,6 @@
 "use client";
 import CalendarSideView from "./CalendarSideView";
 import React from "react";
-import { SelectedDateContext } from "../utils/SelectedDateContext";
-import { SelectedDateInfoContext } from "../utils/SelectedDateInfoContext";
 import Calendar from "./Calendar";
 import { useState } from "react";
 import OrderForm from "./OrderForm";
@@ -12,19 +10,16 @@ import SignOutButton from "./SignOutButton";
 import { AddModalContext } from "../utils/AddModalContext";
 import { Provider } from "react-redux";
 import { store } from "../store/store";
-import dayjs from 'dayjs';
 
 const defaultLanguage = GlobalConfig.i18n.defaultLanguage || "en";
 const gc = GlobalConfig.i18n.translations[defaultLanguage as keyof typeof GlobalConfig.i18n.translations]?.dashboard;
 
 export default function CalendarSection(props: { orders: any[] }) {
-    const [selectedDateInfo, setSelectedDateInfo] = useState({});
     const [isAddModalVisible, setIsAddModalVisible] = useState(false);
 
     return (
         <>
             <Provider store={store}>
-                <SelectedDateInfoContext.Provider value={{ selectedDateInfo, setSelectedDateInfo }}>
                     <AddModalContext.Provider value={{ isAddModalVisible, setIsAddModalVisible }}>
                         <div className="header flex flex-row justify-between">
                             <div className="title font-bold text-2xl select-none">{gc?.title}</div>
@@ -41,7 +36,6 @@ export default function CalendarSection(props: { orders: any[] }) {
                         </div>
                         <SignOutButton />
                     </AddModalContext.Provider>
-                </SelectedDateInfoContext.Provider>
             </Provider>
         </>
     );
