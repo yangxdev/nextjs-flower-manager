@@ -96,7 +96,7 @@
 
 .hover-add-button {
     border-radius: 5px;
-    transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+    transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1)!important;
     display: none;
     max-width: 50px;
     justify-content: center;
