@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button, ConfigProvider, Form, Modal, Popconfirm, Radio, RadioChangeEvent } from "antd";
 import toast from "react-hot-toast";
@@ -7,11 +7,11 @@ import { MdDelete } from "react-icons/md";
 import EditForm from "./EditForm";
 import { useMediaQuery } from "react-responsive";
 import { FaPlus } from "react-icons/fa6";
-import { AddModalContext } from "../utils/AddModalContext";
 import dayjs from "dayjs";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/store";
 import { setSelectedDateInfo } from "../features/selectedDateInfo/selectedDateInfoSlice";
+import { setAddModal } from "../features/addModal/addModalSlice";
 
 export default function CalendarSideView(props: { orders: any[] }) {
     const router = useRouter();
@@ -23,10 +23,8 @@ export default function CalendarSideView(props: { orders: any[] }) {
     const [isZoomModalVisible, setIsZoomModalVisible] = useState(false);
     const [modalImage, setModalImage] = useState("");
 
-    const { setIsAddModalVisible } = React.useContext(AddModalContext);
-
     const selectedDateInfoUnparsed = useSelector((state: RootState) => state.selectedDateInfo.value);
-    const selectedDateInfo = Object.keys(selectedDateInfoUnparsed).length > 0 ? JSON.parse(selectedDateInfoUnparsed as string) : [];
+    const selectedDateInfo = useMemo(() => Object.keys(selectedDateInfoUnparsed).length > 0 ? JSON.parse(selectedDateInfoUnparsed as string) : [], [selectedDateInfoUnparsed]);
     const infoIsEmpty = selectedDateInfo && Object.keys(selectedDateInfo).length === 0;
 
     // update selectedDateInfo when the selected date orders changes
@@ -60,15 +58,15 @@ export default function CalendarSideView(props: { orders: any[] }) {
 
     const selectedDateInfoArray = selectedDateInfo
         ? Object.values(selectedDateInfo).map((order: any) => ({
-              id: order.id,
-              customerName: order.customerName,
-              customerWechatId: order.customerWechatId,
-              advance: order.advance,
-              amount: order.amount,
-              productionCost: order.productionCost,
-              photo: order.photo,
-              soldStatus: order.soldStatus,
-          }))
+            id: order.id,
+            customerName: order.customerName,
+            customerWechatId: order.customerWechatId,
+            advance: order.advance,
+            amount: order.amount,
+            productionCost: order.productionCost,
+            photo: order.photo,
+            soldStatus: order.soldStatus,
+        }))
         : [];
 
     if (!selectedDate) {
@@ -187,7 +185,7 @@ export default function CalendarSideView(props: { orders: any[] }) {
                         className={`flex items-center w-fit bg-white`}
                         icon={<FaPlus />}
                         onClick={() => {
-                            setIsAddModalVisible(true);
+                            dispatch(setAddModal(true));
                         }}
                     ></Button>
                 </div>

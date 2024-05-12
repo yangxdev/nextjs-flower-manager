@@ -4,7 +4,7 @@ import loadingReducer from "../features/loading/loadingSlice";
 import selectedDateReducer from "../features/selectedDate/selectedDateSlice";
 import selectedDateInfoReducer from "../features/selectedDateInfo/selectedDateInfoSlice";
 import ordersReducer from "../features/orders/ordersSlice";
-// import selectedAddModalReducer from "../features/selectedAddModal/selectedAddModalSlice";
+import addModalReducer from "../features/addModal/addModalSlice";
 
 export const store = configureStore({
     reducer: {
@@ -12,7 +12,7 @@ export const store = configureStore({
         selectedDate: selectedDateReducer,
         selectedDateInfo: selectedDateInfoReducer,
         orders: ordersReducer,
-        // selectedAddModal: selectedAddModalReducer,
+        addModal: addModalReducer,
     },
 });
 

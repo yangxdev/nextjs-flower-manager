@@ -5,14 +5,15 @@ import toast from "react-hot-toast";
 import { FaPlus } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
 import { MdAddPhotoAlternate } from "react-icons/md";
-import { AddModalContext } from "../utils/AddModalContext";
 import { useMediaQuery } from "react-responsive";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/store";
 import dayjs from 'dayjs';
+import { setAddModal } from "../features/addModal/addModalSlice";
 
 export default function OrderForm({ label }: { label: string | null }) {
     const router = useRouter();
+    const dispatch = useDispatch();
     const isMobile = useMediaQuery({ query: "(max-width: 767px)" });
     const [file, setFile] = useState<File | null>(null);
     const [message, setMessage] = useState<string>("");
@@ -20,7 +21,7 @@ export default function OrderForm({ label }: { label: string | null }) {
     const [loadedFileMessage, setLoadedFileMessage] = useState<string>("");
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
-    const { isAddModalVisible, setIsAddModalVisible } = React.useContext(AddModalContext);
+    const addModal = useSelector((state: RootState) => state.addModal.value);
 
     const selectedDate = dayjs(useSelector((state: RootState) => state.selectedDate.value));
 
@@ -28,16 +29,16 @@ export default function OrderForm({ label }: { label: string | null }) {
 
     const formRef = useRef<any>();
     useEffect(() => {
-        if (isAddModalVisible) {
+        if (addModal) {
             formRef.current.resetFields();
             setFile(null);
             setMessage("");
             setLoadedFileMessage("");
         }
-    }, [isAddModalVisible]);
+    }, [addModal]);
 
     const handleAddModalClose = () => {
-        setIsAddModalVisible(false);
+        dispatch(setAddModal(false));
     };
 
     useEffect(() => {
@@ -167,13 +168,14 @@ export default function OrderForm({ label }: { label: string | null }) {
                     className={`flex items-center w-fit bg-white ${loading ? "hidden" : ""}`}
                     icon={<FaPlus />}
                     onClick={() => {
-                        setIsAddModalVisible(true);
+                        // setIsAddModalVisible(true);
+                        dispatch(setAddModal(true));
                     }}
                 >
                     {label}
                 </Button>
             </div>
-            <Modal key={isAddModalVisible ? "addModal" : null} open={isAddModalVisible} transitionName={isMobile ? "" : undefined} onOk={handleAddModalClose} onCancel={handleAddModalClose} footer={null}>
+            <Modal key={addModal ? "addModal" : null} open={addModal} transitionName={isMobile ? "" : undefined} onOk={handleAddModalClose} onCancel={handleAddModalClose} footer={null}>
                 <div className="p-4 w-full rounded-md bg-white">
                     <div className="font-semibold mb-4 text-left text-lg">Add Order</div>
                     <Form name="addOrder" style={{ maxWidth: "500px" }} onFinish={handleSubmit} ref={formRef}>

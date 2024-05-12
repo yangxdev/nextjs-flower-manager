@@ -6,7 +6,6 @@ import "@/app/css/Calendar.css";
 import Image from "next/image";
 import itIT from "antd/locale/it_IT";
 import "dayjs/locale/it";
-import { AddModalContext } from "../utils/AddModalContext";
 import { FaPlus } from "react-icons/fa6";
 import { useWindowSize } from "react-use";
 import { useSelector, useDispatch } from 'react-redux';
@@ -14,6 +13,7 @@ import { RootState } from '@/app/store/store';
 import { setLoading } from "../features/loading/loadingSlice";
 import { setSelectedDate } from "../features/selectedDate/selectedDateSlice";
 import { setSelectedDateInfo } from "../features/selectedDateInfo/selectedDateInfoSlice";
+import { setAddModal } from "../features/addModal/addModalSlice";
 
 type Locale = ConfigProviderProps["locale"];
 
@@ -30,7 +30,6 @@ export default function Calendar(props: { orders: any[] }) {
     const selectedDateInfoUnparsed = useSelector((state: RootState) => state.selectedDateInfo.value);
     const selectedDateInfo = Object.keys(selectedDateInfoUnparsed).length > 0 ? JSON.parse(selectedDateInfoUnparsed as string) : [];
     const infoIsEmpty = selectedDateInfo && Object.keys(selectedDateInfo).length === 0;
-    const { setIsAddModalVisible } = React.useContext(AddModalContext);
 
     const [locale] = useState<Locale>(itIT);
 
@@ -62,7 +61,7 @@ export default function Calendar(props: { orders: any[] }) {
                 {listData.length === 0 && (
                     <div className="hover-add-button text-center aspect-square w-full p-[2px]" onClick={
                         () => {
-                            setIsAddModalVisible(true);
+                            dispatch(setAddModal(true));
                         }
                     }>
                         <FaPlus size={iconSize} />
