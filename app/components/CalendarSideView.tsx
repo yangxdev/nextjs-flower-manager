@@ -14,6 +14,7 @@ import dayjs from "dayjs";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/store";
 import { setSelectedDateInfo } from "../features/selectedDateInfo/selectedDateInfoSlice";
+import { setSelectedDate } from "../features/selectedDate/selectedDateSlice";
 
 export default function CalendarSideView(props: { orders: any[] }) {
     const router = useRouter();
@@ -28,12 +29,21 @@ export default function CalendarSideView(props: { orders: any[] }) {
     const { setIsAddModalVisible } = React.useContext(AddModalContext);
 
     // const { selectedDateInfo, setSelectedDateInfo } = React.useContext(SelectedDateInfoContext);
-    const selectedDateInfoRaw = useSelector((state: RootState) => state.selectedDateInfo.value);
-    if (Object.keys(selectedDateInfoRaw).length === 0) {
-        return null;
-    }
-    const selectedDateInfo = JSON.parse(selectedDateInfoRaw as string)
+    const selectedDateInfoUnparsed = useSelector((state: RootState) => state.selectedDateInfo.value);
+    const selectedDateInfo = Object.keys(selectedDateInfoUnparsed).length > 0 ? JSON.parse(selectedDateInfoUnparsed as string) : [];
     const infoIsEmpty = selectedDateInfo && Object.keys(selectedDateInfo).length === 0;
+
+    // update selectedDateInfo when the selected date orders changes
+    useEffect(() => {
+        const newOrders = props.orders.filter((order) => dayjs(order.deliveryDate).isSame(selectedDate, "day"));
+        const toBeDispatched: { [key: number]: any } = {};
+        let counter = 0;
+        newOrders.forEach((order) => {
+            toBeDispatched[counter] = order;
+            counter++;
+        });
+        dispatch(setSelectedDateInfo(JSON.stringify(toBeDispatched)));
+    });
 
     // const filteredOrders = props.orders.filter((order) => dayjs(order.deliveryDate).isSame(selectedDate, "day"));
 
@@ -53,32 +63,33 @@ export default function CalendarSideView(props: { orders: any[] }) {
     const sideViewRef = useRef<HTMLDivElement>(null);
     useEffect(() => {
         // when in mobile, scrolls to the bottom of the side view when a date is selected
-        if (selectedDateInfo && !infoIsEmpty && window.innerWidth < 768) {
+        if (selectedDateInfo && !infoIsEmpty && isMobile) {
             sideViewRef?.current?.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
         }
-    }, [infoIsEmpty, selectedDateInfo]);
+    }, [infoIsEmpty, isMobile, selectedDateInfo]);
 
     if (!selectedDate) {
         return null;
     }
     const $D = selectedDate.date();
     const $M = selectedDate.month();
-    const $y = selectedDate.year()
+    const $y = selectedDate.year();
     const month = Intl.DateTimeFormat("en-US", { month: "long" }).format(new Date($y, $M, $D));
     const fullDate = `${month} ${$D}, ${$y}`;
 
     const selectedDateInfoArray = selectedDateInfo
         ? Object.values(selectedDateInfo).map((order: any) => ({
-            id: order.id,
-            customerName: order.customerName,
-            customerWechatId: order.customerWechatId,
-            advance: order.advance,
-            amount: order.amount,
-            productionCost: order.productionCost,
-            photo: order.photo,
-            soldStatus: order.soldStatus,
-        }))
+              id: order.id,
+              customerName: order.customerName,
+              customerWechatId: order.customerWechatId,
+              advance: order.advance,
+              amount: order.amount,
+              productionCost: order.productionCost,
+              photo: order.photo,
+              soldStatus: order.soldStatus,
+          }))
         : [];
+    // console.log(selectedDateInfoArray);
 
     if (!selectedDate) {
         return null;
@@ -127,15 +138,25 @@ export default function CalendarSideView(props: { orders: any[] }) {
     };
 
     const handleUpdateContext = (id: string, status: string) => {
-        setSelectedDateInfo((prevState: any) => {
-            const updatedInfo = { ...prevState };
-            for (const key in updatedInfo) {
-                if (updatedInfo[key].id === id) {
-                    updatedInfo[key].soldStatus = status;
-                }
+        const toBeDispatched = { ...selectedDateInfo };
+        for (const key in toBeDispatched) {
+            if (toBeDispatched[key].id === id) {
+                toBeDispatched[key].soldStatus = status;
             }
-            return updatedInfo;
-        });
+        }
+        dispatch(setSelectedDateInfo(JSON.stringify(toBeDispatched)));
+
+        // dispatch(
+        //     setSelectedDateInfo((prevState: any) => {
+        //         const updatedInfo = { ...prevState };
+        //         for (const key in updatedInfo) {
+        //             if (updatedInfo[key].id === id) {
+        //                 updatedInfo[key].soldStatus = status;
+        //             }
+        //         }
+        //         return updatedInfo;
+        //     })
+        // );
     };
 
     const deleteOrder = async (id: string) => {
@@ -152,15 +173,25 @@ export default function CalendarSideView(props: { orders: any[] }) {
                 throw new Error("HTTP error " + response.status);
             }
             router.refresh();
-            setSelectedDateInfo((prevState: any) => {
-                const updatedInfo = { ...prevState };
-                for (const key in updatedInfo) {
-                    if (updatedInfo[key].id === id) {
-                        delete updatedInfo[key];
-                    }
+
+            const toBeDispatched = { ...selectedDateInfo };
+            for (const key in toBeDispatched) {
+                if (toBeDispatched[key].id === id) {
+                    delete toBeDispatched[key];
                 }
-                return updatedInfo;
-            });
+            }
+            dispatch(setSelectedDateInfo(JSON.stringify(toBeDispatched)));
+            // dispatch(
+            //     setSelectedDateInfo((prevState: any) => {
+            //         const updatedInfo = { ...prevState };
+            //         for (const key in updatedInfo) {
+            //             if (updatedInfo[key].id === id) {
+            //                 delete updatedInfo[key];
+            //             }
+            //         }
+            //         return updatedInfo;
+            //     })
+            // );
         });
 
         toast.promise(

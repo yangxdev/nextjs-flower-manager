@@ -32,7 +32,8 @@ export default function Calendar(props: { orders: any[] }) {
     const selectedDate = useSelector((state: RootState) => state.selectedDate.value)
 
     // const { selectedDateInfo, setSelectedDateInfo } = React.useContext(SelectedDateInfoContext);
-    const selectedDateInfo = useSelector((state: RootState) => state.selectedDateInfo.value);
+    const selectedDateInfoUnparsed = useSelector((state: RootState) => state.selectedDateInfo.value);
+    const selectedDateInfo = Object.keys(selectedDateInfoUnparsed).length > 0 ? JSON.parse(selectedDateInfoUnparsed as string) : [];
     const infoIsEmpty = selectedDateInfo && Object.keys(selectedDateInfo).length === 0;
     const { setIsAddModalVisible } = React.useContext(AddModalContext);
 
