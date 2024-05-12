@@ -99,7 +99,7 @@ export default function CalendarSideView(props: { orders: any[] }) {
                 throw new Error("HTTP error " + response.status);
             }
             router.refresh();
-            handleUpdateContext(id, e.target.value);
+            handleUpdateState(id, e.target.value);
         });
 
         toast.promise(
@@ -115,7 +115,7 @@ export default function CalendarSideView(props: { orders: any[] }) {
         );
     };
 
-    const handleUpdateContext = (id: string, status: string) => {
+    const handleUpdateState = (id: string, status: string) => {
         const toBeDispatched = { ...selectedDateOrders };
         for (const key in toBeDispatched) {
             if (toBeDispatched[key].id === id) {

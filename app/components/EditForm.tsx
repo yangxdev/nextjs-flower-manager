@@ -55,7 +55,7 @@ export default function EditForm(props: { orderId: string; orders: any[] }) {
             }
             router.refresh();
             handleEditModalClose();
-            handleContextUpdate(values);
+            handleStateUpdate(values);
             setIsSubmitting(false);
             return response;
         });
@@ -76,7 +76,7 @@ export default function EditForm(props: { orderId: string; orders: any[] }) {
     const handleEditModalClose = () => {
         setIsEditModalVisible(false);
     };
-    const handleContextUpdate = (values: any) => {
+    const handleStateUpdate = (values: any) => {
         // get all orders of the selected date
         const date = deliveryDate;
         const updatedDeliveryDate = values.deliveryDate;
