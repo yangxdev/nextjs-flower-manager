@@ -1,6 +1,5 @@
 import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
-import GlobalConfig from "@/app/app.config";
 
 export default async function Settings() {
     const session = await getServerSession();
@@ -16,11 +15,6 @@ export default async function Settings() {
                 <div className="pb-2 flex flex-row justify-between">
                     <div className="">Base currency: </div>
                     <select className="bg-[#434343] rounded-md p-1 cursor-pointer hover:bg-[#565656] transition duration-100 dark:[color-scheme:dark] focus:outline-none">
-                        {/* {GlobalConfig.currency.currencies.map((currency, index) => (
-                            <option key={index} value={currency}>
-                                {currency}
-                            </option>
-                        ))} */}
                     </select>
                 </div>
                 <div className="pb-2 flex flex-row justify-between">

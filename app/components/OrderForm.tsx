@@ -1,44 +1,44 @@
 "use client";
-import { InboxOutlined, UploadOutlined } from "@ant-design/icons";
-import { Input, Button, Checkbox, Col, ColorPicker, Form, InputNumber, Radio, Rate, Row, Select, Slider, Space, Switch, Upload, Modal, ConfigProvider } from "antd";
+import { Input, Button, Col, Form, Radio, Row, Space, Modal, ConfigProvider } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { FaPlus } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
 import { MdAddPhotoAlternate } from "react-icons/md";
-import { LoadingStateContext } from "../utils/LoadingStateContext";
-import { AddModalContext } from "../utils/AddModalContext";
-import { SelectedDateContext } from "../utils/SelectedDateContext";
 import { useMediaQuery } from "react-responsive";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../store/store";
+import dayjs from 'dayjs';
+import { setAddModal } from "../features/addModal/addModalSlice";
 
 export default function OrderForm({ label }: { label: string | null }) {
     const router = useRouter();
-    const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
+    const dispatch = useDispatch();
+    const isMobile = useMediaQuery({ query: "(max-width: 767px)" });
     const [file, setFile] = useState<File | null>(null);
-    const [uploading, setUploading] = useState<boolean>(false);
     const [message, setMessage] = useState<string>("");
     const [show, setShow] = useState<string>("hidden");
     const [loadedFileMessage, setLoadedFileMessage] = useState<string>("");
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
-    const { isAddModalVisible: isAddModalVisible, setIsAddModalVisible: setIsAddModalVisible
-    } = React.useContext(AddModalContext);
-    const { selectedDate } = React.useContext(SelectedDateContext);
+    const addModal = useSelector((state: RootState) => state.addModal.value);
 
-    const { loading } = React.useContext(LoadingStateContext);
+    const selectedDate = dayjs(useSelector((state: RootState) => state.selectedDate.value));
+
+    const loading = useSelector((state: RootState) => state.loading.value);
 
     const formRef = useRef<any>();
     useEffect(() => {
-        if (isAddModalVisible) {
+        if (addModal) {
             formRef.current.resetFields();
             setFile(null);
             setMessage("");
             setLoadedFileMessage("");
         }
-    }, [isAddModalVisible]);
+    }, [addModal]);
 
     const handleAddModalClose = () => {
-        setIsAddModalVisible(false);
+        dispatch(setAddModal(false));
     };
 
     useEffect(() => {
@@ -48,8 +48,6 @@ export default function OrderForm({ label }: { label: string | null }) {
     }, [file]);
 
     const handlePhotoUpload = async (file: File) => {
-        setUploading(true);
-
         const response = await fetch(`/api/postPhoto?filename=${file.name}&contentType=${file.type}`);
 
         if (response.ok) {
@@ -69,7 +67,6 @@ export default function OrderForm({ label }: { label: string | null }) {
             if (uploadResponse.ok) {
                 setMessage("Upload successful!");
                 const fileUrl = new URL(fields.key, url).toString();
-                setUploading(false);
                 return fileUrl;
             } else {
                 console.error("S3 Upload Error:", uploadResponse);
@@ -78,13 +75,10 @@ export default function OrderForm({ label }: { label: string | null }) {
         } else {
             setMessage("Failed to get pre-signed URL.");
         }
-
-        setUploading(false);
         return "";
     };
 
     const handleSubmit = async (values: any) => {
-        //console.log("Received values of form: ", values);
         setIsSubmitting(true);
 
         // AWS S3 photo upload process
@@ -146,19 +140,11 @@ export default function OrderForm({ label }: { label: string | null }) {
         setLoadedFileMessage("");
     };
 
-    const tzoffset = new Date().getTimezoneOffset() * 60000; //offset in milliseconds
-    const localISOTime = (new Date(Date.now() - tzoffset)).toISOString().slice(0, -1);
+    const tzoffset = new Date().getTimezoneOffset() * 60000;
+    const localISOTime = new Date(Date.now() - tzoffset).toISOString().slice(0, -1);
 
     return (
         <>
-            {/* <div
-                className="text-black border-2 border-lightBorder hover:text-white hover:bg-newBlue-500 w-fit items-center flex flex-row gap-1 p-2 rounded-lg bg-whiteDarker cursor-pointer"
-                onClick={() => {
-                    setIsAddModalVisible(true);
-                }}
-            >
-                <FaPlus /> {label}
-            </div> */}
             <div>
                 <div
                     className={`custom-loading-spinner bg-white w-[7.5rem] border-[#d9d9d9] border-[1px] flex justify-center items-center h-[32px] rounded-[6px] ${loading ? "" : "hidden"}`}
@@ -182,31 +168,24 @@ export default function OrderForm({ label }: { label: string | null }) {
                     className={`flex items-center w-fit bg-white ${loading ? "hidden" : ""}`}
                     icon={<FaPlus />}
                     onClick={() => {
-                        setIsAddModalVisible(true);
+                        // setIsAddModalVisible(true);
+                        dispatch(setAddModal(true));
                     }}
                 >
                     {label}
                 </Button>
             </div>
-            <Modal
-                key={isAddModalVisible ? "addModal" : null}
-                open={isAddModalVisible} transitionName={isMobile ? "" : undefined} onOk={handleAddModalClose} onCancel={handleAddModalClose} footer={null}>
+            <Modal key={addModal ? "addModal" : null} open={addModal} transitionName={isMobile ? "" : undefined} onOk={handleAddModalClose} onCancel={handleAddModalClose} footer={null}>
                 <div className="p-4 w-full rounded-md bg-white">
                     <div className="font-semibold mb-4 text-left text-lg">Add Order</div>
                     <Form name="addOrder" style={{ maxWidth: "500px" }} onFinish={handleSubmit} ref={formRef}>
-                        <Form.Item name="deliveryDate" rules={[{ required: true, message: "Please input the date" }]} initialValue={selectedDate ?
-                            (new Date(selectedDate - tzoffset)).toISOString().split("T")[0] :
-                            (new Date(localISOTime)).toISOString().split("T")[0]
-                        }>
+                        <Form.Item name="deliveryDate" rules={[{ required: true, message: "Please input the date" }]} initialValue={selectedDate ? new Date(selectedDate.valueOf() - tzoffset).toISOString().split("T")[0] : new Date(localISOTime).toISOString().split("T")[0]}>
                             <Row gutter={8}>
                                 <Col span={8}>
                                     <label>Delivery date</label>
                                 </Col>
                                 <Col span={16}>
-                                    <Input placeholder="Delivery date" type="date" defaultValue={selectedDate ?
-                                        (new Date(selectedDate - tzoffset)).toISOString().split("T")[0] :
-                                        (new Date(localISOTime)).toISOString().split("T")[0]
-                                    } />
+                                    <Input placeholder="Delivery date" type="date" defaultValue={selectedDate ? new Date(selectedDate.valueOf() - tzoffset).toISOString().split("T")[0] : new Date(localISOTime).toISOString().split("T")[0]} />
                                 </Col>
                             </Row>
                         </Form.Item>
@@ -366,4 +345,3 @@ export default function OrderForm({ label }: { label: string | null }) {
 // Thanks @imevanc for the image upload functionality https://github.com/imevanc/nextjs-aws-s3
 
 //TODO: drag and drop file upload
-// TODO: add form from side view

@@ -1,12 +1,12 @@
 "use client";
 import { Button } from "antd";
 import { signOut } from "next-auth/react";
-import { useContext } from "react";
 import { RiLogoutBoxLine } from "react-icons/ri";
-import { LoadingStateContext } from "../utils/LoadingStateContext";
+import { useSelector } from "react-redux";
+import { RootState } from "../store/store";
 
 export default function SignOutButton() {
-    const { loading, setLoading } = useContext(LoadingStateContext);
+    const loading = useSelector((state: RootState) => state.loading.value);
 
     return (
         <>

@@ -6,6 +6,11 @@ export default function Greetings() {
     function HandleUsername(greeting: string) {
         const { data: session } = useSession();
         const username = session?.user?.name;
+        // if username has more than one word, only use the first one
+        const usernameSplit = username?.split(" ");
+        if (usernameSplit && usernameSplit.length > 1) {
+            return greeting.replace("{username}", usernameSplit[0]);
+        }
         return greeting.replace("{username}", username || "user");
     }
 
