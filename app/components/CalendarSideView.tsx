@@ -13,6 +13,7 @@ import { AddModalContext } from "../utils/AddModalContext";
 import dayjs from "dayjs";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/store";
+import { setSelectedDateInfo } from "../features/selectedDateInfo/selectedDateInfoSlice";
 
 export default function CalendarSideView(props: { orders: any[] }) {
     const router = useRouter();
@@ -26,23 +27,28 @@ export default function CalendarSideView(props: { orders: any[] }) {
 
     const { setIsAddModalVisible } = React.useContext(AddModalContext);
 
-    const { selectedDateInfo, setSelectedDateInfo } = React.useContext(SelectedDateInfoContext);
+    // const { selectedDateInfo, setSelectedDateInfo } = React.useContext(SelectedDateInfoContext);
+    const selectedDateInfoRaw = useSelector((state: RootState) => state.selectedDateInfo.value);
+    if (Object.keys(selectedDateInfoRaw).length === 0) {
+        return null;
+    }
+    const selectedDateInfo = JSON.parse(selectedDateInfoRaw as string)
     const infoIsEmpty = selectedDateInfo && Object.keys(selectedDateInfo).length === 0;
 
-    const filteredOrders = props.orders.filter((order) => dayjs(order.deliveryDate).isSame(selectedDate, "day"));
+    // const filteredOrders = props.orders.filter((order) => dayjs(order.deliveryDate).isSame(selectedDate, "day"));
 
-    useEffect(() => {
-        // updates the orders list when the received props change
-        setSelectedDateInfo({});
-        filteredOrders.forEach((order) => {
-            setSelectedDateInfo((prevState: any) => {
-                return {
-                    ...prevState,
-                    [order.id]: order,
-                };
-            });
-        });
-    }, [props.orders]);
+    // useEffect(() => {
+    //     // updates the orders list when the received props change
+    //     dispatch(setSelectedDateInfo({}));
+    //     filteredOrders.forEach((order) => {
+    //         setSelectedDateInfo((prevState: any) => {
+    //             return {
+    //                 ...prevState,
+    //                 [order.id]: order,
+    //             };
+    //         });
+    //     });
+    // }, [dispatch, filteredOrders, props.orders]);
 
     const sideViewRef = useRef<HTMLDivElement>(null);
     useEffect(() => {
@@ -82,6 +88,8 @@ export default function CalendarSideView(props: { orders: any[] }) {
         setModalImage(image);
         setIsZoomModalVisible(true);
     };
+
+    //TODO: lift zoom image state to parent component
 
     const handleZoomModalClose = () => {
         setIsZoomModalVisible(false);

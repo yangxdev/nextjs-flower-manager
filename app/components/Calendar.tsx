@@ -17,6 +17,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@/app/store/store';
 import { setLoading } from "../features/loading/loadingSlice";
 import { setSelectedDate } from "../features/selectedDate/selectedDateSlice";
+import { setSelectedDateInfo } from "../features/selectedDateInfo/selectedDateInfoSlice";
 
 type Locale = ConfigProviderProps["locale"];
 
@@ -30,7 +31,8 @@ export default function Calendar(props: { orders: any[] }) {
     }, [dispatch]);
     const selectedDate = useSelector((state: RootState) => state.selectedDate.value)
 
-    const { selectedDateInfo, setSelectedDateInfo } = React.useContext(SelectedDateInfoContext);
+    // const { selectedDateInfo, setSelectedDateInfo } = React.useContext(SelectedDateInfoContext);
+    const selectedDateInfo = useSelector((state: RootState) => state.selectedDateInfo.value);
     const infoIsEmpty = selectedDateInfo && Object.keys(selectedDateInfo).length === 0;
     const { setIsAddModalVisible } = React.useContext(AddModalContext);
 
@@ -105,7 +107,7 @@ export default function Calendar(props: { orders: any[] }) {
                             } else {
                                 dispatch(setSelectedDate(date.format()));
                                 const filteredOrders = props.orders.filter((order) => dayjs(order.deliveryDate).isSame(date, "day"));
-                                setSelectedDateInfo(filteredOrders);
+                                dispatch(setSelectedDateInfo(JSON.stringify(filteredOrders)));
                             }
                         }
                     }}
@@ -117,3 +119,4 @@ export default function Calendar(props: { orders: any[] }) {
 
 // DONE: use context to set loading to the antd buttons too
 // DONE: use next/image for image optimization
+// TODO: rename selectedDateInfo to selectedDateOrders

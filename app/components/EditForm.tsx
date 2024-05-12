@@ -5,18 +5,28 @@ import toast from "react-hot-toast";
 import { MdEdit } from "react-icons/md";
 import { SelectedDateInfoContext } from "../utils/SelectedDateInfoContext";
 import dayjs from "dayjs";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../store/store";
+import { setSelectedDateInfo } from "../features/selectedDateInfo/selectedDateInfoSlice";
 
 export default function EditForm(props: { orderId: string; orders: any[] }) {
     const router = useRouter();
+    const dispatch = useDispatch();
+    const formRef = useRef<any>(null);
     const isMobile = window.innerWidth < 768;
     const [isEditModalVisible, setIsEditModalVisible] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const selectedDateInfo = JSON.parse(useSelector((state: RootState) => state.selectedDateInfo.value) as string);
+    if (props.orderId === undefined) {
+        return null;
+    }
     const orderData = props.orders.find((order) => order.id === props.orderId);
     const { deliveryDate, customerName, customerWechatId, advance, amount, productionCost, photo, soldStatus } = orderData;
 
     const inputDefaultDeliveryDate = deliveryDate ? deliveryDate.toISOString().split("T")[0] : new Date().toISOString().split("T")[0];
 
-    const { selectedDateInfo, setSelectedDateInfo } = useContext(SelectedDateInfoContext);
+
+    // const { selectedDateInfo, setSelectedDateInfo } = useContext(SelectedDateInfoContext);
 
     const handleSubmit = async (values: any) => {
         setIsSubmitting(true);
@@ -61,7 +71,6 @@ export default function EditForm(props: { orderId: string; orders: any[] }) {
         );
     };
 
-    const formRef = useRef<any>(null);
     const handleEditModalClose = () => {
         setIsEditModalVisible(false);
     };
@@ -71,7 +80,7 @@ export default function EditForm(props: { orderId: string; orders: any[] }) {
         const updatedDeliveryDate = values.deliveryDate;
         if (!dayjs(updatedDeliveryDate).isSame(date, "day")) {
             const updatedFilteredOrders = (selectedDateInfo as any[]).filter((order) => order.id !== props.orderId);
-            setSelectedDateInfo(updatedFilteredOrders);
+            dispatch(setSelectedDateInfo(updatedFilteredOrders));
             return;
         }
         const filteredOrders = props.orders.filter((order) => dayjs(order.deliveryDate).isSame(date, "day"));
