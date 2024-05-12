@@ -1,22 +1,34 @@
 import { Button, Col, ConfigProvider, Form, Input, Modal, Radio, Row, Space } from "antd";
 import { useRouter } from "next/navigation";
-import { useContext, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { MdEdit } from "react-icons/md";
-import { SelectedDateInfoContext } from "../utils/SelectedDateInfoContext";
 import dayjs from "dayjs";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../store/store";
+import { setSelectedDateOrders } from "../features/selectedDateOrders/selectedDateOrdersSlice";
 
 export default function EditForm(props: { orderId: string; orders: any[] }) {
     const router = useRouter();
+    const dispatch = useDispatch();
+    const formRef = useRef<any>(null);
     const isMobile = window.innerWidth < 768;
     const [isEditModalVisible, setIsEditModalVisible] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const orderData = props.orders.find((order) => order.id === props.orderId);
-    const { deliveryDate, customerName, customerWechatId, advance, amount, productionCost, photo, soldStatus } = orderData;
+    const selectedDateOrders = JSON.parse(useSelector((state: RootState) => state.selectedDateOrders.value) as string);
+    if (selectedDateOrders === undefined || Object.keys(selectedDateOrders).length === 0) {
+        return null;
+    }
 
-    const inputDefaultDeliveryDate = deliveryDate ? deliveryDate.toISOString().split("T")[0] : new Date().toISOString().split("T")[0];
-
-    const { selectedDateInfo, setSelectedDateInfo } = useContext(SelectedDateInfoContext);
+    if (props.orderId === undefined) {
+        return null;
+    }
+    const orderData = Object.values(selectedDateOrders).find((order: any) => order.id === props.orderId); // const orderData = props.orders.find((order) => order.id === props.orderId);
+    if (orderData === undefined) {
+        return null;
+    }
+    const { deliveryDate, customerName, customerWechatId, advance, amount, productionCost, photo, soldStatus } = orderData as any;
+    const inputDefaultDeliveryDate = deliveryDate ? deliveryDate.split("T")[0] : new Date().toISOString().split("T")[0];
 
     const handleSubmit = async (values: any) => {
         setIsSubmitting(true);
@@ -43,7 +55,7 @@ export default function EditForm(props: { orderId: string; orders: any[] }) {
             }
             router.refresh();
             handleEditModalClose();
-            handleContextUpdate(values);
+            handleStateUpdate(values);
             setIsSubmitting(false);
             return response;
         });
@@ -61,21 +73,20 @@ export default function EditForm(props: { orderId: string; orders: any[] }) {
         );
     };
 
-    const formRef = useRef<any>(null);
     const handleEditModalClose = () => {
         setIsEditModalVisible(false);
     };
-    const handleContextUpdate = (values: any) => {
+    const handleStateUpdate = (values: any) => {
         // get all orders of the selected date
         const date = deliveryDate;
         const updatedDeliveryDate = values.deliveryDate;
         if (!dayjs(updatedDeliveryDate).isSame(date, "day")) {
-            const updatedFilteredOrders = (selectedDateInfo as any[]).filter((order) => order.id !== props.orderId);
-            setSelectedDateInfo(updatedFilteredOrders);
+            const updatedFilteredOrders = (selectedDateOrders as any[]).filter((order) => order.id !== props.orderId);
+            dispatch(setSelectedDateOrders(updatedFilteredOrders));
             return;
         }
         const filteredOrders = props.orders.filter((order) => dayjs(order.deliveryDate).isSame(date, "day"));
-        const updatedFilteredOrders = filteredOrders.map((order) => {
+        const toBeDispatched = filteredOrders.map((order) => {
             if (order.id === props.orderId) {
                 return {
                     ...order,
@@ -90,7 +101,7 @@ export default function EditForm(props: { orderId: string; orders: any[] }) {
             }
             return order;
         });
-        setSelectedDateInfo(updatedFilteredOrders);
+        dispatch(setSelectedDateOrders(JSON.stringify(toBeDispatched)));
     };
 
     const onReset = () => {

@@ -1,7 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { SelectedDateContext } from "../utils/SelectedDateContext";
-import { SelectedDateInfoContext } from "../utils/SelectedDateInfoContext";
 import { Button, ConfigProvider, Form, Modal, Popconfirm, Radio, RadioChangeEvent } from "antd";
 import toast from "react-hot-toast";
 import Image from "next/image";
@@ -9,64 +7,68 @@ import { MdDelete } from "react-icons/md";
 import EditForm from "./EditForm";
 import { useMediaQuery } from "react-responsive";
 import { FaPlus } from "react-icons/fa6";
-import { AddModalContext } from "../utils/AddModalContext";
 import dayjs from "dayjs";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../store/store";
+import { setSelectedDateOrders } from "../features/selectedDateOrders/selectedDateOrdersSlice";
+import { setAddModal } from "../features/addModal/addModalSlice";
+import { setImageZoom } from "../features/imageZoom/imageZoomSlice";
+import { setImageZoomSource } from "../features/imageZoomSource/imageZoomSourceSlice";
 
 export default function CalendarSideView(props: { orders: any[] }) {
     const router = useRouter();
-
     const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
 
-    const [isZoomModalVisible, setIsZoomModalVisible] = useState(false);
-    const [modalImage, setModalImage] = useState("");
+    const dispatch = useDispatch();
+    const selectedDate = dayjs(useSelector((state: RootState) => state.selectedDate.value));
 
-    const { setIsAddModalVisible } = React.useContext(AddModalContext);
+    const selectedDateOrdersUnparsed = useSelector((state: RootState) => state.selectedDateOrders.value);
+    const selectedDateOrders = useMemo(() => Object.keys(selectedDateOrdersUnparsed).length > 0 ? JSON.parse(selectedDateOrdersUnparsed as string) : [], [selectedDateOrdersUnparsed]);
+    const infoIsEmpty = selectedDateOrders && Object.keys(selectedDateOrders).length === 0;
 
-    const { selectedDate } = React.useContext(SelectedDateContext);
-    const { selectedDateInfo, setSelectedDateInfo } = React.useContext(SelectedDateInfoContext);
-    const infoIsEmpty = selectedDateInfo && Object.keys(selectedDateInfo).length === 0;
+    const imageZoom = useSelector((state: RootState) => state.imageZoom.value);
+    const imageZoomSource = useSelector((state: RootState) => state.imageZoomSource.value);
 
-    const filteredOrders = props.orders.filter((order) => dayjs(order.deliveryDate).isSame(selectedDate, "day"));
-
+    // update selectedDateOrders when the selected date orders changes
     useEffect(() => {
-        // updates the orders list when the received props change
-        setSelectedDateInfo({});
-        filteredOrders.forEach((order) => {
-            setSelectedDateInfo((prevState: any) => {
-                return {
-                    ...prevState,
-                    [order.id]: order,
-                };
-            });
+        const newOrders = props.orders.filter((order) => dayjs(order.deliveryDate).isSame(selectedDate, "day"));
+        const toBeDispatched: { [key: number]: any } = {};
+        let counter = 0;
+        newOrders.forEach((order) => {
+            toBeDispatched[counter] = order;
+            counter++;
         });
-    }, [props.orders]);
+        dispatch(setSelectedDateOrders(JSON.stringify(toBeDispatched)));
+    });
 
     const sideViewRef = useRef<HTMLDivElement>(null);
     useEffect(() => {
         // when in mobile, scrolls to the bottom of the side view when a date is selected
-        if (selectedDateInfo && !infoIsEmpty && window.innerWidth < 768) {
+        if (selectedDateOrders && !infoIsEmpty && isMobile) {
             sideViewRef?.current?.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
         }
-    }, [infoIsEmpty, selectedDateInfo]);
+    }, [infoIsEmpty, isMobile, selectedDateOrders]);
 
     if (!selectedDate) {
         return null;
     }
-    const { $D, $H, $L, $M, $W, $d, $isDayjsObject, $m, $ms, $s, $u, $x, $y } = selectedDate;
+    const $D = selectedDate.date();
+    const $M = selectedDate.month();
+    const $y = selectedDate.year();
     const month = Intl.DateTimeFormat("en-US", { month: "long" }).format(new Date($y, $M, $D));
     const fullDate = `${month} ${$D}, ${$y}`;
 
-    const selectedDateInfoArray = selectedDateInfo
-        ? Object.values(selectedDateInfo).map((order: any) => ({
-              id: order.id,
-              customerName: order.customerName,
-              customerWechatId: order.customerWechatId,
-              advance: order.advance,
-              amount: order.amount,
-              productionCost: order.productionCost,
-              photo: order.photo,
-              soldStatus: order.soldStatus,
-          }))
+    const selectedDateOrdersArray = selectedDateOrders
+        ? Object.values(selectedDateOrders).map((order: any) => ({
+            id: order.id,
+            customerName: order.customerName,
+            customerWechatId: order.customerWechatId,
+            advance: order.advance,
+            amount: order.amount,
+            productionCost: order.productionCost,
+            photo: order.photo,
+            soldStatus: order.soldStatus,
+        }))
         : [];
 
     if (!selectedDate) {
@@ -74,12 +76,12 @@ export default function CalendarSideView(props: { orders: any[] }) {
     }
 
     const showZoomModal = (image: string) => {
-        setModalImage(image);
-        setIsZoomModalVisible(true);
+        dispatch(setImageZoomSource(image));
+        dispatch(setImageZoom(true));
     };
 
     const handleZoomModalClose = () => {
-        setIsZoomModalVisible(false);
+        dispatch(setImageZoom(false));
     };
 
     const onStatusChange = (id: string) => (e: RadioChangeEvent) => {
@@ -97,7 +99,7 @@ export default function CalendarSideView(props: { orders: any[] }) {
                 throw new Error("HTTP error " + response.status);
             }
             router.refresh();
-            handleUpdateContext(id, e.target.value);
+            handleUpdateState(id, e.target.value);
         });
 
         toast.promise(
@@ -113,16 +115,14 @@ export default function CalendarSideView(props: { orders: any[] }) {
         );
     };
 
-    const handleUpdateContext = (id: string, status: string) => {
-        setSelectedDateInfo((prevState: any) => {
-            const updatedInfo = { ...prevState };
-            for (const key in updatedInfo) {
-                if (updatedInfo[key].id === id) {
-                    updatedInfo[key].soldStatus = status;
-                }
+    const handleUpdateState = (id: string, status: string) => {
+        const toBeDispatched = { ...selectedDateOrders };
+        for (const key in toBeDispatched) {
+            if (toBeDispatched[key].id === id) {
+                toBeDispatched[key].soldStatus = status;
             }
-            return updatedInfo;
-        });
+        }
+        dispatch(setSelectedDateOrders(JSON.stringify(toBeDispatched)));
     };
 
     const deleteOrder = async (id: string) => {
@@ -139,15 +139,14 @@ export default function CalendarSideView(props: { orders: any[] }) {
                 throw new Error("HTTP error " + response.status);
             }
             router.refresh();
-            setSelectedDateInfo((prevState: any) => {
-                const updatedInfo = { ...prevState };
-                for (const key in updatedInfo) {
-                    if (updatedInfo[key].id === id) {
-                        delete updatedInfo[key];
-                    }
+
+            const toBeDispatched = { ...selectedDateOrders };
+            for (const key in toBeDispatched) {
+                if (toBeDispatched[key].id === id) {
+                    delete toBeDispatched[key];
                 }
-                return updatedInfo;
-            });
+            }
+            dispatch(setSelectedDateOrders(JSON.stringify(toBeDispatched)));
         });
 
         toast.promise(
@@ -188,12 +187,12 @@ export default function CalendarSideView(props: { orders: any[] }) {
                         className={`flex items-center w-fit bg-white`}
                         icon={<FaPlus />}
                         onClick={() => {
-                            setIsAddModalVisible(true);
+                            dispatch(setAddModal(true));
                         }}
                     ></Button>
                 </div>
                 <div className="flex flex-col gap-4 w-full overflow-y-auto">
-                    {selectedDateInfoArray.map((order: any, index: number) => (
+                    {selectedDateOrdersArray.map((order: any, index: number) => (
                         <div key={index} className={`info-card gap-1 bg-white flex flex-col justify-between border-2 border-lightBorder rounded-md p-4 ${borderColor(order.soldStatus)} border-l-4`}>
                             <div className="flex flex-row text-xs opacity-50">{order.id}</div>
                             <div className="flex flex-row">
@@ -264,11 +263,7 @@ export default function CalendarSideView(props: { orders: any[] }) {
                             </div>
                             <div className="flex flex-row">
                                 <div className="font-semibold mr-2">Photo:</div>
-                                {order.photo ? <Image src={order.photo} alt="order" width={200} height={200} className="w-40 h-fit rounded-xl cursor-pointer hover:brightness-90 transition duration-100" onClick={() => showZoomModal(order.photo)} /> : "Nessuna Photo"}
-
-                                <Modal open={isZoomModalVisible} transitionName={isMobile ? "" : undefined} onOk={handleZoomModalClose} onCancel={handleZoomModalClose} footer={null}>
-                                    <Image src={modalImage} className="p-6 -mb-3" height={200} width={200} alt="order" style={{ width: "100%" }} onClick={handleZoomModalClose} />
-                                </Modal>
+                                {order.photo ? <Image src={order.photo} alt="order" priority={true} width={200} height={200} className="w-40 h-fit rounded-xl cursor-pointer hover:brightness-90 transition duration-100" onClick={() => showZoomModal(order.photo)} /> : "Nessuna Photo"}
                             </div>
                             <div className="flex flex-row mt-2 justify-end gap-3">
                                 <EditForm orderId={order.id} orders={props.orders} />
@@ -289,6 +284,9 @@ export default function CalendarSideView(props: { orders: any[] }) {
                             </div>
                         </div>
                     ))}
+                    <Modal open={imageZoom} transitionName={isMobile ? "" : undefined} onOk={handleZoomModalClose} onCancel={handleZoomModalClose} footer={null}>
+                        <Image src={imageZoomSource} className="p-6 -mb-3" height={200} width={200} alt="order" style={{ width: "100%" }} onClick={handleZoomModalClose} />
+                    </Modal>
                 </div>
             </div>
         </>
@@ -297,5 +295,6 @@ export default function CalendarSideView(props: { orders: any[] }) {
 
 // DONE: mobile view
 // DONE: add entry from side view, with already selected date
+// DONE: lift zoom image state to parent component
 
 // TODO: search functionality
