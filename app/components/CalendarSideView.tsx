@@ -12,6 +12,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/store";
 import { setSelectedDateOrders } from "../features/selectedDateOrders/selectedDateOrdersSlice";
 import { setAddModal } from "../features/addModal/addModalSlice";
+import { setImageZoom } from "../features/imageZoom/imageZoomSlice";
+import { setImageZoomSource } from "../features/imageZoomSource/imageZoomSourceSlice";
 
 export default function CalendarSideView(props: { orders: any[] }) {
     const router = useRouter();
@@ -20,12 +22,12 @@ export default function CalendarSideView(props: { orders: any[] }) {
     const dispatch = useDispatch();
     const selectedDate = dayjs(useSelector((state: RootState) => state.selectedDate.value));
 
-    const [isZoomModalVisible, setIsZoomModalVisible] = useState(false);
-    const [modalImage, setModalImage] = useState("");
-
     const selectedDateOrdersUnparsed = useSelector((state: RootState) => state.selectedDateOrders.value);
     const selectedDateOrders = useMemo(() => Object.keys(selectedDateOrdersUnparsed).length > 0 ? JSON.parse(selectedDateOrdersUnparsed as string) : [], [selectedDateOrdersUnparsed]);
     const infoIsEmpty = selectedDateOrders && Object.keys(selectedDateOrders).length === 0;
+
+    const imageZoom = useSelector((state: RootState) => state.imageZoom.value);
+    const imageZoomSource = useSelector((state: RootState) => state.imageZoomSource.value);
 
     // update selectedDateOrders when the selected date orders changes
     useEffect(() => {
@@ -74,12 +76,12 @@ export default function CalendarSideView(props: { orders: any[] }) {
     }
 
     const showZoomModal = (image: string) => {
-        setModalImage(image);
-        setIsZoomModalVisible(true);
+        dispatch(setImageZoomSource(image));
+        dispatch(setImageZoom(true));
     };
 
     const handleZoomModalClose = () => {
-        setIsZoomModalVisible(false);
+        dispatch(setImageZoom(false));
     };
 
     const onStatusChange = (id: string) => (e: RadioChangeEvent) => {
@@ -262,10 +264,6 @@ export default function CalendarSideView(props: { orders: any[] }) {
                             <div className="flex flex-row">
                                 <div className="font-semibold mr-2">Photo:</div>
                                 {order.photo ? <Image src={order.photo} alt="order" priority={true} width={200} height={200} className="w-40 h-fit rounded-xl cursor-pointer hover:brightness-90 transition duration-100" onClick={() => showZoomModal(order.photo)} /> : "Nessuna Photo"}
-
-                                <Modal open={isZoomModalVisible} transitionName={isMobile ? "" : undefined} onOk={handleZoomModalClose} onCancel={handleZoomModalClose} footer={null}>
-                                    <Image src={modalImage} className="p-6 -mb-3" height={200} width={200} alt="order" style={{ width: "100%" }} onClick={handleZoomModalClose} />
-                                </Modal>
                             </div>
                             <div className="flex flex-row mt-2 justify-end gap-3">
                                 <EditForm orderId={order.id} orders={props.orders} />
@@ -286,6 +284,9 @@ export default function CalendarSideView(props: { orders: any[] }) {
                             </div>
                         </div>
                     ))}
+                    <Modal open={imageZoom} transitionName={isMobile ? "" : undefined} onOk={handleZoomModalClose} onCancel={handleZoomModalClose} footer={null}>
+                        <Image src={imageZoomSource} className="p-6 -mb-3" height={200} width={200} alt="order" style={{ width: "100%" }} onClick={handleZoomModalClose} />
+                    </Modal>
                 </div>
             </div>
         </>

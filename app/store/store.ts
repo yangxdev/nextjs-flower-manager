@@ -5,6 +5,8 @@ import selectedDateReducer from "../features/selectedDate/selectedDateSlice";
 import selectedDateOrdersReducer from "../features/selectedDateOrders/selectedDateOrdersSlice";
 import ordersReducer from "../features/orders/ordersSlice";
 import addModalReducer from "../features/addModal/addModalSlice";
+import imageZoomReducer from "../features/imageZoom/imageZoomSlice";
+import imageZoomSourceReducer from "../features/imageZoomSource/imageZoomSourceSlice";
 
 export const store = configureStore({
     reducer: {
@@ -13,6 +15,8 @@ export const store = configureStore({
         selectedDateOrders: selectedDateOrdersReducer,
         orders: ordersReducer,
         addModal: addModalReducer,
+        imageZoom: imageZoomReducer,
+        imageZoomSource: imageZoomSourceReducer,
     },
 });
 
