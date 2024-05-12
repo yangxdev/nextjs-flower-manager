@@ -44,3 +44,4 @@ export default function CalendarSection(props: { orders: any[] }) {
 // DONE: make images in calendar square
 // DONE: branch to clean code
 // DONE: use redux for state management
+// TODO: AddModalContext to redux
