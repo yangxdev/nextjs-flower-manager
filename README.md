@@ -1,13 +1,13 @@
-# 🌷 Flower Manager v1.1.0
+# 🌷 Flower Manager v2.0.0
 ### 👨🏻‍💻 By Yang (@yangxdev)
 
 ### 🌸 Description
 Welcome to my latest project! This is an order manager I made for my partner's flower business where she can keep track of her orders and customers throughout the month. This project gives me a chance to make a real world impact, using the latest technologies to make a product that can provide value to a business.
-For the latest updates (also with explanatory GIFs) see my most recent [v1.1.0 release](https://github.com/yangxdev/nextjs-flower-manager/releases/tag/v1.1.0)!
+For the latest updates (also with explanatory GIFs) see my most recent [v2.0.0 release](https://github.com/yangxdev/nextjs-flower-manager/releases/tag/v2.0.0)!
 
 ---
 
-### 🌼 Screenshots and videos
+### 🌼 v1.1.0 Previews (v2.0.0 coming soon!)
 <img src="https://github.com/yangxdev/nextjs-flower-manager/assets/102532340/431c943c-4f11-49c7-8f74-508b60979f8a" alt="GIF 1 - selecting a date" width="250">
 <img src="https://github.com/yangxdev/nextjs-flower-manager/assets/102532340/e2fb1f25-51a0-4c62-ad11-5b522e0a7b5f" alt="GIF 2 - changing status from side view" width="250">
 <img src="https://github.com/yangxdev/nextjs-flower-manager/assets/102532340/a31d2dce-cf8d-41dd-9fe2-01feebe52b82" alt="GIF 3 - editing an entry" width="250">
@@ -26,6 +26,7 @@ For the latest updates (also with explanatory GIFs) see my most recent [v1.1.0 r
 
 ### 🌹 Technologies
 - React (Next.js 14)
+- Redux
 - Tailwind CSS
 - AWS S3 (for image storage)
 - PostgreSQL (w/ Prisma ORM)
@@ -35,7 +36,7 @@ For the latest updates (also with explanatory GIFs) see my most recent [v1.1.0 r
 
 ### 🌺 Future Features
 - Dark mode
-- Add order from selected day
+- Add order from selected day ✅
 - Customer management
 - Order search
 - Order sorting

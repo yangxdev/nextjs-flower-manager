@@ -168,7 +168,6 @@ export default function OrderForm({ label }: { label: string | null }) {
                     className={`flex items-center w-fit bg-white ${loading ? "hidden" : ""}`}
                     icon={<FaPlus />}
                     onClick={() => {
-                        // setIsAddModalVisible(true);
                         dispatch(setAddModal(true));
                     }}
                 >
