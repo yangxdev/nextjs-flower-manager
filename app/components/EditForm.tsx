@@ -1,19 +1,23 @@
 import { Button, Col, ConfigProvider, Form, Input, Modal, Radio, Row, Space } from "antd";
 import { useRouter } from "next/navigation";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
-import { MdEdit } from "react-icons/md";
+import { MdAddPhotoAlternate, MdEdit } from "react-icons/md";
 import dayjs from "dayjs";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../store/store";
 import { setSelectedDateOrders } from "../features/selectedDateOrders/selectedDateOrdersSlice";
+import { handlePhotoUpload } from "../utils/photoUpload";
 
 export default function EditForm(props: { orderId: string; orders: any[] }) {
     const router = useRouter();
     const dispatch = useDispatch();
     const formRef = useRef<any>(null);
     const isMobile = window.innerWidth < 768;
+    const [file, setFile] = useState<File | null>(null);
+    const [message, setMessage] = useState<string>("");
     const [isEditModalVisible, setIsEditModalVisible] = useState(false);
+    const [loadedFileMessage, setLoadedFileMessage] = useState<string>("");
     const [isSubmitting, setIsSubmitting] = useState(false);
     const selectedDateOrders = JSON.parse(useSelector((state: RootState) => state.selectedDateOrders.value) as string);
     if (selectedDateOrders === undefined || Object.keys(selectedDateOrders).length === 0) {
@@ -30,8 +34,19 @@ export default function EditForm(props: { orderId: string; orders: any[] }) {
     const { deliveryDate, customerName, customerWechatId, advance, amount, productionCost, photo, soldStatus } = orderData as any;
     const inputDefaultDeliveryDate = deliveryDate ? deliveryDate.split("T")[0] : new Date().toISOString().split("T")[0];
 
+    useEffect(() => {
+        if (file) {
+            setLoadedFileMessage(`File loaded: ${file.name}`);
+        }
+    }, [file]);
+
     const handleSubmit = async (values: any) => {
         setIsSubmitting(true);
+    
+        if (!file) {
+            return;
+        }
+        const photoUrl = await handlePhotoUpload(file, setMessage);
         const responsePromise = fetch("/api/database/edit_order", {
             method: "POST",
             headers: {
@@ -45,7 +60,7 @@ export default function EditForm(props: { orderId: string; orders: any[] }) {
                 amount: values.amount,
                 productionCost: values.productionCost,
                 soldStatus: values.soldStatus,
-                photo: photo,
+                photo: photoUrl || photo,
                 updated_at: new Date().toISOString(),
                 orderId: props.orderId,
             }),
@@ -190,13 +205,13 @@ export default function EditForm(props: { orderId: string; orders: any[] }) {
                             </Row>
                         </Form.Item>
 
-                        {/* <Form.Item name="photo" extra={loadedFileMessage} rules={[{ required: true, message: "Please input the photo" }]}>
+                        <Form.Item name="photo" extra={loadedFileMessage} rules={[{ required: false, message: "Please input the photo" }]}>
                             <Row gutter={8}>
                                 <Col span={8}>
                                     <label>Photo</label>
                                 </Col>
                                 <Col span={16}>
-                                    <div className="flex justify-end">
+                                    <div className="flex justify-end select-none">
                                         <input
                                             id="file"
                                             type="file"
@@ -217,8 +232,8 @@ export default function EditForm(props: { orderId: string; orders: any[] }) {
                                     </div>
                                 </Col>
                             </Row>
-                        </Form.Item> */}
-
+                        </Form.Item>
+                        
                         <Form.Item name="soldStatus" rules={[{ required: true, message: "Please select the status" }]} initialValue={soldStatus}>
                             <Row gutter={8}>
                                 <Col span={6}>

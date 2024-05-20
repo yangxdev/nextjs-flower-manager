@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/store";
 import dayjs from 'dayjs';
 import { setAddModal } from "../features/addModal/addModalSlice";
+import { handlePhotoUpload } from "../utils/photoUpload";
 
 export default function OrderForm({ label }: { label: string | null }) {
     const router = useRouter();
@@ -47,37 +48,6 @@ export default function OrderForm({ label }: { label: string | null }) {
         }
     }, [file]);
 
-    const handlePhotoUpload = async (file: File) => {
-        const response = await fetch(`/api/postPhoto?filename=${file.name}&contentType=${file.type}`);
-
-        if (response.ok) {
-            const { url, fields } = await response.json();
-
-            const formData = new FormData();
-            Object.entries(fields).forEach(([key, value]) => {
-                formData.append(key, value as string);
-            });
-            formData.append("file", file);
-
-            const uploadResponse = await fetch(url, {
-                method: "POST",
-                body: formData,
-            });
-
-            if (uploadResponse.ok) {
-                setMessage("Upload successful!");
-                const fileUrl = new URL(fields.key, url).toString();
-                return fileUrl;
-            } else {
-                console.error("S3 Upload Error:", uploadResponse);
-                setMessage("Upload failed.");
-            }
-        } else {
-            setMessage("Failed to get pre-signed URL.");
-        }
-        return "";
-    };
-
     const handleSubmit = async (values: any) => {
         setIsSubmitting(true);
 
@@ -86,7 +56,7 @@ export default function OrderForm({ label }: { label: string | null }) {
             toast.error("Please upload a photo");
             return;
         }
-        const photoUrl = await handlePhotoUpload(file);
+        const photoUrl = await handlePhotoUpload(file, setMessage);
 
         const { deliveryDate, customerName, customerWechatId, advance, amount, productionCost, soldStatus } = values;
         const responsePromise = fetch("/api/database/add_order", {

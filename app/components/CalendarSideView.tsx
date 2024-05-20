@@ -297,4 +297,5 @@ export default function CalendarSideView(props: { orders: any[] }) {
 // DONE: add entry from side view, with already selected date
 // DONE: lift zoom image state to parent component
 
+// TODO: add carousel for multiple images
 // TODO: search functionality
