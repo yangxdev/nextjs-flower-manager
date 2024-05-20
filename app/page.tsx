@@ -16,3 +16,4 @@ export default async function Home() {
 }
 
 // DONE: Edit button in side view entries
+// TODO: add "go to top" button

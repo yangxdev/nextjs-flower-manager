@@ -224,7 +224,7 @@ export default function OrderForm({ label }: { label: string | null }) {
                                 <Col span={16}>
                                     <div className="flex justify-end select-none gap-6">
                                         <div className="preview-images">
-                                            {file && <img className="rounded-lg max-w-24" src={URL.createObjectURL(file)} alt="Preview image" />}
+                                            {file && <img className="rounded-lg max-w-24 max-h-24" src={URL.createObjectURL(file)} alt="Preview image" />}
                                         </div>
                                         <input
                                             id="file"

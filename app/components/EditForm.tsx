@@ -20,7 +20,7 @@ export default function EditForm(props: { orderId: string; orders: any[] }) {
     const [loadedFileMessage, setLoadedFileMessage] = useState<string>("");
     const [isSubmitting, setIsSubmitting] = useState(false);
     const selectedDateOrders = JSON.parse(useSelector((state: RootState) => state.selectedDateOrders.value) as string);
-    
+
     useEffect(() => {
         if (file) {
             setLoadedFileMessage(`File loaded: ${file.name}`);
@@ -206,13 +206,18 @@ export default function EditForm(props: { orderId: string; orders: any[] }) {
                             </Row>
                         </Form.Item>
 
-                        <Form.Item name="photo" extra={loadedFileMessage} rules={[{ required: false, message: "Please input the photo" }]}>
+                        <Form.Item
+                            name="photo"
+                            //  extra={loadedFileMessage}
+                            rules={[{ required: false, message: "Please input the photo" }]}
+                        >
                             <Row gutter={8}>
                                 <Col span={8}>
                                     <label>Photo</label>
                                 </Col>
                                 <Col span={16}>
-                                    <div className="flex justify-end select-none">
+                                    <div className="flex justify-end select-none gap-6">
+                                        <div className="preview-images">{file && <img className="rounded-lg max-w-24 max-h-24" src={URL.createObjectURL(file)} alt="Preview image" />}</div>
                                         <input
                                             id="file"
                                             type="file"
@@ -226,9 +231,9 @@ export default function EditForm(props: { orderId: string; orders: any[] }) {
                                             accept="image/png, image/jpeg, image/jpg"
                                             style={{ display: "none" }}
                                         />
-                                        <label htmlFor="file" className="flex flex-row gap-1 items-center w-fit border-2 p-2 cursor-pointer hover:bg-newBlue-200 transition duration-200 rounded-lg">
+                                        <label htmlFor="file" className="flex flex-row gap-1 items-center w-fit border-2 p-2 cursor-pointer hover:bg-newBlue-200 transition duration-200 rounded-lg max-h-10">
                                             <MdAddPhotoAlternate />
-                                            {file ? "Change photo" : "Upload photo"}
+                                            {file ? "Change" : "Upload"}
                                         </label>
                                     </div>
                                 </Col>
