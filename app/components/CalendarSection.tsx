@@ -36,7 +36,7 @@ export default function CalendarSection(props: { orders: any[] }) {
                             height={40}
                         ></Image>
                     </div> */}
-                    <div className="div absolute z-10 right-[24px] -top-[6px]">
+                    <div className="div absolute z-10 right-[24px] md:right-[16px] -top-[6px]">
                         <Image
                             src="/others/capy_front.png"
                             alt="capybara"
