@@ -20,6 +20,13 @@ export default function EditForm(props: { orderId: string; orders: any[] }) {
     const [loadedFileMessage, setLoadedFileMessage] = useState<string>("");
     const [isSubmitting, setIsSubmitting] = useState(false);
     const selectedDateOrders = JSON.parse(useSelector((state: RootState) => state.selectedDateOrders.value) as string);
+    
+    useEffect(() => {
+        if (file) {
+            setLoadedFileMessage(`File loaded: ${file.name}`);
+        }
+    }, [file]);
+
     if (selectedDateOrders === undefined || Object.keys(selectedDateOrders).length === 0) {
         return null;
     }
@@ -34,15 +41,9 @@ export default function EditForm(props: { orderId: string; orders: any[] }) {
     const { deliveryDate, customerName, customerWechatId, advance, amount, productionCost, photo, soldStatus } = orderData as any;
     const inputDefaultDeliveryDate = deliveryDate ? deliveryDate.split("T")[0] : new Date().toISOString().split("T")[0];
 
-    useEffect(() => {
-        if (file) {
-            setLoadedFileMessage(`File loaded: ${file.name}`);
-        }
-    }, [file]);
-
     const handleSubmit = async (values: any) => {
         setIsSubmitting(true);
-    
+
         if (!file) {
             return;
         }
@@ -233,7 +234,7 @@ export default function EditForm(props: { orderId: string; orders: any[] }) {
                                 </Col>
                             </Row>
                         </Form.Item>
-                        
+
                         <Form.Item name="soldStatus" rules={[{ required: true, message: "Please select the status" }]} initialValue={soldStatus}>
                             <Row gutter={8}>
                                 <Col span={6}>

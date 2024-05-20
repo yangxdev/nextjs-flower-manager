@@ -221,6 +221,9 @@ export default function OrderForm({ label }: { label: string | null }) {
                                 </Col>
                                 <Col span={16}>
                                     <div className="flex justify-end select-none">
+                                        {/* <div className="preview-images">
+
+                                        </div> */}
                                         <input
                                             id="file"
                                             type="file"
