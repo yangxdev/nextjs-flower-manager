@@ -8,7 +8,7 @@ import { MdAddPhotoAlternate } from "react-icons/md";
 import { useMediaQuery } from "react-responsive";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/store";
-import dayjs from 'dayjs';
+import dayjs from "dayjs";
 import { setAddModal } from "../features/addModal/addModalSlice";
 import { handlePhotoUpload } from "../utils/photoUpload";
 
@@ -214,16 +214,18 @@ export default function OrderForm({ label }: { label: string | null }) {
                             </Row>
                         </Form.Item>
 
-                        <Form.Item name="photo" extra={loadedFileMessage} rules={[{ required: true, message: "Please input the photo" }]}>
+                        <Form.Item name="photo" 
+                            // extra={loadedFileMessage} 
+                            rules={[{ required: true, message: "Please input the photo" }]}>
                             <Row gutter={8}>
                                 <Col span={8}>
                                     <label>Photo</label>
                                 </Col>
                                 <Col span={16}>
-                                    <div className="flex justify-end select-none">
-                                        {/* <div className="preview-images">
-
-                                        </div> */}
+                                    <div className="flex justify-end select-none gap-6">
+                                        <div className="preview-images">
+                                            {file && <img className="rounded-lg max-w-24" src={URL.createObjectURL(file)} alt="Preview image" />}
+                                        </div>
                                         <input
                                             id="file"
                                             type="file"
@@ -237,9 +239,9 @@ export default function OrderForm({ label }: { label: string | null }) {
                                             accept="image/png, image/jpeg, image/jpg"
                                             style={{ display: "none" }}
                                         />
-                                        <label htmlFor="file" className="flex flex-row gap-1 items-center w-fit border-2 p-2 cursor-pointer hover:bg-newBlue-200 transition duration-200 rounded-lg">
+                                        <label htmlFor="file" className="flex flex-row gap-1 items-center w-fit border-2 p-2 cursor-pointer hover:bg-newBlue-200 transition duration-200 rounded-lg max-h-10">
                                             <MdAddPhotoAlternate />
-                                            {file ? "Change photo" : "Upload photo"}
+                                            {file ? "Change" : "Upload"}
                                         </label>
                                     </div>
                                 </Col>
