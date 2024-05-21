@@ -1,39 +1,66 @@
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
+  output   = "../src/prisma/client"
 }
 
 datasource db {
-    provider  = "postgresql"
-    url       = env("POSTGRES_PRISMA_URL") 
-    directUrl = env("POSTGRES_URL_NON_POOLING")
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL")
+  directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
 model Order {
-    id        String   @id @default(cuid())
-    deliveryDate DateTime @map(name: "delivery_date")
-    customerName String @map(name: "customer_name")
-    customerWechatId String @map(name: "customer_wechat_id")
-    advance Float
-    amount Float
-    productionCost Float    @map(name: "production_cost")
-    photo String
-    soldStatus String @map(name: "sold_status")
-    createdAt DateTime @default(now()) @map(name: "created_at")
-    updatedAt DateTime @updatedAt @map(name: "updated_at")
-    // userId    String   @map(name: "user_id")
-    // user      User     @relation(fields: [userId], references: [id])
+  id               String   @id @default(cuid())
+  deliveryDate     DateTime @map("delivery_date")
+  customerName     String   @map("customer_name")
+  customerWechatId String   @map("customer_wechat_id")
+  advance          Float
+  amount           Float
+  productionCost   Float    @map("production_cost")
+  photo            String
+  soldStatus       String   @map("sold_status")
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
 
-    @@map(name: "orders")
+  @@map("orders")
 }
 
+model expenses {
+  id         String   @id
+  type       String
+  date       DateTime
+  source     String
+  amount     Float
+  currency   String
+  category   String
+  notes      String?
+  created_at DateTime @default(now())
+  updated_at DateTime
+  user_id    String
+  users      users    @relation(fields: [user_id], references: [id])
+}
 
-// model User {
-//     id        String    @id @default(cuid())
-//     email     String    @unique
-//     name      String?
-//     createdAt DateTime  @default(now()) @map(name: "created_at")
-//     updatedAt DateTime  @updatedAt @map(name: "updated_at")
-//     orders  Order[]
+model incomes {
+  id         String   @id
+  type       String
+  date       DateTime
+  source     String
+  amount     Float
+  currency   String
+  category   String
+  notes      String?
+  created_at DateTime @default(now())
+  updated_at DateTime
+  user_id    String
+  users      users    @relation(fields: [user_id], references: [id])
+}
 
-//     @@map(name: "users")
-// }
+model users {
+  id         String     @id
+  email      String     @unique
+  name       String?
+  created_at DateTime   @default(now())
+  updated_at DateTime
+  expenses   expenses[]
+  incomes    incomes[]
+}
